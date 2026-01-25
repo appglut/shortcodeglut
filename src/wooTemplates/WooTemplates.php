@@ -38,7 +38,7 @@ class WooTemplates {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for CSS class assignment, no form processing
-		if ( isset( $_GET['page'] ) && $this->menu_slug === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) && 'woo_template' === sanitize_text_field( wp_unslash( $_GET['editor'] ) ) && isset( $_GET['template_id'] ) ) {
+		if ( isset( $_GET['page'] ) && $this->menu_slug === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) && 'woo_template' === sanitize_text_field( wp_unslash( $_GET['editor'] ) ) ) {
 			$classes .= ' shortcodeglut-woo-template-editor';
 		}
 
@@ -59,8 +59,8 @@ class WooTemplates {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for page routing, no form processing
-		if ( isset( $_GET['page'] ) && $this->menu_slug === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) && 'woo_template' === sanitize_text_field( wp_unslash( $_GET['editor'] ) ) && isset( $_GET['template_id'] ) ) {
-			// Render template editor
+		if ( isset( $_GET['page'] ) && $this->menu_slug === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) && 'woo_template' === sanitize_text_field( wp_unslash( $_GET['editor'] ) ) ) {
+			// Render template editor (both Add New and Edit)
 			$woo_templates_settings->templateEditorPage();
 		} else {
 			// Render templates list

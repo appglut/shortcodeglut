@@ -237,7 +237,7 @@ class SettingsPage {
 					<a href="<?php echo esc_url( $list_url ); ?>" class="scg-back-link">&larr; Back to Templates</a>
 				</div>
 				<div class="scg-header-center">
-					<h1><?php echo esc_html( $page_title ); ?></h1>
+					<h1 style="text-align: left;"><?php echo esc_html( $page_title ); ?></h1>
 				</div>
 				<div class="scg-header-actions">
 					<button type="button" class="scg-btn scg-btn--secondary" id="scg-cancel-edit">Cancel</button>
@@ -353,6 +353,66 @@ class SettingsPage {
 		</div>
 
 		<style>
+			/* CRITICAL: Force full width and hide admin menu - Highest specificity */
+			body.shortcodeglut-woo-template-editor #adminmenumain,
+			body.shortcodeglut-woo-template-editor #adminmenuback,
+			body.shortcodeglut-woo-template-editor #adminmenuwrap,
+			body.shortcodeglut-woo-template-editor .adminmenu {
+				display: none !important;
+				width: 0 !important;
+				visibility: hidden !important;
+			}
+
+			body.shortcodeglut-woo-template-editor #wpadminbar {
+				display: none !important;
+				height: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor.admin-bar {
+				padding-top: 0 !important;
+				margin-top: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor html.admin-bar {
+				padding-top: 0 !important;
+				margin-top: 0 !important;
+			}
+
+			/* Override WordPress default margin for wpcontent/wpfooter */
+			body.shortcodeglut-woo-template-editor #wpcontent,
+			body.shortcodeglut-woo-template-editor #wpfooter {
+				margin-left: 0 !important;
+			}
+
+			/* Override WordPress default padding for wpcontent */
+			body.shortcodeglut-woo-template-editor #wpcontent {
+				padding-left: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor #wpwrap,
+			body.shortcodeglut-woo-template-editor.auto-fold #wpwrap {
+				margin-left: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor #wpbody,
+			body.shortcodeglut-woo-template-editor #wpbody-content {
+				margin-left: 0 !important;
+				position: relative !important;
+				left: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor .wrap {
+				max-width: 100% !important;
+				width: 100% !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+
+			body.shortcodeglut-woo-template-editor #wpbody-content {
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+			}
+
 			html.wp-toolbar {
 				padding: 0px;
 			}
@@ -884,7 +944,7 @@ class SettingsPage {
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'shopglut_preview_template',
+						action: 'shortcodeglut_preview_template',
 						nonce: '<?php echo wp_create_nonce( 'shopglut_preview_nonce' ); ?>',
 						html: html,
 						css: css
@@ -1472,7 +1532,7 @@ class SettingsPage {
 	public function ajaxDuplicateTemplate() {
 		// Check nonce for security
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Nonce check before sanitization
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'shopglut_duplicate_template' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'shortcodeglut_duplicate_template' ) ) {
 			wp_send_json_error( array( 'message' => 'Security check failed.' ) );
 			return;
 		}

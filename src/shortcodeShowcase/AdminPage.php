@@ -24,9 +24,9 @@ class AdminPage {
 		$woo_active = class_exists( 'WooCommerce' );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h2 style="text-align: center; font-weight: bold;">
+			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0;">
 				Shortcode Showcase
-			</h2>
+			</h1>
 			<p class="subheading" style="text-align: center; margin-bottom: 30px; margin-top: 8px; color: #6b7280;">
 				Display WooCommerce content with powerful shortcodes
 			</p>
@@ -39,7 +39,7 @@ class AdminPage {
 
 			<div class="shopg-tab-container">
 				<ul class="shopg-tabs">
-					<li class="shopg-tab active" data-tab="tab-all">All Shortcodes</li>
+					<li class="shopg-tab active" data-tab="tab-all" style="font-size: 18px; font-weight: 600;">All Shortcodes</li>
 				</ul>
 
 				<div class="shopg-tab-content active" id="tab-all">
@@ -189,6 +189,7 @@ class AdminPage {
 				border-bottom: 1px solid #ddd;
 				display: flex;
 				gap: 5px;
+				justify-content: center;
 			}
 
 			.shopg-tab {

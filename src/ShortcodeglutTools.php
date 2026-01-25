@@ -44,7 +44,7 @@ class ShortcodeglutTools {
 
 					switch ( $editor ) {
 						case 'woo_template':
-							$classes .= '-shortcodeglut-woo-template-editor ';
+							$classes .= ' shortcodeglut-woo-template-editor';
 							break;
 					}
 				}
@@ -304,11 +304,11 @@ class ShortcodeglutTools {
 			}
 
 			// Copy template ID functionality
-			$(document).on('click', '.shortcodeglut-copy-id-btn', function(e) {
+			$(document).on('click', '.shopglut-copy-id-btn', function(e) {
 				e.preventDefault();
 				var templateId = $(this).data('template-id');
 				var $button = $(this);
-				var $wrapper = $button.closest('.shortcodeglut-template-id-wrapper');
+				var $wrapper = $button.closest('.shopglut-template-id-wrapper');
 
 				// Create temporary input for copying
 				var tempInput = $('<input>');
@@ -318,12 +318,12 @@ class ShortcodeglutTools {
 				tempInput.remove();
 
 				// Visual feedback
-				$wrapper.addClass('shortcodeglut-copied');
+				$wrapper.addClass('shopglut-copied');
 				$button.find('.dashicons').addClass('dashicons-yes').removeClass('dashicons-admin-page');
 
 				// Reset after 2 seconds
 				setTimeout(function() {
-					$wrapper.removeClass('shortcodeglut-copied');
+					$wrapper.removeClass('shopglut-copied');
 					$button.find('.dashicons').addClass('dashicons-admin-page').removeClass('dashicons-yes');
 				}, 2000);
 			});
@@ -394,7 +394,7 @@ class ShortcodeglutTools {
 			}
 
 			// Preview template functionality
-			$(document).on('click', '.shortcodeglut-preview-btn', function(e) {
+			$(document).on('click', '.shopglut-preview-btn', function(e) {
 				e.preventDefault();
 				e.stopPropagation();
 				var $button = $(this);
@@ -406,7 +406,7 @@ class ShortcodeglutTools {
 
 				// Show loader
 				$('#shortcodeglut-preview-modal').show();
-				$('#shortcodeglut-preview-content').html('<div class="shortcodeglut-preview-loader"><span class="spinner is-active"></span></div>');
+				$('#shortcodeglut-preview-content').html('<div class="shopglut-preview-loader"><span class="spinner is-active"></span></div>');
 				$('body').css('overflow', 'hidden');
 
 				// Simulate loading and render preview
@@ -449,7 +449,7 @@ class ShortcodeglutTools {
 			});
 
 			// Duplicate template functionality
-			$(document).on('click', '.shortcodeglut-duplicate-btn', function(e) {
+			$(document).on('click', '.shopglut-duplicate-btn', function(e) {
 				e.preventDefault();
 				e.stopPropagation();
 				var templateId = $(this).data('template-id');
@@ -509,13 +509,13 @@ class ShortcodeglutTools {
 		}
 
 		/* Template ID Wrapper with Copy Button */
-		.shortcodeglut-template-id-wrapper {
+		.shopglut-template-id-wrapper {
 			display: flex;
 			align-items: center;
 			gap: 8px;
 		}
 
-		.shortcodeglut-template-id-code {
+		.shopglut-template-id-code {
 			background: #f0f0f1;
 			padding: 4px 8px;
 			border-radius: 4px;
@@ -523,7 +523,7 @@ class ShortcodeglutTools {
 			color: #1d2327;
 		}
 
-		.shortcodeglut-copy-btn {
+		.shopglut-copy-btn {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
@@ -537,35 +537,35 @@ class ShortcodeglutTools {
 			transition: all 0.1s ease;
 		}
 
-		.shortcodeglut-copy-btn:hover {
+		.shopglut-copy-btn:hover {
 			background: #e9e9eb;
 			border-color: #50575e;
 		}
 
-		.shortcodeglut-copy-btn .dashicons {
+		.shopglut-copy-btn .dashicons {
 			font-size: 16px;
 			width: 16px;
 			height: 16px;
 			color: #50575e;
 		}
 
-		.shortcodeglut-template-id-wrapper.shortcodeglut-copied .shortcodeglut-copy-btn {
+		.shopglut-template-id-wrapper.shopglut-copied .shopglut-copy-btn {
 			background: #d1fae5;
 			border-color: #10b981;
 		}
 
-		.shortcodeglut-template-id-wrapper.shortcodeglut-copied .shortcodeglut-copy-btn .dashicons {
+		.shopglut-template-id-wrapper.shopglut-copied .shopglut-copy-btn .dashicons {
 			color: #10b981;
 		}
 
 		/* Template Actions Buttons */
-		.shortcodeglut-template-actions {
+		.shopglut-template-actions {
 			display: flex;
 			gap: 6px;
 			flex-wrap: wrap;
 		}
 
-		.shortcodeglut-action-btn {
+		.shopglut-action-btn {
 			display: inline-flex;
 			align-items: center;
 			gap: 6px;
@@ -581,36 +581,36 @@ class ShortcodeglutTools {
 		}
 
 		/* Preview Button - Blue */
-		.shortcodeglut-preview-btn {
+		.shopglut-preview-btn {
 			background: #e7f3ff;
 			border-color: #b8daff;
 			color: #0066cc;
 		}
 
-		.shortcodeglut-preview-btn:hover {
+		.shopglut-preview-btn:hover {
 			background: #cce5ff;
 			border-color: #0066cc;
 			color: #0052a3;
 		}
 
-		.shortcodeglut-preview-btn .dashicons {
+		.shopglut-preview-btn .dashicons {
 			color: #0066cc;
 		}
 
 		/* Duplicate Button - Green */
-		.shortcodeglut-duplicate-btn {
+		.shopglut-duplicate-btn {
 			background: #d1fae5;
 			border-color: #a7f3d0;
 			color: #059669;
 		}
 
-		.shortcodeglut-duplicate-btn:hover {
+		.shopglut-duplicate-btn:hover {
 			background: #a7f3d0;
 			border-color: #059669;
 			color: #047857;
 		}
 
-		.shortcodeglut-duplicate-btn .dashicons {
+		.shopglut-duplicate-btn .dashicons {
 			color: #059669;
 		}
 
@@ -723,7 +723,7 @@ class ShortcodeglutTools {
 		}
 
 		/* Preview Loader */
-		.shortcodeglut-preview-loader {
+		.shopglut-preview-loader {
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -733,19 +733,19 @@ class ShortcodeglutTools {
 			border: 1px solid #8c8f94;
 		}
 
-		.shortcodeglut-preview-loader .spinner {
+		.shopglut-preview-loader .spinner {
 			float: none;
 			margin: 0;
 		}
 
 		/* Star rating for preview */
-		.shortcodeglut-star-rating {
+		.shopglut-star-rating {
 			color: #ffb400;
 			font-size: 16px;
 			display: flex;
 			gap: 2px;
 		}
-		.shortcodeglut-star-rating .dashicons {
+		.shopglut-star-rating .dashicons {
 			font-size: 16px;
 			width: 16px;
 			height: 16px;
@@ -781,7 +781,9 @@ class ShortcodeglutTools {
 		$this->settingsPageHeader( $active_menu );
 		?>
 		<div class="wrap shortcodeglut-admin-contents">
-			<h2 style="text-align: center; font-weight:bold"><?php echo esc_html__( 'WooCommerce Tools', 'shortcodeglut' ); ?></h2>
+			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0;">
+				<?php echo esc_html__( 'WooCommerce Tools', 'shortcodeglut' ); ?>
+			</h1>
 			<p class="subheading" style="text-align: center;">
 				<?php echo esc_html__( 'Powerful tools and widgets to enhance your WooCommerce store functionality', 'shortcodeglut' ); ?>
 			</p>
