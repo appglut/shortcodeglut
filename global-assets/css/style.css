@@ -1,0 +1,278 @@
+/* ShortcodeGlut Admin Styles */
+
+/* Hide WordPress notices on admin pages */
+.shortcodeglut-admin #screen-meta-links {
+  display: none;
+}
+
+.shortcodeglut-admin .notice.notice-warning.update-nag {
+  display: none;
+}
+
+.shortcodeglut-admin .updated,
+.shortcodeglut-admin .notice {
+  display: none !important;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .wrap {
+  padding-left: 20px;
+  margin: 0 20px 0 2px;
+}
+
+.wp-admin.shortcodeglut-admin #wpcontent {
+  padding: 0;
+}
+
+/* Page Header Styles */
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner {
+  background-color: #7340b0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  width: 100%;
+  padding: 15px;
+  padding-bottom: 0px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner.shortcodeglut-pro {
+  padding: 15px 15px 0;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__logo {
+  padding: 0 0 15px;
+  display: block;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__logo img {
+  width: 150px;
+  height: auto;
+  float: left;
+  margin-top: 25px;
+  padding-left: 15px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__helplinks {
+  float: right;
+  padding: 20px 20px 20px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__helplinks a {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__helplinks a.shortcodeglut-active {
+  background: #fff;
+  padding: 5px;
+  color: #0068b3;
+  border-radius: 4px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__helplinks > span {
+  padding-right: 15px;
+}
+
+.shortcodeglut-admin div#screen-meta-links {
+  position: absolute;
+  right: 0;
+  z-index: 9;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-nav-tab-wrapper {
+  padding: 0;
+  margin: 10px 16px 0;
+  border-bottom: 0;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-nav-tab-wrapper .shortcodeglut-nav-tab {
+  display: block;
+  font-weight: 500;
+  padding: 5px 12px;
+  padding-bottom: 10px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-nav-tab-wrapper .shortcodeglut-nav-tab.shortcodeglut-nav-active {
+  background-color: #fff;
+  color: #2d3559;
+  border-color: #fff;
+  border-radius: 4px 4px 0 0;
+  padding-bottom: 8px;
+  padding-top: 7px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header-banner.shortcodeglut-not-pro {
+  padding-bottom: 0;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-no-submenu .shortcodeglut-nav-tab-wrapper {
+  margin-top: 0;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header-banner .shortcodeglut-header-menus {
+  margin-top: 10px;
+}
+
+.shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-wrap + .wrap h2 {
+  font-size: 21px;
+  font-weight: 500;
+}
+
+/* Full width editor styles */
+body.shortcodeglut-woo-template-editor,
+.shortcodeglut-woo-template-editor #adminmenumain,
+.shortcodeglut-woo-template-editor #adminmenuback,
+.shortcodeglut-woo-template-editor #adminmenuwrap {
+  display: none !important;
+}
+
+.shortcodeglut-woo-template-editor #wpbody,
+.shortcodeglut-woo-template-editor #wpbody-content {
+  margin-left: 0 !important;
+}
+
+.shortcodeglut-woo-template-editor.auto-fold .wp-wrap {
+  margin-left: 0 !important;
+}
+
+/* Hide admin bar */
+.shortcodeglut-woo-template-editor #wpadminbar {
+  display: none !important;
+}
+
+.shortcodeglut-woo-template-editor.admin-bar {
+  padding-top: 0 !important;
+}
+
+.shortcodeglut-woo-template-editor html {
+  padding-top: 0 !important;
+}
+
+/* Full width content */
+.shortcodeglut-woo-template-editor .wrap {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.shortcodeglut-woo-template-editor #wpbody-content {
+  padding-bottom: 0 !important;
+}
+
+/* Hide notices in template editor */
+.shortcodeglut-woo-template-editor .notice,
+.shortcodeglut-woo-template-editor .update-nag {
+  display: none !important;
+}
+
+/* Copy button notification */
+.shortcodeglut-copy-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 999999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease-in-out;
+}
+
+.shortcodeglut-copy-notification.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Template badge styles */
+.scg-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
+.scg-badge--default {
+  background-color: #edc728;
+  color: #1d2327;
+}
+
+/* Template wrapper and actions */
+.shopglut-template-id-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shopglut-template-id-code {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  color: #2271b1;
+  background: #f0f6ff;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.shopglut-copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.shopglut-copy-btn:hover {
+  opacity: 1;
+}
+
+.shopglut-template-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.shopglut-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #f0f0f1;
+  border: 1px solid #c3c4c7;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shopglut-action-btn:hover {
+  background: #f6f7f7;
+  border-color: #a7aaad;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+  .shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__logo {
+    float: none;
+  }
+
+  .shortcodeglut-admin .shortcodeglut-page-header .shortcodeglut-page-header-banner__helplinks {
+    float: none;
+    text-align: center;
+    padding: 10px 0;
+  }
+}
