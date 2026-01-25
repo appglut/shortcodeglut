@@ -30,12 +30,12 @@ class ShortcodeglutTools {
 			}
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for body class only
-			if ( isset( $_GET['page'] ) && 'shortcodeglut_tools' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) ) {
+			if ( isset( $_GET['page'] ) && 'shortcodeglut' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) && isset( $_GET['editor'] ) ) {
 				$classes .= '-shortcodeglut-editor-collapse ';
 			}
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for CSS class addition only
-			if ( isset( $_GET['page'] ) && 'shortcodeglut_tools' === sanitize_text_field( wp_unslash($_GET['page']) ) ) {
+			if ( isset( $_GET['page'] ) && 'shortcodeglut' === sanitize_text_field( wp_unslash($_GET['page']) ) ) {
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for CSS class addition only
 				if ( isset( $_GET['editor'] ) ) {
@@ -69,8 +69,8 @@ class ShortcodeglutTools {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for routing only
 			$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : '';
 
-			// Handle shortcodeglut_tools page
-			if ( 'shortcodeglut_tools' === $page ) {
+			// Handle shortcodeglut page
+			if ( 'shortcodeglut' === $page ) {
 
 				// Editor routes
 				if ( ! empty( $editor )) {
@@ -98,7 +98,7 @@ class ShortcodeglutTools {
 							break;
 					}
 				}
-				// Default shortcodeglut_tools page - show main tools landing page
+				// Default shortcodeglut page - show main tools landing page
 				else {
 					$this->renderWooCommerceTools();
 				}
@@ -177,9 +177,9 @@ class ShortcodeglutTools {
 
 	public function headerMenuTabs() {
 		$tabs = [
-			1 => [ 'id' => 'all_tools', 'url' => admin_url( 'admin.php?page=shortcodeglut_tools' ), 'label' => '🔧 ' . esc_html__( 'All Tools', 'shortcodeglut' ) ],
-			10 => [ 'id' => 'shortcode_showcase', 'url' => admin_url( 'admin.php?page=shortcodeglut_tools&view=shortcode_showcase' ), 'label' => '💻 ' . esc_html__( 'Shortcode Showcase', 'shortcodeglut' ) ],
-			15 => [ 'id' => 'woo_templates', 'url' => admin_url( 'admin.php?page=shortcodeglut_tools&view=woo_templates' ), 'label' => '📋 ' . esc_html__( 'Woo Templates', 'shortcodeglut' ) ],
+			1 => [ 'id' => 'all_tools', 'url' => admin_url( 'admin.php?page=shortcodeglut' ), 'label' => '🔧 ' . esc_html__( 'All Tools', 'shortcodeglut' ) ],
+			10 => [ 'id' => 'shortcode_showcase', 'url' => admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ), 'label' => '💻 ' . esc_html__( 'Shortcode Showcase', 'shortcodeglut' ) ],
+			15 => [ 'id' => 'woo_templates', 'url' => admin_url( 'admin.php?page=shortcodeglut&view=woo_templates' ), 'label' => '📋 ' . esc_html__( 'Woo Templates', 'shortcodeglut' ) ],
 		];
 
 		ksort( $tabs );
@@ -201,7 +201,7 @@ class ShortcodeglutTools {
 
 		if ( ( ! wp_verify_nonce( $nonce_check, 'url_nonce_value' ) ) && ( strpos( $page, 'shortcodeglut' ) !== false ) ) {
 			// If no view parameter, we're on the main landing page (all_tools)
-			if ( !isset( $_GET['view'] ) && isset( $_GET['page'] ) && $_GET['page'] === 'shortcodeglut_tools' ) {
+			if ( !isset( $_GET['view'] ) && isset( $_GET['page'] ) && $_GET['page'] === 'shortcodeglut' ) {
 				return 'all_tools';
 			}
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for menu display only
@@ -261,7 +261,7 @@ class ShortcodeglutTools {
 				\Shortcodeglut\wooTemplates\WooTemplatesEntity::delete_template( $template_id );
 
 				// Redirect to avoid resubmission
-				wp_safe_redirect( admin_url( 'admin.php?page=shortcodeglut_tools&view=woo_templates&deleted=true' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=shortcodeglut&view=woo_templates&deleted=true' ) );
 				exit;
 			} else {
 				wp_die( esc_html__( 'Security check failed.', 'shortcodeglut' ) );
@@ -284,7 +284,7 @@ class ShortcodeglutTools {
 
 		<div class="wrap shortcodeglut-admin-contents">
 			<h2><?php echo esc_html__( 'Woo Templates', 'shortcodeglut' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools&editor=woo_template' ) ); ?>">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&editor=woo_template' ) ); ?>">
 					<span class="add-new-h2"><?php echo esc_html__( 'Add New Template', 'shortcodeglut' ); ?></span>
 				</a>
 			</h2>
@@ -795,7 +795,7 @@ class ShortcodeglutTools {
 						<h3 style="margin: 0; color: #333;"><?php echo esc_html__( 'Shortcode Showcase', 'shortcodeglut' ); ?></h3>
 					</div>
 					<p style="color: #666; margin-bottom: 15px;"><?php echo esc_html__( 'Create and manage custom shortcodes to display content anywhere.', 'shortcodeglut' ); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools&view=shortcode_showcase' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Shortcodes', 'shortcodeglut' ); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Shortcodes', 'shortcodeglut' ); ?></a>
 				</div>
 
 				<!-- Product Templates -->
@@ -805,7 +805,7 @@ class ShortcodeglutTools {
 						<h3 style="margin: 0; color: #333;"><?php echo esc_html__( 'Woo Templates', 'shortcodeglut' ); ?></h3>
 					</div>
 					<p style="color: #666; margin-bottom: 15px;"><?php echo esc_html__( 'Create custom WooCommerce templates for products and pages.', 'shortcodeglut' ); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools&view=woo_templates' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Templates', 'shortcodeglut' ); ?></a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=woo_templates' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Templates', 'shortcodeglut' ); ?></a>
 				</div>
 
 			</div>

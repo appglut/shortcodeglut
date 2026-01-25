@@ -9,11 +9,11 @@ use Shortcodeglut\tools\ShortcodeglutTools;
 
 class ShortcodeglutRegisterMenu {
 
-	private $menut_slug = 'shortcodeglut_tools';
+	private $menut_slug = 'shortcodeglut';
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'shortcodeglutMenuRegister' ) );
-		add_action( 'load-shortcodeglut_page_shortcodeglut_tools', array( $this, 'shortcodeglutToolsScreenOptions' ) );
+		add_action( 'load-toplevel_page_shortcodeglut', array( $this, 'shortcodeglutToolsScreenOptions' ) );
 		add_filter( 'admin_body_class', array( $this, 'shortcodeglutAdminBodyClass' ) );
 	}
 

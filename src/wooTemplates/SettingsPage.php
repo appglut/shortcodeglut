@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Shortcodeglut\wooTemplates\WooTemplatesEntity;
 
 class SettingsPage {
-	private $menu_slug = 'shortcodeglut_tools';
+	private $menu_slug = 'shortcodeglut';
 	private $template_tags = [ 
 		'product' => [ 
 			'[product_title]' => 'Product Title - Displays the main product title',
@@ -44,8 +44,8 @@ class SettingsPage {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueEditorScripts' ) );
 		add_action( 'wp_ajax_save_woo_template', array( $this, 'ajaxSaveTemplate' ) );
-		add_action( 'wp_ajax_shopglut_preview_template', array( $this, 'ajaxPreviewTemplate' ) );
-		add_action( 'wp_ajax_shopglut_duplicate_template', array( $this, 'ajaxDuplicateTemplate' ) );
+	add_action( 'wp_ajax_shortcodeglut_preview_template', array( $this, 'ajaxPreviewTemplate' ) );
+	add_action( 'wp_ajax_shortcodeglut_duplicate_template', array( $this, 'ajaxDuplicateTemplate' ) );
 		add_action( 'admin_init', array( $this, 'handleTemplateActions' ) );
 	}
 

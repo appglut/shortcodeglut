@@ -9,7 +9,7 @@ use Shortcodeglut\wooTemplates\WooTemplatesEntity;
 
 class WooTemplates {
 	private static $instance = null;
-	private $menu_slug = 'shortcodeglut_tools';
+	private $menu_slug = 'shortcodeglut';
 	private static $settings_page = null;
 
 	public function __construct() {
@@ -103,13 +103,13 @@ class WooTemplates {
 					<div class="clear"></div>
 					<div class="shortcodeglut-header-menus">
 						<nav class="shortcodeglut-nav-tab-wrapper nav-tab-wrapper">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
 								🔧 <?php echo esc_html__( 'All Tools', 'shortcodeglut' ); ?>
 							</a>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools&view=shortcode_showcase' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
 								💻 <?php echo esc_html__( 'Shortcode Showcase', 'shortcodeglut' ); ?>
 							</a>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut_tools&view=woo_templates' ) ); ?>" class="shortcodeglut-nav-tab nav-tab shortcodeglut-nav-active">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=woo_templates' ) ); ?>" class="shortcodeglut-nav-tab nav-tab shortcodeglut-nav-active">
 								📋 <?php echo esc_html__( 'Woo Templates', 'shortcodeglut' ); ?>
 							</a>
 						</nav>

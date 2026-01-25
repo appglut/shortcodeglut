@@ -103,7 +103,7 @@ class WooTemplatesListTable extends \WP_List_Table {
         if ( ! $is_default ) {
             $actions['edit'] = sprintf(
                 '<a href="%s">%s</a>',
-                esc_url(admin_url('admin.php?page=shopglut_tools&editor=woo_template&template_id=' . $item['id'])),
+                esc_url(admin_url('admin.php?page=shortcodeglut&editor=woo_template&template_id=' . $item['id'])),
                 esc_html__('Edit', 'shopglut')
             );
         } else {
@@ -116,7 +116,7 @@ class WooTemplatesListTable extends \WP_List_Table {
         if ( ! $is_default ) {
             $actions['delete'] = sprintf(
                 '<a href="%s" class="submitdelete" onclick="return confirm(\'%s\');">%s</a>',
-                esc_url(wp_nonce_url(admin_url('admin.php?page=shopglut_tools&view=woo_templates&action=delete&template_id=' . $item['id']), 'delete_template_' . $item['id'])),
+                esc_url(wp_nonce_url(admin_url('admin.php?page=shortcodeglut&view=woo_templates&action=delete&template_id=' . $item['id']), 'delete_template_' . $item['id'])),
                 esc_html__('Are you sure you want to delete this template?', 'shopglut'),
                 esc_html__('Delete', 'shopglut')
             );
@@ -124,7 +124,7 @@ class WooTemplatesListTable extends \WP_List_Table {
 
         $name_link = $is_default ? esc_html($item['template_name']) : sprintf(
             '<a href="%s">%s</a>',
-            esc_url(admin_url('admin.php?page=shopglut_tools&editor=woo_template&template_id=' . $item['id'])),
+            esc_url(admin_url('admin.php?page=shortcodeglut&editor=woo_template&template_id=' . $item['id'])),
             esc_html($item['template_name'])
         );
 
