@@ -118,10 +118,10 @@ class SaleProductsShortcode {
 	 */
 	private function enqueue_assets( $atts ) {
 		// Enqueue sale products styles
-		wp_enqueue_style( 'shopglut-sale-products', SHORTCODEGLUT_PLUGIN_URL . 'src/shortcodeShowcase/shortcodes/sale-products/assets/css/style.css', array(), SHORTCODEGLUT_VERSION );
+		wp_enqueue_style( 'shopglut-sale-products', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/sale-products/assets/css/style.css', array(), SHORTCODEGLUT_VERSION );
 
 		if ( $atts['async'] ) {
-			wp_enqueue_script( 'shopglut-sale-products', SHORTCODEGLUT_PLUGIN_URL . 'src/shortcodeShowcase/shortcodes/sale-products/assets/js/script.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
+			wp_enqueue_script( 'shopglut-sale-products', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/sale-products/assets/js/script.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
 			wp_localize_script( 'shopglut-sale-products', 'shopglutSaleProductsAjax', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'shopglut_sale_products_nonce' )

@@ -76,8 +76,7 @@ class ShortcodeglutTools {
 				if ( ! empty( $editor )) {
 					switch ( $editor ) {
 						case 'woo_template':
-							require_once SHORTCODEGLUT_PATH . 'src/wooTemplates/SettingsPage.php';
-							$woo_template_settings = new \Shortcodeglut\wooTemplates\SettingsPage();
+							$woo_template_settings = \Shortcodeglut\wooTemplates\SettingsPage::get_instance();
 							$woo_template_settings->templateEditorPage();
 							break;
 						default:
@@ -98,9 +97,9 @@ class ShortcodeglutTools {
 							break;
 					}
 				}
-				// Default shortcodeglut page - show main tools landing page
+				// Default shortcodeglut page - redirect to shortcode showcase
 				else {
-					$this->renderWooCommerceTools();
+					$this->renderShortcodeShowcase();
 				}
 			}
 			else {
@@ -172,12 +171,11 @@ class ShortcodeglutTools {
 	}
 
 	public function defaultHeaderMenu() {
-		return 'all_tools';
+		return 'shortcode_showcase';
 	}
 
 	public function headerMenuTabs() {
 		$tabs = [
-			1 => [ 'id' => 'all_tools', 'url' => admin_url( 'admin.php?page=shortcodeglut' ), 'label' => '🔧 ' . esc_html__( 'All Tools', 'shortcodeglut' ) ],
 			10 => [ 'id' => 'shortcode_showcase', 'url' => admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ), 'label' => '💻 ' . esc_html__( 'Shortcode Showcase', 'shortcodeglut' ) ],
 			15 => [ 'id' => 'woo_templates', 'url' => admin_url( 'admin.php?page=shortcodeglut&view=woo_templates' ), 'label' => '📋 ' . esc_html__( 'Woo Templates', 'shortcodeglut' ) ],
 		];
@@ -200,10 +198,6 @@ class ShortcodeglutTools {
 		$nonce_check = isset( $_GET['url_nonce_check'] ) ? sanitize_text_field( wp_unslash( $_GET['url_nonce_check'] ) ) : '';
 
 		if ( ( ! wp_verify_nonce( $nonce_check, 'url_nonce_value' ) ) && ( strpos( $page, 'shortcodeglut' ) !== false ) ) {
-			// If no view parameter, we're on the main landing page (all_tools)
-			if ( !isset( $_GET['view'] ) && isset( $_GET['page'] ) && $_GET['page'] === 'shortcodeglut' ) {
-				return 'all_tools';
-			}
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for menu display only
 			return isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : $this->defaultHeaderMenu();
 		}
@@ -769,49 +763,6 @@ class ShortcodeglutTools {
 		</div>
 		<div id="shortcodeglut-preview-styles"></div>
 
-		<?php
-	}
-
-	public function renderWooCommerceTools() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shortcodeglut' ) );
-		}
-
-		$active_menu = $this->activeMenuTab();
-		$this->settingsPageHeader( $active_menu );
-		?>
-		<div class="wrap shortcodeglut-admin-contents">
-			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0;">
-				<?php echo esc_html__( 'WooCommerce Tools', 'shortcodeglut' ); ?>
-			</h1>
-			<p class="subheading" style="text-align: center;">
-				<?php echo esc_html__( 'Powerful tools and widgets to enhance your WooCommerce store functionality', 'shortcodeglut' ); ?>
-			</p>
-
-			<div class="shortcodeglut-enhancements-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
-
-				<!-- Shortcode Showcase -->
-				<div class="shortcodeglut-option-card" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div class="option-header" style="display: flex; align-items: center; margin-bottom: 15px;">
-						<i class="fas fa-code" style="font-size: 24px; color: #667eea; margin-right: 12px;"></i>
-						<h3 style="margin: 0; color: #333;"><?php echo esc_html__( 'Shortcode Showcase', 'shortcodeglut' ); ?></h3>
-					</div>
-					<p style="color: #666; margin-bottom: 15px;"><?php echo esc_html__( 'Create and manage custom shortcodes to display content anywhere.', 'shortcodeglut' ); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Shortcodes', 'shortcodeglut' ); ?></a>
-				</div>
-
-				<!-- Product Templates -->
-				<div class="shortcodeglut-option-card" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div class="option-header" style="display: flex; align-items: center; margin-bottom: 15px;">
-						<i class="fas fa-file-alt" style="font-size: 24px; color: #667eea; margin-right: 12px;"></i>
-						<h3 style="margin: 0; color: #333;"><?php echo esc_html__( 'Woo Templates', 'shortcodeglut' ); ?></h3>
-					</div>
-					<p style="color: #666; margin-bottom: 15px;"><?php echo esc_html__( 'Create custom WooCommerce templates for products and pages.', 'shortcodeglut' ); ?></p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=woo_templates' ) ); ?>" class="button button-primary"><?php echo esc_html__( 'Manage Templates', 'shortcodeglut' ); ?></a>
-				</div>
-
-			</div>
-		</div>
 		<?php
 	}
 

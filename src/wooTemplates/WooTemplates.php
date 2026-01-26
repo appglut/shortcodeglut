@@ -103,9 +103,6 @@ class WooTemplates {
 					<div class="clear"></div>
 					<div class="shortcodeglut-header-menus">
 						<nav class="shortcodeglut-nav-tab-wrapper nav-tab-wrapper">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
-								🔧 <?php echo esc_html__( 'All Tools', 'shortcodeglut' ); ?>
-							</a>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' ) ); ?>" class="shortcodeglut-nav-tab nav-tab">
 								💻 <?php echo esc_html__( 'Shortcode Showcase', 'shortcodeglut' ); ?>
 							</a>

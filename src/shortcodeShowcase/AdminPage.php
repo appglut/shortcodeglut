@@ -39,7 +39,7 @@ class AdminPage {
 
 			<div class="shopg-tab-container">
 				<ul class="shopg-tabs">
-					<li class="shopg-tab active" data-tab="tab-all" style="font-size: 18px; font-weight: 600;">All Shortcodes</li>
+					<li class="shopg-tab active" data-tab="tab-all" style="font-size: 16px; font-weight: 600;">All Shortcodes</li>
 				</ul>
 
 				<div class="shopg-tab-content active" id="tab-all">

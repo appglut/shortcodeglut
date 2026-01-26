@@ -17,6 +17,7 @@
         init: function() {
             this.initDataTables();
             this.bindEvents();
+            this.bindFilterEvents();
         },
 
         /**
@@ -26,6 +27,7 @@
             $('.shopglut-product-table[data-options]').each(function() {
                 var $table = $(this);
                 var options = $table.data('options');
+                var tableId = $table.attr('id');
 
                 // Check if DataTables is available
                 if (typeof $.fn.DataTable === 'undefined') {
@@ -33,10 +35,10 @@
                 }
 
                 // Initialize DataTable
-                $table.DataTable({
+                var dataTable = $table.DataTable({
                     pageLength: options.pageLength || 20,
                     paging: options.paging !== false,
-                    searching: options.searching !== false,
+                    searching: false, // Disable built-in search, use custom
                     ordering: true,
                     info: true,
                     responsive: options.responsive !== false,
@@ -63,11 +65,107 @@
                     drawCallback: function() {
                         // Re-bind events after table redraw
                         ShopglutProductTable.bindEvents();
+                    },
+                    initComplete: function() {
+                        // Store DataTable instance for custom filtering
+                        $table.data('dataTable', dataTable);
                     }
                 });
 
                 // Add wrapper class
                 $table.closest('.dataTables_wrapper').addClass('shopglut-datatables-wrapper');
+            });
+        },
+
+        /**
+         * Bind filter events
+         */
+        bindFilterEvents: function() {
+            // Items per page change
+            $(document).on('change', '.dt-length-select', function() {
+                var tableId = $(this).closest('.shopglut-product-table-wrapper').find('.shopglut-product-table').attr('id');
+                var length = parseInt($(this).val());
+
+                $('#' + tableId).each(function() {
+                    var dataTable = $(this).data('dataTable');
+                    if (dataTable) {
+                        dataTable.page.len(length).draw();
+                    }
+                });
+            });
+
+            // Category filter change
+            $(document).on('change', '.dt-category-filter', function() {
+                var tableId = $(this).data('table');
+                ShopglutProductTable.applyFilters(tableId);
+            });
+
+            // Tag filter change
+            $(document).on('change', '.dt-tag-filter', function() {
+                var tableId = $(this).data('table');
+                ShopglutProductTable.applyFilters(tableId);
+            });
+
+            // Search input
+            $(document).on('keyup search', '.dt-search-input', function() {
+                var tableId = $(this).closest('.shopglut-product-table-wrapper').find('.shopglut-product-table').attr('id');
+                var searchTerm = $(this).val();
+
+                $('#' + tableId).each(function() {
+                    var dataTable = $(this).data('dataTable');
+                    if (dataTable) {
+                        dataTable.search(searchTerm).draw();
+                    }
+                });
+            });
+        },
+
+        /**
+         * Apply category and tag filters
+         */
+        applyFilters: function(tableId) {
+            var $wrapper = $('#' + tableId + '_wrapper');
+            var categoryFilter = $wrapper.find('.dt-category-filter').val();
+            var tagFilter = $wrapper.find('.dt-tag-filter').val();
+
+            $('#' + tableId).each(function() {
+                var dataTable = $(this).data('dataTable');
+                if (!dataTable) return;
+
+                // Apply custom filter
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    var row = dataTable.row(dataIndex);
+                    var node = row.node();
+                    var $row = $(node);
+
+                    // Category filter
+                    if (categoryFilter) {
+                        var categoryData = $row.find('td').filter(function() {
+                            return $(this).data('category') !== undefined;
+                        });
+                        if (categoryData.length === 0) {
+                            // Check if row contains category link with matching slug
+                            var hasCategory = $row.find('td').html().indexOf('product_cat') > -1 &&
+                                              $row.find('a[href*="/product-category/' + categoryFilter + '/"]').length > 0;
+                            if (!hasCategory) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    // Tag filter
+                    if (tagFilter) {
+                        var hasTag = $row.find('td').html().indexOf('product_tag') > -1 &&
+                                       $row.find('a[href*="/product-tag/' + tagFilter + '/"]').length > 0;
+                        if (!hasTag) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+                dataTable.draw();
             });
         },
 

@@ -11,11 +11,14 @@
 
 .shopglut-sale-products-content {
 	min-height: 100px;
+	display: flex;
+	justify-content: center;
 }
 
 .shopglut-sale-products {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	margin: 0 -10px;
 }
 

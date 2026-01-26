@@ -35,14 +35,14 @@ class ShortcodeHandler {
         ), $atts, 'shopglut_template');
         
         if (empty($atts['id'])) {
-            return '<p class="shopglut-error">' . esc_html__('Template ID is required.', 'shopglut') . '</p>';
+            return '<p class="shopglut-error">' . esc_html__('Template ID is required.', 'shortcodeglut') . '</p>';
         }
         
         // Get template by template_id
         $template = WooTemplatesEntity::get_template_by_template_id($atts['id']);
         
         if (!$template) {
-            return '<p class="shopglut-error">' . esc_html__('Template not found.', 'shopglut') . '</p>';
+            return '<p class="shopglut-error">' . esc_html__('Template not found.', 'shortcodeglut') . '</p>';
         }
         
         // Get product
@@ -50,7 +50,7 @@ class ShortcodeHandler {
         $product = wc_get_product($product_id);
         
         if (!$product) {
-            return '<p class="shopglut-error">' . esc_html__('Product not found.', 'shopglut') . '</p>';
+            return '<p class="shopglut-error">' . esc_html__('Product not found.', 'shortcodeglut') . '</p>';
         }
         
         // Process template tags
@@ -83,8 +83,8 @@ class ShortcodeHandler {
             '[product_description]' => $product->get_description(),
             '[product_sku]' => $product->get_sku(),
             '[product_stock]' => $product->is_in_stock() ? 
-                '<span class="in-stock">' . esc_html__('In Stock', 'shopglut') . '</span>' : 
-                '<span class="out-of-stock">' . esc_html__('Out of Stock', 'shopglut') . '</span>',
+                '<span class="in-stock">' . esc_html__('In Stock', 'shortcodeglut') . '</span>' : 
+                '<span class="out-of-stock">' . esc_html__('Out of Stock', 'shortcodeglut') . '</span>',
         );
         
         // Product image
@@ -158,7 +158,7 @@ class ShortcodeHandler {
                 esc_url($product->add_to_cart_url()),
                 $product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button ajax_add_to_cart' : '',
                 $product->is_purchasable() && $product->is_in_stock() ? 'data-product_id="' . esc_attr($product->get_id()) . '" data-product_sku="' . esc_attr($product->get_sku()) . '"' : '',
-                esc_html($product->is_purchasable() && $product->is_in_stock() ? __('Add to cart', 'shopglut') : __('Read more', 'shopglut'))
+                esc_html($product->is_purchasable() && $product->is_in_stock() ? __('Add to cart', 'shortcodeglut') : __('Read more', 'shortcodeglut'))
             );
             $replacements['[btn_cart]'] = $cart_button;
         }
@@ -167,7 +167,7 @@ class ShortcodeHandler {
             $view_button = sprintf(
                 '<a href="%s" class="button shopglut-view-product">%s</a>',
                 esc_url(get_permalink($product->get_id())),
-                esc_html__('View product', 'shopglut')
+                esc_html__('View product', 'shortcodeglut')
             );
             $replacements['[btn_view]'] = $view_button;
         }

@@ -27,9 +27,9 @@ class WooTemplatesListTable extends \WP_List_Table {
     public function get_columns() {
         return [
             'cb'            => '<input type="checkbox" />',
-            'template_name' => esc_html__('Template Name', 'shopglut'),
-            'template_id'   => esc_html__('Template ID', 'shopglut'),
-            'actions'       => esc_html__('Actions', 'shopglut')
+            'template_name' => esc_html__('Template Name', 'shortcodeglut'),
+            'template_id'   => esc_html__('Template ID', 'shortcodeglut'),
+            'actions'       => esc_html__('Actions', 'shortcodeglut')
         ];
     }
 
@@ -96,7 +96,7 @@ class WooTemplatesListTable extends \WP_List_Table {
      */
     public function column_template_name($item) {
         $is_default = isset( $item['is_default'] ) && $item['is_default'] == 1;
-        $default_badge = $is_default ? ' <span class="scg-badge scg-badge--default">' . esc_html__( 'Default', 'shopglut' ) . '</span>' : '';
+        $default_badge = $is_default ? ' <span class="scg-badge scg-badge--default">' . esc_html__( 'Default', 'shortcodeglut' ) . '</span>' : '';
 
         $actions = [];
 
@@ -104,12 +104,12 @@ class WooTemplatesListTable extends \WP_List_Table {
             $actions['edit'] = sprintf(
                 '<a href="%s">%s</a>',
                 esc_url(admin_url('admin.php?page=shortcodeglut&editor=woo_template&template_id=' . $item['id'])),
-                esc_html__('Edit', 'shopglut')
+                esc_html__('Edit', 'shortcodeglut')
             );
         } else {
             $actions['view_only'] = sprintf(
                 '<span style="color:#999;cursor:not-allowed">%s</span>',
-                esc_html__('Prebuilt - View Only', 'shopglut')
+                esc_html__('Prebuilt - View Only', 'shortcodeglut')
             );
         }
 
@@ -117,8 +117,8 @@ class WooTemplatesListTable extends \WP_List_Table {
             $actions['delete'] = sprintf(
                 '<a href="%s" class="submitdelete" onclick="return confirm(\'%s\');">%s</a>',
                 esc_url(wp_nonce_url(admin_url('admin.php?page=shortcodeglut&view=woo_templates&action=delete&template_id=' . $item['id']), 'delete_template_' . $item['id'])),
-                esc_html__('Are you sure you want to delete this template?', 'shopglut'),
-                esc_html__('Delete', 'shopglut')
+                esc_html__('Are you sure you want to delete this template?', 'shortcodeglut'),
+                esc_html__('Delete', 'shortcodeglut')
             );
         }
 
@@ -143,7 +143,7 @@ class WooTemplatesListTable extends \WP_List_Table {
         $template_id = esc_html($item['template_id']);
         return '<div class="shopglut-template-id-wrapper">
                 <code class="shopglut-template-id-code">' . $template_id . '</code>
-                <button type="button" class="shopglut-copy-btn shopglut-copy-id-btn" data-template-id="' . esc_attr($item['template_id']) . '" title="' . esc_attr__('Copy', 'shopglut') . '">
+                <button type="button" class="shopglut-copy-btn shopglut-copy-id-btn" data-template-id="' . esc_attr($item['template_id']) . '" title="' . esc_attr__('Copy', 'shortcodeglut') . '">
                     <span class="dashicons dashicons-admin-page"></span>
                 </button>
             </div>';
@@ -164,15 +164,15 @@ class WooTemplatesListTable extends \WP_List_Table {
                         data-template-html="' . $template_html . '"
                         data-template-css="' . $template_css . '"
                         data-template-name="' . $template_name . '"
-                        title="' . esc_attr__('Preview Template', 'shopglut') . '">
+                        title="' . esc_attr__('Preview Template', 'shortcodeglut') . '">
                     <span class="dashicons dashicons-visibility"></span>
-                    <span>' . esc_html__('Preview', 'shopglut') . '</span>
+                    <span>' . esc_html__('Preview', 'shortcodeglut') . '</span>
                 </button>
                 <button type="button" class="shopglut-action-btn shopglut-duplicate-btn"
                         data-template-id="' . $template_id . '"
-                        title="' . esc_attr__('Duplicate Template', 'shopglut') . '">
+                        title="' . esc_attr__('Duplicate Template', 'shortcodeglut') . '">
                     <span class="dashicons dashicons-admin-page"></span>
-                    <span>' . esc_html__('Duplicate', 'shopglut') . '</span>
+                    <span>' . esc_html__('Duplicate', 'shortcodeglut') . '</span>
                 </button>
             </div>';
     }
@@ -182,7 +182,7 @@ class WooTemplatesListTable extends \WP_List_Table {
      */
     public function get_bulk_actions() {
         return [
-            'delete' => esc_html__('Delete', 'shopglut')
+            'delete' => esc_html__('Delete', 'shortcodeglut')
         ];
     }
 
@@ -190,6 +190,6 @@ class WooTemplatesListTable extends \WP_List_Table {
      * No items found text
      */
     public function no_items() {
-        esc_html_e('No templates found.', 'shopglut');
+        esc_html_e('No templates found.', 'shortcodeglut');
     }
 }

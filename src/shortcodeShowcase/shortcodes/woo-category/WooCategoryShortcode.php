@@ -139,11 +139,10 @@ class WooCategoryShortcode {
 	 */
 	private function enqueue_assets( $atts ) {
 		// Enqueue Bootstrap-like styles
-		// Use SHORTCODEGLUT_PLUGIN_URL which is defined by loader.php
-		wp_enqueue_style( 'shopglut-woo-category-shortcode', SHORTCODEGLUT_PLUGIN_URL . 'src/shortcodeShowcase/shortcodes/woo-category/assets/css/style.css', array(), SHORTCODEGLUT_VERSION );
+		wp_enqueue_style( 'shopglut-woo-category-shortcode', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/woo-category/assets/css/style.css', array(), SHORTCODEGLUT_VERSION );
 
 		if ( $atts['async'] ) {
-			wp_enqueue_script( 'shopglut-woo-category-shortcode', SHORTCODEGLUT_PLUGIN_URL . 'src/shortcodeShowcase/shortcodes/woo-category/assets/js/script.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
+			wp_enqueue_script( 'shopglut-woo-category-shortcode', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/woo-category/assets/js/script.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
 			wp_localize_script( 'shopglut-woo-category-shortcode', 'shopglutWooCategoryAjax', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'shopglut_woo_category_nonce' )

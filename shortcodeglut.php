@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: ShortcodeGlut - Product Shortcodes for WooCommerce
+ * Plugin Name: ShortcodeGlut - Product Shortcodes for WooCommerce 11
  * Plugin URI: https://shopglut.com/
  * Description: Beautiful WooCommerce product shortcodes with grid, list, and table layouts for displaying products, sale items, and category listings.
  * Version: 1.0.0
@@ -29,6 +29,17 @@ require_once SHORTCODEGLUT_PATH . 'src/ShortcodeglutRegisterScripts.php';
 require_once SHORTCODEGLUT_PATH . 'src/ShortcodeglutRegisterMenu.php';
 require_once SHORTCODEGLUT_PATH . 'src/ShortcodeglutBase.php';
 require_once SHORTCODEGLUT_PATH . 'src/ShortcodeglutTools.php';
+require_once SHORTCODEGLUT_PATH . 'src/WelcomePage.php';
+
+// Load WooTemplates classes before initializing SettingsPage
+require_once SHORTCODEGLUT_PATH . 'src/wooTemplates/WooTemplatesEntity.php';
+require_once SHORTCODEGLUT_PATH . 'src/wooTemplates/SettingsPage.php';
+
+// Initialize WelcomePage early to register menu
+\Shortcodeglut\WelcomePage::get_instance();
+
+// Initialize SettingsPage early to register AJAX actions
+\Shortcodeglut\wooTemplates\SettingsPage::get_instance();
 
 // Initialize the plugin
 function shortcodeglut_init() {
@@ -40,4 +51,23 @@ add_action( 'plugins_loaded', 'shortcodeglut_init' );
 // Activation hook
 register_activation_hook( __FILE__, function() {
 	\Shortcodeglut\ShortcodeglutDatabase::shortcodeglut_initialize();
+	// Set transient to redirect to welcome page
+	set_transient( 'shortcodeglut_activation_redirect', true, 30 );
+} );
+
+// Admin init hook for redirect to welcome page
+add_action( 'admin_init', function() {
+	// Check if we should redirect to welcome page
+	if ( get_transient( 'shortcodeglut_activation_redirect' ) ) {
+		delete_transient( 'shortcodeglut_activation_redirect' );
+
+		// Don't redirect if activating from network admin or bulk activation
+		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
+			return;
+		}
+
+		// Redirect to welcome page
+		wp_safe_redirect( admin_url( 'admin.php?page=shortcodeglut-welcome' ) );
+		exit;
+	}
 } );

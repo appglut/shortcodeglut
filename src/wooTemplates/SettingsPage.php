@@ -42,10 +42,13 @@ class SettingsPage {
 	];
 
 	public function __construct() {
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueEditorScripts' ) );
+		// Register AJAX actions early - these need to be available on every admin load
 		add_action( 'wp_ajax_save_woo_template', array( $this, 'ajaxSaveTemplate' ) );
-	add_action( 'wp_ajax_shortcodeglut_preview_template', array( $this, 'ajaxPreviewTemplate' ) );
-	add_action( 'wp_ajax_shortcodeglut_duplicate_template', array( $this, 'ajaxDuplicateTemplate' ) );
+		add_action( 'wp_ajax_shortcodeglut_preview_template', array( $this, 'ajaxPreviewTemplate' ) );
+		add_action( 'wp_ajax_shortcodeglut_duplicate_template', array( $this, 'ajaxDuplicateTemplate' ) );
+
+		// Admin-specific hooks
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueEditorScripts' ) );
 		add_action( 'admin_init', array( $this, 'handleTemplateActions' ) );
 	}
 
@@ -84,7 +87,7 @@ class SettingsPage {
 
 		// Validate required fields
 		if ( empty( $template_name ) || empty( $template_slug ) ) {
-			add_settings_error( 'shopglut_templates', 'required-fields', esc_html__( 'Template name and ID are required.', 'shopglut' ), 'error' );
+			add_settings_error( 'shopglut_templates', 'required-fields', esc_html__( 'Template name and ID are required.', 'shortcodeglut' ), 'error' );
 			return false;
 		}
 
@@ -97,7 +100,7 @@ class SettingsPage {
 		) );
 
 		if ( $existing_template ) {
-			add_settings_error( 'shopglut_templates', 'duplicate-template-id', esc_html__( 'Template ID must be unique. This ID is already in use.', 'shopglut' ), 'error' );
+			add_settings_error( 'shopglut_templates', 'duplicate-template-id', esc_html__( 'Template ID must be unique. This ID is already in use.', 'shortcodeglut' ), 'error' );
 			return false;
 		}
 
@@ -123,7 +126,7 @@ class SettingsPage {
 
 			// Prevent editing of default templates
 			if ( $existing_record && isset( $existing_record->is_default ) && $existing_record->is_default == 1 ) {
-				add_settings_error( 'shopglut_templates', 'default-template-readonly', esc_html__( 'Cannot edit prebuilt templates. Please create a copy first.', 'shopglut' ), 'error' );
+				add_settings_error( 'shopglut_templates', 'default-template-readonly', esc_html__( 'Cannot edit prebuilt templates. Please create a copy first.', 'shortcodeglut' ), 'error' );
 				return false;
 			}
 
@@ -147,10 +150,10 @@ class SettingsPage {
 		}
 
 		if ( $success ) {
-			add_settings_error( 'shopglut_templates', 'template-saved', esc_html__( 'Template saved successfully.', 'shopglut' ), 'success' );
+			add_settings_error( 'shopglut_templates', 'template-saved', esc_html__( 'Template saved successfully.', 'shortcodeglut' ), 'success' );
 			return $template_id;
 		} else {
-			add_settings_error( 'shopglut_templates', 'save-failed', esc_html__( 'Failed to save template.', 'shopglut' ), 'error' );
+			add_settings_error( 'shopglut_templates', 'save-failed', esc_html__( 'Failed to save template.', 'shortcodeglut' ), 'error' );
 			return false;
 		}
 	}
@@ -178,7 +181,7 @@ class SettingsPage {
 				// Show admin notice for default templates
 				add_action( 'admin_notices', function() {
 					echo '<div class="notice notice-warning"><p>';
-					echo esc_html__( 'This is a prebuilt template. To edit it, create a copy first.', 'shopglut' );
+					echo esc_html__( 'This is a prebuilt template. To edit it, create a copy first.', 'shortcodeglut' );
 					echo '</p></div>';
 				} );
 			}
@@ -213,8 +216,8 @@ class SettingsPage {
 	 */
 	private function displayEditorInterface( $template_id, $template_name, $template_slug, $template_html, $template_css, $template_tags_json ) {
 		$is_new = ! $template_id;
-		$page_title = $is_new ? esc_html__( 'Add New Template', 'shopglut' ) : esc_html__( 'Edit Template', 'shopglut' );
-		$button_text = $is_new ? esc_html__( 'Save Template', 'shopglut' ) : esc_html__( 'Update Template', 'shopglut' );
+		$page_title = $is_new ? esc_html__( 'Add New Template', 'shortcodeglut' ) : esc_html__( 'Edit Template', 'shortcodeglut' );
+		$button_text = $is_new ? esc_html__( 'Save Template', 'shortcodeglut' ) : esc_html__( 'Update Template', 'shortcodeglut' );
 		$list_url = admin_url( 'admin.php?page=' . $this->menu_slug . '&view=woo_templates' );
 
 		// Display settings errors
@@ -225,7 +228,7 @@ class SettingsPage {
 		if ( isset( $_GET['saved'] ) && $_GET['saved'] == '1' ) {
 			add_action( 'admin_notices', function() {
 				echo '<div class="notice notice-success is-dismissible"><p>';
-				echo esc_html__( 'Template saved successfully!', 'shopglut' );
+				echo esc_html__( 'Template saved successfully!', 'shortcodeglut' );
 				echo '</p></div>';
 			} );
 		}
@@ -353,6 +356,19 @@ class SettingsPage {
 		</div>
 
 		<style>
+			/* Hide Screen Options menu */
+			body.shortcodeglut-woo-template-editor #screen-meta-links,
+			body.shortcodeglut-woo-template-editor #contextual-help-link-wrap {
+				display: none !important;
+			}
+
+			/* Prevent horizontal scroll */
+			body.shortcodeglut-woo-template-editor,
+			body.shortcodeglut-woo-template-editor html,
+			body.shortcodeglut-woo-template-editor #wpwrap {
+				overflow-x: hidden !important;
+			}
+
 			/* CRITICAL: Force full width and hide admin menu - Highest specificity */
 			body.shortcodeglut-woo-template-editor #adminmenumain,
 			body.shortcodeglut-woo-template-editor #adminmenuback,
@@ -408,9 +424,26 @@ class SettingsPage {
 				padding: 0 !important;
 			}
 
+			/* Add left/right padding to the main body content with proper max-width */
 			body.shortcodeglut-woo-template-editor #wpbody-content {
-				padding-left: 0 !important;
-				padding-right: 0 !important;
+				padding-left: 32px !important;
+				padding-right: 32px !important;
+				box-sizing: border-box !important;
+				max-width: 100% !important;
+			}
+
+			/* Add padding to template editor page for nice content display */
+			body.shortcodeglut-woo-template-editor .scg-template-editor-page {
+				box-sizing: border-box !important;
+				max-width: 100% !important;
+				width: 100% !important;
+			}
+
+			/* Ensure editor body doesn't overflow */
+			body.shortcodeglut-woo-template-editor .scg-editor-body {
+				max-width: 100% !important;
+				box-sizing: border-box !important;
+				overflow-x: hidden !important;
 			}
 
 			html.wp-toolbar {
@@ -437,22 +470,22 @@ class SettingsPage {
 			.scg-back-link {
 				display: inline-flex;
 				align-items: center;
-				gap: 6px;
-				color: #64748b;
+				gap: 8px;
+				color: #475569;
 				text-decoration: none;
-				font-size: .875rem;
-				font-weight: 500;
-				transition: all .15s ease;
-				width: fit-content;
-				padding: 6px 12px;
-				background: #f1f5f9;
-				border-radius: 6px;
-				border: 1px solid #e2e8f0;
+				font-size: 0.875rem;
+				font-weight: 600;
+				transition: all 0.2s ease;
+				padding: 10px 16px;
+				background: #f8fafc;
+				border-radius: 8px;
+				border: 1px solid #cbd5e1;
 			}
 			.scg-back-link:hover {
 				color: #0284c7;
-				background: #f0f9ff;
+				background: #e0f2fe;
 				border-color: #0284c7;
+				transform: translateX(-2px);
 			}
 			.scg-header-center {
 				text-align: center;
@@ -648,9 +681,12 @@ class SettingsPage {
 			}
 			.scg-editor-body {
 				display: grid;
-				grid-template-columns: 1fr 320px;
-				gap: 32px;
+				grid-template-columns: minmax(0, 1fr) 300px;
+				gap: 24px;
 				align-items: start;
+				max-width: 100%;
+				box-sizing: border-box;
+				overflow: hidden;
 			}
 			.scg-editors-section {
 				display: flex;
@@ -879,14 +915,14 @@ class SettingsPage {
 
 			// Cancel button functionality
 			$('#scg-cancel-edit').on('click', function() {
-				if (confirm('<?php echo esc_js( __( 'Are you sure you want to cancel? Any unsaved changes will be lost.', 'shopglut' ) ); ?>')) {
+				if (confirm('<?php echo esc_js( __( 'Are you sure you want to cancel? Any unsaved changes will be lost.', 'shortcodeglut' ) ); ?>')) {
 					window.location.href = '<?php echo esc_js( $list_url ); ?>';
 				}
 			});
 
 			// Form submit handling - sync CodeMirror values before submit
 			$('#template-editor-form').on('submit', function() {
-				$('#scg-save-template').prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'shopglut' ) ); ?>');
+				$('#scg-save-template').prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'shortcodeglut' ) ); ?>');
 
 				// Sync CodeMirror values to textareas before submit
 				if (htmlEditor && htmlEditor.codemirror) {
@@ -1259,7 +1295,7 @@ class SettingsPage {
 
 		// Validate required fields
 		if ( empty( $template_name ) || empty( $template_slug ) ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Template name and ID are required.', 'shopglut' ) ) );
+			wp_send_json_error( array( 'message' => esc_html__( 'Template name and ID are required.', 'shortcodeglut' ) ) );
 			return;
 		}
 
@@ -1272,7 +1308,7 @@ class SettingsPage {
 		) );
 
 		if ( $existing_template ) {
-			wp_send_json_error( array( 'message' => esc_html__( 'Template ID must be unique. This ID is already in use.', 'shopglut' ) ) );
+			wp_send_json_error( array( 'message' => esc_html__( 'Template ID must be unique. This ID is already in use.', 'shortcodeglut' ) ) );
 			return;
 		}
 
@@ -1318,9 +1354,9 @@ class SettingsPage {
 		}
 
 		if ( $success ) {
-			wp_send_json_success( array( 'message' => esc_html__( 'Template saved successfully.', 'shopglut' ), 'template_id' => $new_id ? $new_id : $template_id ) );
+			wp_send_json_success( array( 'message' => esc_html__( 'Template saved successfully.', 'shortcodeglut' ), 'template_id' => $new_id ? $new_id : $template_id ) );
 		} else {
-			wp_send_json_error( array( 'message' => esc_html__( 'Failed to save template.', 'shopglut' ) ) );
+			wp_send_json_error( array( 'message' => esc_html__( 'Failed to save template.', 'shortcodeglut' ) ) );
 		}
 	}
 
@@ -1628,7 +1664,7 @@ class SettingsPage {
 
 			// Verify nonce
 			if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'delete_template_' . $template_id ) ) {
-				wp_die( esc_html__( 'Security check failed.', 'shopglut' ) );
+				wp_die( esc_html__( 'Security check failed.', 'shortcodeglut' ) );
 			}
 
 			// Check if this is a default template
