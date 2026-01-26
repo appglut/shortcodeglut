@@ -942,10 +942,8 @@ class ShortcodeglutDatabase {
 
 		if ( ! $column_exists ) {
 			// Add assigned_attributes column
-			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
-				"ALTER TABLE `" . esc_sql( $table_name ) . "`
-				ADD COLUMN assigned_attributes text DEFAULT NULL AFTER layout_settings"
-			);
+			
+			$wpdb->query( "ALTER TABLE `" . esc_sql( $table_name ) . "` ADD COLUMN assigned_attributes text DEFAULT NULL AFTER layout_settings"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 		}
 
 		// Check if assignment_type column exists
@@ -959,16 +957,12 @@ class ShortcodeglutDatabase {
 
 		if ( ! $column_exists ) {
 			// Add assignment_type column
-			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
-				"ALTER TABLE `" . esc_sql( $table_name ) . "`
-				ADD COLUMN assignment_type varchar(20) DEFAULT 'legacy' AFTER assigned_attributes"
-			);
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
+			$wpdb->query("ALTER TABLE `" . esc_sql( $table_name ) . "`ADD COLUMN assignment_type varchar(20) DEFAULT 'legacy' AFTER assigned_attributes" );// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 
 			// Add index for assignment_type
-			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
-				"ALTER TABLE `" . esc_sql( $table_name ) . "`
-				ADD KEY assignment_type (assignment_type)"
-			);
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
+			$wpdb->query("ALTER TABLE `" . esc_sql( $table_name ) . "`ADD KEY assignment_type (assignment_type)"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 		}
 	}
 

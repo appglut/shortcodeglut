@@ -247,13 +247,13 @@ class ProductTableShortcode {
 					'data-stock' => $stock_status,
 				);
 
-				// Build data attributes string - properly escaped
+				// Build data attributes string - each key/value already escaped with esc_attr()
 				$attrs_array = array();
 				foreach ( $row_data_attrs as $key => $value ) {
 					$attrs_array[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
 				}
-				$attrs_string = implode( ' ', $attrs_array );
-				echo '<tr ' . $attrs_string . '>';
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output properly escaped, each attribute value escaped with esc_attr() above
+				echo '<tr ' . implode( ' ', $attrs_array ) . '>';
 				foreach ( $columns as $col_index => $column_fields ) {
 					echo '<td data-label="' . esc_attr( $headers[ $col_index ] ) . '">';
 					foreach ( $column_fields as $field ) {

@@ -1,5 +1,5 @@
-=== ShortcodeGlut - Product Shortcodes for WooCommerce 11 ===
-Contributors: shopglut
+=== ShortcodeGlut - Product Shortcodes for WooCommerce ===
+Contributors: appglut
 Tags: woocommerce, products, shortcode, product table, product display
 Requires at least: 5.8
 Requires PHP: 7.4

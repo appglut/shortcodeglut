@@ -15,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\shortcodeShowcase\AdminPage' ) ) {
+
 class AdminPage {
 
 	/**
