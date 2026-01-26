@@ -15,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\shortcodeShowcase\shortcodes\ProductTable\ProductTableShortcode' ) ) {
+
 class ProductTableShortcode {
 	private static $instance = null;
 	private $shortcode_counter = 0;
@@ -660,3 +663,6 @@ class ProductTableShortcode {
 		return ob_get_clean();
 	}
 }
+
+} // End if class_exists check
+

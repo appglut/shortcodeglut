@@ -961,3 +961,4 @@ class AdminPage {
 		<?php
 	}
 }
+} // End if class_exists check

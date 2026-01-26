@@ -11,6 +11,9 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\\wooTemplates\\WooTemplatesListTable' ) ) {
+
 class WooTemplatesListTable extends \WP_List_Table {
 
     public function __construct() {
@@ -193,3 +196,5 @@ class WooTemplatesListTable extends \WP_List_Table {
         esc_html_e('No templates found.', 'shortcodeglut');
     }
 }
+
+} // End if class_exists check

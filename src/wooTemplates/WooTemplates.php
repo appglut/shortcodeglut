@@ -7,6 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Shortcodeglut\wooTemplates\WooTemplatesEntity;
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\wooTemplates\WooTemplates' ) ) {
+
 class WooTemplates {
 	private static $instance = null;
 	private $menu_slug = 'shortcodeglut';
@@ -117,3 +120,4 @@ class WooTemplates {
 		<?php
 	}
 }
+} // End if class_exists check

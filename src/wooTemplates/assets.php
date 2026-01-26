@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Asset registration for wooTemplates
  */
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\\wooTemplates\\WooTemplatesAssets' ) ) {
+
 class WooTemplatesAssets {
     
     public function __construct() {
@@ -68,3 +71,5 @@ class WooTemplatesAssets {
 
 // Initialize the assets class
 new WooTemplatesAssets();
+
+} // End if class_exists check

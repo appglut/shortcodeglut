@@ -7,6 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Shortcodeglut\ShortcodeglutDatabase;
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\wooTemplates\WooTemplatesEntity' ) ) {
+
 class WooTemplatesEntity {
 
 	protected static function getTable() {
@@ -628,3 +631,5 @@ class WooTemplatesEntity {
 		}
 	}
 }
+} // End if class_exists check
+

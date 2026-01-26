@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Prevent class redeclaration when both ShortcodeGlut and ShopGlut plugins are active
+if ( ! class_exists( 'Shortcodeglut\shortcodeShowcase\shortcodes\WooCategory\WooCategoryShortcode' ) ) {
+
 class WooCategoryShortcode {
 	private static $instance = null;
 	private $shortcode_counter = 0;
@@ -768,3 +771,5 @@ class WooCategoryShortcode {
 		wp_send_json_success( array( 'html' => $html ) );
 	}
 }
+
+} // End if class_exists check
