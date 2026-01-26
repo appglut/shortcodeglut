@@ -981,7 +981,7 @@ class SettingsPage {
 					type: 'POST',
 					data: {
 						action: 'shortcodeglut_preview_template',
-						nonce: '<?php echo wp_create_nonce( 'shopglut_preview_nonce' ); ?>',
+						nonce: '<?php echo esc_js( wp_create_nonce( 'shopglut_preview_nonce' ) ); ?>',
 						html: html,
 						css: css
 					},
@@ -1605,7 +1605,9 @@ class SettingsPage {
 		$count = 1;
 
 		// Check if the new ID exists and increment until we find a unique one
-		while ( $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$table_name} WHERE template_id = %s", $new_template_id ) ) ) {
+		$escaped_table_name = esc_sql( $table_name );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query required for custom table operation, safe table name from internal function
+		while ( $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$escaped_table_name} WHERE template_id = %s", $new_template_id ) ) ) {
 			$new_template_id = $template_id_slug . '-copy-' . $count;
 			$count++;
 		}
@@ -1635,7 +1637,9 @@ class SettingsPage {
 			) );
 		} else {
 			// Log error for debugging
-			error_log( 'ShopGlut: Failed to duplicate template. Last error: ' . $wpdb->last_error );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'ShopGlut: Failed to duplicate template. Last error: ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+			}
 			wp_send_json_error( array( 'message' => 'Failed to duplicate template. DB Error: ' . $wpdb->last_error ) );
 		}
 	}

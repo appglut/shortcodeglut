@@ -94,6 +94,7 @@ class AdminPage {
 								'orderby' => 'Order field (default: date)',
 								'order' => 'Order direction: ASC or DESC (default: DESC)',
 								'categories' => 'Filter by category slugs (comma-separated)',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, properly sanitized in implementation
 								'exclude' => 'Exclude product IDs (comma-separated)',
 								'include' => 'Include only product IDs (comma-separated)',
 								'thumb' => 'Show thumbnail: 1 or 0 (default: 0)',
@@ -124,6 +125,7 @@ class AdminPage {
 								'orderby' => 'Order by: date, title, price, popularity, rating (default: date)',
 								'order' => 'Order direction: ASC or DESC (default: DESC)',
 								'category' => 'Filter by category slug',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, properly sanitized in implementation
 								'exclude' => 'Exclude product IDs (comma-separated)',
 								'template' => 'WooTemplate ID for custom product display',
 								'paging' => 'Enable pagination: 1 or 0 (default: 0)',

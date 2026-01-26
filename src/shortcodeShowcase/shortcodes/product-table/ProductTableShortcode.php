@@ -58,28 +58,38 @@ class ProductTableShortcode {
 		// Parse shortcode attributes with defaults
 		$atts = shortcode_atts( array(
 			// Basic options
-			'cols' => 'title|price|stock|categories|date|add_to_cart', // Column definition (| separated, , for multiple fields in same column)
-			'colheads' => 'Product|Price|Stock|Categories|Date|Action', // Column headers (must match number of columns)
-			'items_per_page' => 20,              // Items per page
-			'orderby' => 'date',                 // Order field
-			'order' => 'DESC',                   // Order direction
-			'categories' => '',                  // Filter by category slugs (comma-separated)
-			'exclude' => '',                     // Exclude product IDs (comma-separated)
-			'include' => '',                     // Include only product IDs (comma-separated)
-			'thumb' => 0,                       // Show thumbnail (1) or icon (0)
-			'thumb_width' => 48,                 // Thumbnail width in pixels
-			'template' => '',                    // Template ID from WooTemplates
-			'login' => 0,                        // Require login to view
-			'jstable' => 1,                      // Enable DataTables.js
-			'paging' => 1,                       // Enable pagination
-			'searching' => 1,                    // Enable search
-			'sorting' => 1,                      // Enable column sorting
-			'responsive' => 1,                   // Enable responsive table
+			'cols' => 'title|price|stock|categories|date|add_to_cart',
+			'colheads' => 'Product|Price|Stock|Categories|Date|Action',
+			'design' => 'classic',
+			'title' => '',
+			'description' => '',
+			// Display options
+			'show_items_per_page' => '1',           // Show items per page dropdown
+			'items_per_page' => '10',               // Default items per page (10, 25, 50, 100)
+			'show_search' => '1',                   // Show search field
+			'show_category_filter' => '1',          // Show category filter dropdown
+			'show_tag_filter' => '0',               // Show tag filter dropdown
+			'show_stock_filter' => '0',             // Show stock filter dropdown
+			// Other options
+			'orderby' => 'date',
+			'order' => 'DESC',
+			'categories' => '',
+			'exclude' => '',
+			'include' => '',
+			'thumb' => 0,
+			'thumb_width' => 48,
+			'template' => '',
+			'login' => 0,
+			'sorting' => 1,
+			'responsive' => 1,
 		), $atts, 'shopglut_product_table' );
 
 		// Sanitize attributes
 		$atts['cols'] = sanitize_text_field( $atts['cols'] );
 		$atts['colheads'] = sanitize_text_field( $atts['colheads'] );
+		$atts['design'] = sanitize_text_field( $atts['design'] );
+		$atts['title'] = sanitize_text_field( $atts['title'] );
+		$atts['description'] = sanitize_text_field( $atts['description'] );
 		$atts['items_per_page'] = absint( $atts['items_per_page'] );
 		$atts['orderby'] = sanitize_text_field( $atts['orderby'] );
 		$atts['order'] = strtoupper( sanitize_text_field( $atts['order'] ) );
@@ -90,9 +100,11 @@ class ProductTableShortcode {
 		$atts['thumb_width'] = absint( $atts['thumb_width'] );
 		$atts['template'] = sanitize_text_field( $atts['template'] );
 		$atts['login'] = filter_var( $atts['login'], FILTER_VALIDATE_BOOLEAN );
-		$atts['jstable'] = filter_var( $atts['jstable'], FILTER_VALIDATE_BOOLEAN );
-		$atts['paging'] = filter_var( $atts['paging'], FILTER_VALIDATE_BOOLEAN );
-		$atts['searching'] = filter_var( $atts['searching'], FILTER_VALIDATE_BOOLEAN );
+		$atts['show_items_per_page'] = filter_var( $atts['show_items_per_page'], FILTER_VALIDATE_BOOLEAN );
+		$atts['show_search'] = filter_var( $atts['show_search'], FILTER_VALIDATE_BOOLEAN );
+		$atts['show_category_filter'] = filter_var( $atts['show_category_filter'], FILTER_VALIDATE_BOOLEAN );
+		$atts['show_tag_filter'] = filter_var( $atts['show_tag_filter'], FILTER_VALIDATE_BOOLEAN );
+		$atts['show_stock_filter'] = filter_var( $atts['show_stock_filter'], FILTER_VALIDATE_BOOLEAN );
 		$atts['sorting'] = filter_var( $atts['sorting'], FILTER_VALIDATE_BOOLEAN );
 		$atts['responsive'] = filter_var( $atts['responsive'], FILTER_VALIDATE_BOOLEAN );
 
@@ -117,20 +129,17 @@ class ProductTableShortcode {
 	 * Enqueue required CSS and JS
 	 */
 	private function enqueue_assets( $atts ) {
-		// Enqueue DataTable if enabled
-		if ( $atts['jstable'] ) {
-			// Enqueue jQuery DataTables CSS
-			wp_enqueue_style( 'jquery-datatables', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/product-table/assets/css/datatables.min.css', array(), SHORTCODEGLUT_VERSION );
-
-			// Enqueue jQuery DataTables JS
-			wp_enqueue_script( 'jquery-datatables', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/product-table/assets/js/datatables.min.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
-		}
-
 		// Enqueue product table styles
 		wp_enqueue_style( 'shopglut-product-table', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/product-table/assets/css/style.css', array(), SHORTCODEGLUT_VERSION );
 
 		// Enqueue product table script
 		wp_enqueue_script( 'shopglut-product-table', SHORTCODEGLUT_URL . 'src/shortcodeShowcase/shortcodes/product-table/assets/js/script.js', array( 'jquery' ), SHORTCODEGLUT_VERSION, true );
+
+		// Localize script
+		wp_localize_script( 'shopglut-product-table', 'shopglutTableParams', array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce' => wp_create_nonce( 'shopglut_table_nonce' ),
+		));
 	}
 
 	/**
@@ -144,36 +153,56 @@ class ProductTableShortcode {
 		// Get products
 		$products = $this->get_products( $atts );
 
-		// Get categories and tags for filters
-		$categories = $this->get_product_categories();
-		$tags = $this->get_product_tags();
+		// Default title and description
+		$title = ! empty( $atts['title'] ) ? $atts['title'] : __( 'Product Table', 'shortcodeglut' );
+		$description = ! empty( $atts['description'] ) ? $atts['description'] : __( 'Search, Filter, and Sort Products', 'shortcodeglut' );
 
-		echo '<div class="shopglut-product-table-wrapper" id="' . esc_attr( $unique_id ) . '_wrapper">';
-
-		// Render filter bar
-		$this->render_filter_bar( $unique_id, $categories, $tags, $atts );
-
-		echo '<table id="' . esc_attr( $unique_id ) . '" class="shopglut-product-table display' . ( $atts['responsive'] ? ' responsive' : '' ) . '"';
-
-		// DataTable options
-		if ( $atts['jstable'] ) {
-			$table_options = array(
-				'pageLength' => $atts['items_per_page'],
-				'paging' => $atts['paging'] ? 'true' : 'false',
-				'searching' => $atts['searching'] ? 'true' : 'false',
-				'order' => array(),
-				'responsive' => $atts['responsive'] ? 'true' : 'false',
-			);
-			echo ' data-options="' . esc_attr( wp_json_encode( $table_options ) ) . '"';
+		// Generate data-column attributes for sorting
+		$column_data_attrs = array();
+		foreach ( $headers as $index => $header ) {
+			$column_data_attrs[] = $this->slugify( $header );
 		}
 
-		echo '>';
+		// Add design class to wrapper
+		$design_class = 'sgpt-design-' . sanitize_html_class( $atts['design'] );
+
+		echo '<div class="shopglut-product-table-wrapper ' . esc_attr( $design_class ) . '" id="' . esc_attr( $unique_id ) . '_wrapper" data-table-id="' . esc_attr( $unique_id ) . '">';
+
+		// Header section - only for modern design
+		if ( $atts['design'] === 'modern' ) {
+			echo '<div class="sgpt-header">';
+			echo '<h2>' . esc_html( $title ) . '</h2>';
+			if ( ! empty( $description ) ) {
+				echo '<p>' . esc_html( $description ) . '</p>';
+			}
+			echo '</div>';
+		}
+
+		// Start table container
+		echo '<div class="sgpt-table-container">';
+
+		// Filter/Controls section
+		$this->render_controls( $unique_id, $atts );
+
+		// Results count (modern only)
+		if ( $atts['design'] === 'modern' ) {
+			echo '<div class="sgpt-results-count" id="sgpt-results-count-' . esc_attr( $unique_id ) . '"></div>';
+		}
+
+		// Table wrapper (modern only)
+		if ( $atts['design'] === 'modern' ) {
+			echo '<div class="sgpt-table-wrapper">';
+		}
+
+		echo '<table id="' . esc_attr( $unique_id ) . '" class="shopglut-product-table' . ( $atts['responsive'] ? ' responsive' : '' ) . '" data-items-per-page="' . esc_attr( $atts['items_per_page'] ) . '">';
 
 		// Table header
 		echo '<thead>';
 		echo '<tr>';
-		foreach ( $headers as $header ) {
-			echo '<th>' . esc_html( $header ) . '</th>';
+		foreach ( $headers as $index => $header ) {
+			$no_sort_class = ( ! $atts['sorting'] ) ? ' class="no-sort"' : '';
+			$data_column = ' data-column="' . esc_attr( $column_data_attrs[ $index ] ) . '"';
+			echo '<th' . $no_sort_class . $data_column . '>' . esc_html( $header ) . '</th>';
 		}
 		echo '</tr>';
 		echo '</thead>';
@@ -192,20 +221,41 @@ class ProductTableShortcode {
 				// Get product categories and tags for filtering
 				$product_categories = get_the_terms( $product->get_id(), 'product_cat' );
 				$category_slugs = is_array( $product_categories ) ? wp_list_pluck( $product_categories, 'slug' ) : array();
+				$category_names = is_array( $product_categories ) ? wp_list_pluck( $product_categories, 'name' ) : array();
 
 				$product_tags = get_the_terms( $product->get_id(), 'product_tag' );
 				$tag_slugs = is_array( $product_tags ) ? wp_list_pluck( $product_tags, 'slug' ) : array();
+				$tag_names = is_array( $product_tags ) ? wp_list_pluck( $product_tags, 'name' ) : array();
+
+				// Determine stock status
+				$stock_status = 'in-stock';
+				$stock_text = __( 'In Stock', 'shortcodeglut' );
+				if ( ! $product->is_in_stock() ) {
+					$stock_status = 'out-of-stock';
+					$stock_text = __( 'Out of Stock', 'shortcodeglut' );
+				} elseif ( $product->is_on_backorder() ) {
+					$stock_status = 'on-backorder';
+					$stock_text = __( 'On Backorder', 'shortcodeglut' );
+				}
 
 				$row_data_attrs = array(
-					'data-categories' => esc_attr( implode( ',', $category_slugs ) ),
-					'data-tags' => esc_attr( implode( ',', $tag_slugs ) ),
+					'data-categories' => implode( ',', $category_slugs ),
+					'data-category-names' => implode( ',', $category_names ),
+					'data-tags' => implode( ',', $tag_slugs ),
+					'data-tag-names' => implode( ',', $tag_names ),
+					'data-stock' => $stock_status,
 				);
 
-				echo '<tr ' . implode( ' ', array_map( function( $k, $v ) { return $k . '="' . $v . '"'; }, array_keys( $row_data_attrs ), $row_data_attrs ) ) . '>';
-				foreach ( $columns as $column_fields ) {
-					echo '<td>';
+				// Build data attributes string
+				$attrs = array();
+				foreach ( $row_data_attrs as $key => $value ) {
+					$attrs[] = $key . '="' . esc_attr( $value ) . '"';
+				}
+				echo '<tr ' . implode( ' ', $attrs ) . '>';
+				foreach ( $columns as $col_index => $column_fields ) {
+					echo '<td data-label="' . esc_attr( $headers[ $col_index ] ) . '">';
 					foreach ( $column_fields as $field ) {
-						echo $this->get_field_value( $field, $product, $atts );
+						echo wp_kses_post( $this->get_field_value( $field, $product, $atts, $unique_id ) );
 					}
 					echo '</td>';
 				}
@@ -217,90 +267,142 @@ class ProductTableShortcode {
 		echo '</tbody>';
 
 		echo '</table>';
-		echo '</div>';
+
+		// Close table wrapper (only for modern design)
+		if ( $atts['design'] === 'modern' ) {
+			echo '</div>'; // Close sgpt-table-wrapper
+		}
+
+		echo '</div>'; // Close sgpt-table-container
+		echo '</div>'; // Close shopglut-product-table-wrapper
 
 		wp_reset_postdata();
 	}
 
 	/**
-	 * Render filter bar with category, tag, search, and items per page
+	 * Render controls/filter section
 	 */
-	private function render_filter_bar( $unique_id, $categories, $tags, $atts ) {
+	private function render_controls( $unique_id, $atts ) {
 		$page_lengths = array( 10, 25, 50, 100 );
 		$current_length = $atts['items_per_page'];
 
-		?>
-		<div class="dt-layout-row">
-			<div class="dt-layout-cell dt-layout-start">
-				<div class="dt-length">
-					<select aria-controls="<?php echo esc_attr( $unique_id ); ?>" class="dt-input" id="dt-length-<?php echo esc_attr( $unique_id ); ?>">
-						<?php foreach ( $page_lengths as $length ) : ?>
-							<option value="<?php echo esc_attr( $length ); ?>" <?php selected( $current_length, $length ); ?>>
-								<?php echo esc_html( $length ); ?>
-							</option>
-						<?php endforeach; ?>
-					</select>
-					<label for="dt-length-<?php echo esc_attr( $unique_id ); ?>"></label>
+		if ( $atts['design'] === 'modern' ) {
+			// Modern design layout
+			echo '<div class="sgpt-controls">';
 
-					<div class="dt-category-wrap" style="">
-						<select id="dt-category-filter-<?php echo esc_attr( $unique_id ); ?>" class="dt-category-filter" data-table="<?php echo esc_attr( $unique_id ); ?>">
-							<option value=""><?php esc_html_e( 'All Categories', 'shortcodeglut' ); ?></option>
-							<?php foreach ( $categories as $cat ) : ?>
-								<option value="<?php echo esc_attr( $cat->slug ); ?>">
-									<?php echo esc_html( $cat->name . ' (' . $cat->count . ')' ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</div>
+			// Items per page
+			if ( $atts['show_items_per_page'] ) {
+				echo '<div class="sgpt-items-per-page">';
+				echo '<label for="sgpt-length-' . esc_attr( $unique_id ) . '">' . esc_html__( 'Show', 'shortcodeglut' ) . '</label>';
+				echo '<select id="sgpt-length-' . esc_attr( $unique_id ) . '" class="sgpt-length-select">';
+				foreach ( $page_lengths as $length ) {
+					echo '<option value="' . esc_attr( $length ) . '" ' . selected( $current_length, $length, false ) . '>' . esc_html( $length ) . '</option>';
+				}
+				echo '</select>';
+				echo '<span>' . esc_html__( 'entries', 'shortcodeglut' ) . '</span>';
+				echo '</div>';
+			}
 
-					<div class="dt-tag-wrap" style="">
-						<select id="dt-tag-filter-<?php echo esc_attr( $unique_id ); ?>" class="dt-tag-filter" data-table="<?php echo esc_attr( $unique_id ); ?>">
-							<option value=""><?php esc_html_e( 'All Tags', 'shortcodeglut' ); ?></option>
-							<?php foreach ( $tags as $tag ) : ?>
-								<option value="<?php echo esc_attr( $tag->slug ); ?>">
-									<?php echo esc_html( $tag->name . ' (' . $tag->count . ')' ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="dt-layout-cell dt-layout-end">
-				<div class="dt-search">
-					<label for="dt-search-<?php echo esc_attr( $unique_id ); ?>"><?php esc_html_e( 'Search', 'shortcodeglut' ); ?></label>
-					<input type="search" class="dt-input" id="dt-search-<?php echo esc_attr( $unique_id ); ?>" placeholder="<?php esc_attr_e( 'Type to filter...', 'shortcodeglut' ); ?>" aria-controls="<?php echo esc_attr( $unique_id ); ?>">
-				</div>
-			</div>
-		</div>
-		<?php
-	}
+			// Category filter
+			if ( $atts['show_category_filter'] ) {
+				echo '<div class="sgpt-filter-group">';
+				echo '<label for="sgpt-category-filter-' . esc_attr( $unique_id ) . '">' . esc_html__( 'Category:', 'shortcodeglut' ) . '</label>';
+				echo '<select id="sgpt-category-filter-' . esc_attr( $unique_id ) . '" class="sgpt-category-filter">';
+				echo '<option value="">' . esc_html__( 'All Categories', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
 
-	/**
-	 * Get all product categories
-	 */
-	private function get_product_categories() {
-		$categories = get_terms( array(
-			'taxonomy' => 'product_cat',
-			'hide_empty' => true,
-			'orderby' => 'name',
-			'order' => 'ASC',
-		) );
+			// Tag filter
+			if ( $atts['show_tag_filter'] ) {
+				echo '<div class="sgpt-filter-group">';
+				echo '<label for="sgpt-tag-filter-' . esc_attr( $unique_id ) . '">' . esc_html__( 'Tag:', 'shortcodeglut' ) . '</label>';
+				echo '<select id="sgpt-tag-filter-' . esc_attr( $unique_id ) . '" class="sgpt-tag-filter">';
+				echo '<option value="">' . esc_html__( 'All Tags', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
 
-		return is_array( $categories ) ? $categories : array();
-	}
+			// Stock filter
+			if ( $atts['show_stock_filter'] ) {
+				echo '<div class="sgpt-filter-group">';
+				echo '<label for="sgpt-stock-filter-' . esc_attr( $unique_id ) . '">' . esc_html__( 'Stock:', 'shortcodeglut' ) . '</label>';
+				echo '<select id="sgpt-stock-filter-' . esc_attr( $unique_id ) . '" class="sgpt-stock-filter">';
+				echo '<option value="">' . esc_html__( 'All Stock', 'shortcodeglut' ) . '</option>';
+				echo '<option value="in-stock">' . esc_html__( 'In Stock', 'shortcodeglut' ) . '</option>';
+				echo '<option value="out-of-stock">' . esc_html__( 'Out of Stock', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
 
-	/**
-	 * Get all product tags
-	 */
-	private function get_product_tags() {
-		$tags = get_terms( array(
-			'taxonomy' => 'product_tag',
-			'hide_empty' => true,
-			'orderby' => 'name',
-			'order' => 'ASC',
-		) );
+			// Search box (always last on right)
+			if ( $atts['show_search'] ) {
+				echo '<div class="sgpt-search-box">';
+				echo '<input type="search" class="sgpt-search-input" id="sgpt-search-' . esc_attr( $unique_id ) . '" placeholder="' . esc_attr__( 'Search...', 'shortcodeglut' ) . '" />';
+				echo '</div>';
+			}
 
-		return is_array( $tags ) ? $tags : array();
+			echo '</div>'; // End sgpt-controls
+		} else {
+			// Classic design layout
+			echo '<div class="sgpt-filter-row">';
+
+			echo '<div class="sgpt-filter-cell sgpt-filter-start">';
+
+			// Items per page
+			if ( $atts['show_items_per_page'] ) {
+				echo '<div class="sgpt-length-control">';
+				echo '<select id="sgpt-length-' . esc_attr( $unique_id ) . '" class="sgpt-length-select">';
+				foreach ( $page_lengths as $length ) {
+					echo '<option value="' . esc_attr( $length ) . '" ' . selected( $current_length, $length, false ) . '>' . esc_html( $length ) . '</option>';
+				}
+				echo '</select>';
+				echo '<label for="sgpt-length-' . esc_attr( $unique_id ) . '">' . esc_html__( 'per page', 'shortcodeglut' ) . '</label>';
+				echo '</div>';
+			}
+
+			// Category filter
+			if ( $atts['show_category_filter'] ) {
+				echo '<div class="sgpt-category-wrap">';
+				echo '<select id="sgpt-category-filter-' . esc_attr( $unique_id ) . '" class="sgpt-category-select sgpt-category-filter">';
+				echo '<option value="">' . esc_html__( 'All Categories', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
+
+			// Tag filter
+			if ( $atts['show_tag_filter'] ) {
+				echo '<div class="sgpt-tag-wrap">';
+				echo '<select id="sgpt-tag-filter-' . esc_attr( $unique_id ) . '" class="sgpt-tag-select sgpt-tag-filter">';
+				echo '<option value="">' . esc_html__( 'All Tags', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
+
+			// Stock filter
+			if ( $atts['show_stock_filter'] ) {
+				echo '<div class="sgpt-stock-wrap">';
+				echo '<select id="sgpt-stock-filter-' . esc_attr( $unique_id ) . '" class="sgpt-stock-select sgpt-stock-filter">';
+				echo '<option value="">' . esc_html__( 'All Stock', 'shortcodeglut' ) . '</option>';
+				echo '<option value="in-stock">' . esc_html__( 'In Stock', 'shortcodeglut' ) . '</option>';
+				echo '<option value="out-of-stock">' . esc_html__( 'Out of Stock', 'shortcodeglut' ) . '</option>';
+				echo '</select>';
+				echo '</div>';
+			}
+
+			echo '</div>'; // End sgpt-filter-start
+
+			// Search box (always last on right)
+			if ( $atts['show_search'] ) {
+				echo '<div class="sgpt-filter-cell sgpt-filter-end">';
+				echo '<div class="sgpt-search-control">';
+				echo '<input type="search" class="sgpt-search-input" id="sgpt-search-' . esc_attr( $unique_id ) . '" placeholder="' . esc_attr__( 'Search...', 'shortcodeglut' ) . '" />';
+				echo '</div>';
+				echo '</div>';
+			}
+
+			echo '</div>'; // End sgpt-filter-row
+		}
 	}
 
 	/**
@@ -324,12 +426,23 @@ class ProductTableShortcode {
 	private function parse_headers( $headers_string, $count ) {
 		$headers = explode( '|', $headers_string );
 
-		// Pad with empty strings if not enough headers
 		while ( count( $headers ) < $count ) {
 			$headers[] = '';
 		}
 
 		return array_map( 'trim', $headers );
+	}
+
+	/**
+	 * Convert string to slug for data-column attribute
+	 */
+	private function slugify( $text ) {
+		$text = preg_replace( '~[^\pL\d]+~u', '-', $text );
+		$text = preg_replace( '~[^-\w]+~', '', $text );
+		$text = trim( $text, '-' );
+		$text = preg_replace( '~-+~', '-', $text );
+		$text = strtolower( $text );
+		return $text ?: 'column';
 	}
 
 	/**
@@ -339,12 +452,11 @@ class ProductTableShortcode {
 		$args = array(
 			'post_type' => 'product',
 			'post_status' => 'publish',
-			'posts_per_page' => -1, // Get all products, DataTable handles pagination
+			'posts_per_page' => -1,
 			'orderby' => $atts['orderby'],
 			'order' => $atts['order'],
 		);
 
-		// Filter by categories
 		if ( ! empty( $atts['categories'] ) ) {
 			$args['tax_query'] = array(
 				array(
@@ -355,7 +467,6 @@ class ProductTableShortcode {
 			);
 		}
 
-		// Include/exclude specific products
 		if ( ! empty( $atts['include'] ) ) {
 			$args['post__in'] = array_map( 'absint', explode( ',', $atts['include'] ) );
 		}
@@ -370,7 +481,7 @@ class ProductTableShortcode {
 	/**
 	 * Get field value for display
 	 */
-	private function get_field_value( $field, $product, $atts ) {
+	private function get_field_value( $field, $product, $atts, $table_id ) {
 		$value = '';
 
 		switch ( $field ) {
@@ -408,9 +519,18 @@ class ProductTableShortcode {
 				break;
 
 			case 'stock':
-				$value = $product->is_in_stock()
-					? '<span class="in-stock">' . esc_html__( 'In Stock', 'shortcodeglut' ) . '</span>'
-					: '<span class="out-of-stock">' . esc_html__( 'Out of Stock', 'shortcodeglut' ) . '</span>';
+				$stock_status = 'in-stock';
+				$stock_text = __( 'In Stock', 'shortcodeglut' );
+				if ( ! $product->is_in_stock() ) {
+					$stock_status = 'out-of-stock';
+					$stock_text = __( 'Out of Stock', 'shortcodeglut' );
+				} elseif ( $product->is_on_backorder() ) {
+					$stock_status = 'on-backorder';
+					$stock_text = __( 'On Backorder', 'shortcodeglut' );
+				}
+				// Use badge style for modern, text for classic
+				$badge_class = ( $atts['design'] === 'modern' ) ? 'sgpt-status' : '';
+				$value = '<span class="' . esc_attr( $badge_class ) . ' ' . esc_attr( $stock_status ) . '">' . esc_html( $stock_text ) . '</span>';
 				break;
 
 			case 'stock_quantity':
@@ -462,17 +582,25 @@ class ProductTableShortcode {
 				break;
 
 			case 'add_to_cart':
+				$add_to_cart_class = 'shopglut-table-add-to-cart';
+				$product_id = $product->get_id();
+				$is_purchasable = $product->is_purchasable() && $product->is_in_stock();
+
+				if ( $is_purchasable ) {
+					$add_to_cart_class .= ' ajax_add_to_cart';
+				}
+
 				$value = sprintf(
-					'<a href="%s" class="button shopglut-table-add-to-cart %s" %s>%s</a>',
+					'<a href="%s" class="button %s" data-product_id="%s">%s</a>',
 					esc_url( $product->add_to_cart_url() ),
-					$product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button' : '',
-					$product->is_purchasable() && $product->is_in_stock() ? 'data-product_id="' . esc_attr( $product->get_id() ) . '"' : '',
-					esc_html( $product->is_purchasable() && $product->is_in_stock() ? __( 'Add to Cart', 'shortcodeglut' ) : __( 'Read More', 'shortcodeglut' ) )
+					esc_attr( $add_to_cart_class ),
+					esc_attr( $product_id ),
+					esc_html( $is_purchasable ? __( 'Add to Cart', 'shortcodeglut' ) : __( 'Read More', 'shortcodeglut' ) )
 				);
 				break;
 
 			case 'view':
-				$value = '<a href="' . esc_url( get_permalink( $product->get_id() ) ) . '" class="button">' . esc_html__( 'View', 'shortcodeglut' ) . '</a>';
+				$value = '<a href="' . esc_url( get_permalink( $product->get_id() ) ) . '" class="button shopglut-table-view-product">' . esc_html__( 'View', 'shortcodeglut' ) . '</a>';
 				break;
 
 			case 'rating':

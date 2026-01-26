@@ -1,6 +1,6 @@
-=== ShortcodeGlut - Product Shortcodes for WooCommerce ===
+=== ShortcodeGlut - Product Shortcodes for WooCommerce 11 ===
 Contributors: shopglut
-Tags: woocommerce, products, shortcode, product table, sale products, category products, product display
+Tags: woocommerce, products, shortcode, product table, product display
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.9

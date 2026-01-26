@@ -801,13 +801,14 @@ class ShortcodeglutDatabase {
 		$was_existing = self::table_exists( $table_name );
 		$added_column = false;
 		if ( $was_existing && ! self::column_exists( $table_name, 'is_default' ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- ALTER TABLE for adding column to existing table
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- ALTER TABLE for adding column to existing table, safe table name from internal function
 			$wpdb->query( "ALTER TABLE {$table_name} ADD COLUMN is_default tinyint(1) DEFAULT 0 AFTER template_tags" );
 			$added_column = true;
 		}
 
 		if ( self::table_exists( $table_name ) && ! $added_column ) {
 			// Table exists and we didn't just add the column - check if we need to insert defaults
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query for count, safe table name from internal function
 			$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
 			if ( $count == 0 ) {
 				// Table is empty, insert default templates
@@ -931,6 +932,7 @@ class ShortcodeglutDatabase {
 
 		// Check if assigned_attributes column exists
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration check
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration check
 		$column_exists = $wpdb->get_var(
 			"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
 			WHERE TABLE_SCHEMA = DATABASE()
@@ -940,8 +942,7 @@ class ShortcodeglutDatabase {
 
 		if ( ! $column_exists ) {
 			// Add assigned_attributes column
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Schema migration, safe SQL
-			$wpdb->query(
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 				"ALTER TABLE `" . esc_sql( $table_name ) . "`
 				ADD COLUMN assigned_attributes text DEFAULT NULL AFTER layout_settings"
 			);
@@ -958,15 +959,13 @@ class ShortcodeglutDatabase {
 
 		if ( ! $column_exists ) {
 			// Add assignment_type column
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Schema migration, safe SQL
-			$wpdb->query(
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 				"ALTER TABLE `" . esc_sql( $table_name ) . "`
 				ADD COLUMN assignment_type varchar(20) DEFAULT 'legacy' AFTER assigned_attributes"
 			);
 
 			// Add index for assignment_type
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Schema migration, safe SQL
-			$wpdb->query(
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema migration, safe SQL with esc_sql
 				"ALTER TABLE `" . esc_sql( $table_name ) . "`
 				ADD KEY assignment_type (assignment_type)"
 			);

@@ -18,7 +18,7 @@ class WooTemplatesEntity {
 	 */
 	private static function column_exists( $table, $column_name ) {
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Column existence check, safe table name from internal function
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder, WordPress.DB.DirectDatabaseQuery.NoCaching -- Column existence check, safe table name from internal function
 		$results = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `%1s` LIKE %s", $table, $column_name ) );
 		return ! empty( $results );
 	}
@@ -48,27 +48,24 @@ class WooTemplatesEntity {
 
 			if ($limit > 0) {
 				if ($current_page > 1) {
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, caching handled manually
-					$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query required for custom table operation
+					$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query for custom table, safe internal table/order by values
 						$wpdb->prepare(
-							"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by} LIMIT %d OFFSET %d", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+							"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by} LIMIT %d OFFSET %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 							1, $limit, ($current_page - 1) * $limit
 						), 'ARRAY_A'
 					);
 				} else {
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, caching handled manually
-					$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query required for custom table operation
+					$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query for custom table, safe internal table/order by values
 						$wpdb->prepare(
-							"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by} LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+							"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by} LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 							1, $limit
 						), 'ARRAY_A'
 					);
 				}
 			} else {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, caching handled manually
-				$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query required for custom table operation
+				$result = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query for custom table, safe internal table/order by values
 					$wpdb->prepare(
-						"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by}", // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+						"SELECT * FROM `{$table}` WHERE 1=%d ORDER BY {$order_by}", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						1
 					), 'ARRAY_A'
 				);
@@ -102,8 +99,8 @@ class WooTemplatesEntity {
 		$count = wp_cache_get( $cache_key );
 
 		if ( false === $count ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query required for custom table operation, caching handled manually
-			$count = (int) $wpdb->get_var( "SELECT COUNT(id) FROM `{$table}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query required for custom table operation, caching handled manually, safe table name from internal function
+			$count = (int) $wpdb->get_var( "SELECT COUNT(id) FROM `{$table}`" );
 
 			// Cache the result for 1 hour
 			wp_cache_set( $cache_key, $count, '', 3600 );
@@ -195,14 +192,19 @@ class WooTemplatesEntity {
 
 		$table = self::getTable();
 		if ( empty( $table ) ) {
-			error_log( 'ShopGlut: insert_default_templates() - table is empty' );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'ShopGlut: insert_default_templates() - table is empty' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+			}
 			return;
 		}
 
 		// Check if table exists
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Direct query for table existence check, safe table name from internal function
 		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" );
 		if ( ! $table_exists ) {
-			error_log( 'ShopGlut: insert_default_templates() - table does not exist: ' . $table );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'ShopGlut: insert_default_templates() - table does not exist: ' . $table ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+			}
 			return;
 		}
 
@@ -577,39 +579,52 @@ class WooTemplatesEntity {
 
 		// Check which default templates already exist
 		$placeholders = implode( ',', array_fill( 0, count( $default_template_ids ), '%s' ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Direct query required for custom table operation with variable placeholders
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Direct query required for custom table operation with variable placeholders, safe table name from internal function
 		$existing_ids = $wpdb->get_col( $wpdb->prepare( "SELECT template_id FROM {$table} WHERE template_id IN ({$placeholders})", $default_template_ids ) );
 
 		// Log for debugging
-		error_log( 'ShopGlut: Existing template IDs: ' . implode( ', ', $existing_ids ) );
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'ShopGlut: Existing template IDs: ' . implode( ', ', $existing_ids ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+		}
 
 		// Only insert templates that don't exist yet
 		$templates_to_insert = array_diff( $default_template_ids, $existing_ids );
 
-		error_log( 'ShopGlut: Templates to insert: ' . implode( ', ', $templates_to_insert ) );
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'ShopGlut: Templates to insert: ' . implode( ', ', $templates_to_insert ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+		}
 
 		$inserted = false;
 		$inserted_count = 0;
 		foreach ( $templates_to_insert as $template_id ) {
 			if ( isset( $all_templates[ $template_id ] ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Insert operation for custom table
 				$result = $wpdb->insert( $table, $all_templates[ $template_id ] );
 				if ( $result ) {
 					$inserted = true;
 					$inserted_count++;
-					error_log( 'ShopGlut: Successfully inserted template: ' . $template_id );
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log( 'ShopGlut: Successfully inserted template: ' . $template_id ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+					}
 				} else {
-					error_log( 'ShopGlut: Failed to insert template: ' . $template_id . ' - ' . $wpdb->last_error );
+					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+						error_log( 'ShopGlut: Failed to insert template: ' . $template_id . ' - ' . $wpdb->last_error ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+					}
 				}
 			}
 		}
 
-		error_log( 'ShopGlut: Total templates inserted: ' . $inserted_count );
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'ShopGlut: Total templates inserted: ' . $inserted_count ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+		}
 
 		// Clear cache if any templates were inserted
 		if ( $inserted ) {
 			wp_cache_delete( 'shopglut_woo_templates_count' );
 			wp_cache_flush(); // Clear all listing cache
-			error_log( 'ShopGlut: Cache cleared after template insertion' );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'ShopGlut: Cache cleared after template insertion' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug logging for development
+			}
 		}
 	}
 }

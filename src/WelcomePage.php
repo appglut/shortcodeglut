@@ -13,270 +13,227 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WelcomePage {
 
-	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_welcome_page' ) );
-		add_action( 'admin_head', array( $this, 'remove_welcome_menu' ) );
-	}
-
 	/**
-	 * Add welcome page (hidden from menu)
+	 * Render the welcome page content
 	 */
-	public function add_welcome_page() {
-		add_submenu_page(
-			null, // No parent menu - hidden
-			esc_html__( 'Welcome to ShortcodeGlut', 'shortcodeglut' ),
-			esc_html__( 'Welcome', 'shortcodeglut' ),
-			'manage_options',
-			'shortcodeglut-welcome',
-			array( $this, 'render_welcome_page' )
-		);
-	}
-
-	/**
-	 * Remove welcome page from admin menu
-	 */
-	public function remove_welcome_menu() {
-		remove_submenu_page( 'shortcodeglut', 'shortcodeglut-welcome' );
-	}
-
-	/**
-	 * Render the welcome page
-	 */
-	public function render_welcome_page() {
+	public function render_welcome_content() {
 		// Check if user can access
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'shortcodeglut' ) );
 		}
-
-		// Dismiss welcome URL
-		$dismiss_url = admin_url( 'admin.php?page=shortcodeglut&view=shortcode_showcase' );
 		?>
-		<!DOCTYPE html>
-		<html <?php language_attributes(); ?>>
-		<head>
-			<meta charset="<?php bloginfo( 'charset' ); ?>">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title><?php esc_html_e( 'Welcome to ShortcodeGlut', 'shortcodeglut' ); ?></title>
-			<?php
-			wp_enqueue_style( 'dashicons' );
-			wp_enqueue_script( 'jquery' );
-			?>
+		<div class="wrap scg-wrap-full shortcodeglut-welcome-page">
 			<style>
-				* {
-					margin: 0;
-					padding: 0;
-					box-sizing: border-box;
+				/* Hide default WP title and add custom header */
+				.shortcodeglut-welcome-page > h1 {
+					display: none;
 				}
 
-				body {
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-					min-height: 100vh;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					padding: 20px;
-				}
-
-				.scg-welcome-container {
-					max-width: 900px;
-					width: 100%;
+				.scg-welcome-wrapper {
+					max-width: 1000px;
+					margin: 20px auto;
 					background: #ffffff;
-					border-radius: 20px;
-					box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+					border-radius: 12px;
+					box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 					overflow: hidden;
 				}
 
 				.scg-welcome-header {
 					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-					padding: 60px 40px;
+					padding: 50px 40px;
 					text-align: center;
 					color: #ffffff;
 				}
 
 				.scg-welcome-logo {
-					width: 120px;
-					height: 120px;
+					width: 100px;
+					height: 100px;
 					background: rgba(255, 255, 255, 0.2);
-					border-radius: 30px;
-					margin: 0 auto 30px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					backdrop-filter: blur(10px);
-				}
-
-				.scg-welcome-logo svg {
-					width: 80px;
-					height: 80px;
-					fill: #ffffff;
-				}
-
-				.scg-welcome-title {
-					font-size: 42px;
-					font-weight: 700;
-					margin-bottom: 15px;
-					letter-spacing: -1px;
-				}
-
-				.scg-welcome-subtitle {
-					font-size: 20px;
-					opacity: 0.95;
-					font-weight: 400;
-				}
-
-				.scg-welcome-content {
-					padding: 50px 40px;
-				}
-
-				.scg-welcome-thank-you {
-					text-align: center;
-					margin-bottom: 50px;
-				}
-
-				.scg-welcome-thank-you h2 {
-					font-size: 28px;
-					color: #1d2327;
-					margin-bottom: 15px;
-					font-weight: 600;
-				}
-
-				.scg-welcome-thank-you p {
-					font-size: 16px;
-					color: #475569;
-					line-height: 1.7;
-					max-width: 600px;
-					margin: 0 auto;
-				}
-
-				.scg-welcome-features {
-					display: grid;
-					grid-template-columns: repeat(3, 1fr);
-					gap: 30px;
-					margin-bottom: 50px;
-				}
-
-				.scg-welcome-feature {
-					text-align: center;
-					padding: 30px 20px;
-					background: #f8fafc;
-					border-radius: 16px;
-					transition: transform 0.3s ease, box-shadow 0.3s ease;
-				}
-
-				.scg-welcome-feature:hover {
-					transform: translateY(-5px);
-					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-				}
-
-				.scg-welcome-feature-icon {
-					width: 60px;
-					height: 60px;
-					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-					border-radius: 16px;
+					border-radius: 24px;
 					margin: 0 auto 20px;
 					display: flex;
 					align-items: center;
 					justify-content: center;
 				}
 
+				.scg-welcome-logo svg {
+					width: 70px;
+					height: 70px;
+				}
+
+				.scg-welcome-header h1 {
+					font-size: 36px;
+					font-weight: 700;
+					margin: 0 0 10px 0;
+					letter-spacing: -0.5px;
+					color: #ffffff;
+					display: block !important;
+				}
+
+				.scg-welcome-subtitle {
+					font-size: 18px;
+					opacity: 0.95;
+					font-weight: 400;
+				}
+
+				.scg-welcome-content {
+					padding: 40px;
+				}
+
+				.scg-welcome-thank-you {
+					text-align: center;
+					margin-bottom: 40px;
+				}
+
+				.scg-welcome-thank-you h2 {
+					font-size: 24px;
+					color: #1d2327;
+					margin: 0 0 12px 0;
+					font-weight: 600;
+				}
+
+				.scg-welcome-thank-you p {
+					font-size: 15px;
+					color: #475569;
+					line-height: 1.6;
+					max-width: 550px;
+					margin: 0 auto;
+				}
+
+				.scg-welcome-features {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					gap: 24px;
+					margin-bottom: 40px;
+				}
+
+				.scg-welcome-feature {
+					text-align: center;
+					padding: 24px 16px;
+					background: #f8fafc;
+					border-radius: 12px;
+					transition: all 0.2s ease;
+					border: 1px solid #e2e8f0;
+				}
+
+				.scg-welcome-feature:hover {
+					transform: translateY(-3px);
+					box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+					border-color: #cbd5e1;
+				}
+
+				.scg-welcome-feature-icon {
+					width: 50px;
+					height: 50px;
+					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+					border-radius: 12px;
+					margin: 0 auto 16px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
 				.scg-welcome-feature-icon .dashicons {
-					font-size: 32px;
-					width: 32px;
-					height: 32px;
+					font-size: 28px;
+					width: 28px;
+					height: 28px;
 					color: #ffffff;
 				}
 
 				.scg-welcome-feature h3 {
-					font-size: 18px;
+					font-size: 16px;
 					color: #1d2327;
-					margin-bottom: 10px;
+					margin: 0 0 8px 0;
 					font-weight: 600;
 				}
 
 				.scg-welcome-feature p {
-					font-size: 14px;
+					font-size: 13px;
 					color: #64748b;
-					line-height: 1.6;
+					line-height: 1.5;
+					margin: 0;
 				}
 
 				.scg-welcome-quick-start {
 					background: #fef3c7;
-					border: 2px solid #fbbf24;
-					border-radius: 16px;
-					padding: 30px;
-					margin-bottom: 40px;
+					border: 1px solid #fcd34d;
+					border-radius: 12px;
+					padding: 24px;
+					margin-bottom: 30px;
 				}
 
 				.scg-welcome-quick-start h3 {
-					font-size: 20px;
+					font-size: 18px;
 					color: #92400e;
-					margin-bottom: 20px;
+					margin: 0 0 16px 0;
 					display: flex;
 					align-items: center;
-					gap: 10px;
+					gap: 8px;
 				}
 
 				.scg-welcome-quick-start h3 .dashicons {
-					font-size: 24px;
+					font-size: 22px;
 				}
 
 				.scg-welcome-quick-start ol {
-					margin-left: 20px;
+					margin: 0 0 0 20px;
+					padding: 0;
 				}
 
 				.scg-welcome-quick-start li {
-					font-size: 15px;
+					font-size: 14px;
 					color: #78350f;
-					margin-bottom: 12px;
-					line-height: 1.6;
+					margin-bottom: 10px;
+					line-height: 1.5;
+				}
+
+				.scg-welcome-quick-start li:last-child {
+					margin-bottom: 0;
 				}
 
 				.scg-welcome-quick-start code {
 					background: #fffbeb;
-					padding: 3px 8px;
+					padding: 2px 6px;
 					border-radius: 4px;
-					font-family: ui-monospace, SFMono-Regular, monospace;
-					font-size: 13px;
+					font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+					font-size: 12px;
 					color: #b45309;
-					border: 1px solid #fcd34d;
+					border: 1px solid #fde68a;
 				}
 
 				.scg-welcome-actions {
 					display: flex;
-					gap: 20px;
+					gap: 16px;
 					justify-content: center;
 				}
 
 				.scg-welcome-btn {
 					display: inline-flex;
 					align-items: center;
-					gap: 10px;
-					padding: 16px 32px;
-					font-size: 16px;
+					gap: 8px;
+					padding: 12px 24px;
+					font-size: 14px;
 					font-weight: 600;
-					border-radius: 12px;
+					border-radius: 8px;
 					text-decoration: none;
-					transition: all 0.3s ease;
-					border: none;
-					cursor: pointer;
+					transition: all 0.2s ease;
 				}
 
 				.scg-welcome-btn--primary {
 					background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 					color: #ffffff;
-					box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+					box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
 				}
 
 				.scg-welcome-btn--primary:hover {
-					transform: translateY(-2px);
-					box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+					transform: translateY(-1px);
+					box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
 				}
 
 				.scg-welcome-btn--secondary {
 					background: #f1f5f9;
 					color: #475569;
-					border: 2px solid #e2e8f0;
+					border: 1px solid #e2e8f0;
 				}
 
 				.scg-welcome-btn--secondary:hover {
@@ -284,21 +241,34 @@ class WelcomePage {
 					border-color: #cbd5e1;
 				}
 
-				@media (max-width: 768px) {
+				.scg-welcome-btn .dashicons {
+					font-size: 16px;
+					width: 16px;
+					height: 16px;
+				}
+
+				@media (max-width: 1200px) {
+					.scg-welcome-wrapper {
+						margin: 0;
+						border-radius: 0;
+					}
+				}
+
+				@media (max-width: 782px) {
 					.scg-welcome-features {
 						grid-template-columns: 1fr;
 					}
 
 					.scg-welcome-header {
-						padding: 40px 20px;
+						padding: 40px 24px;
 					}
 
 					.scg-welcome-content {
-						padding: 30px 20px;
+						padding: 24px;
 					}
 
-					.scg-welcome-title {
-						font-size: 32px;
+					.scg-welcome-header h1 {
+						font-size: 28px;
 					}
 
 					.scg-welcome-actions {
@@ -311,14 +281,20 @@ class WelcomePage {
 					}
 				}
 			</style>
-		</head>
-		<body>
-			<div class="scg-welcome-container">
+
+			<div class="scg-welcome-wrapper">
 				<div class="scg-welcome-header">
 					<div class="scg-welcome-logo">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97.96 97.96"><defs><linearGradient id="a" x1="49.31" x2="48.25" y1="52.13" y2="51.18" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffb900"/><stop offset=".42" stop-color="#f70"/><stop offset=".74" stop-color="#d900b5"/><stop offset="1" stop-color="#d900b5"/></linearGradient><linearGradient id="b" x1="49.31" x2="48.25" y1="52.13" y2="51.18" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffb900"/><stop offset=".42" stop-color="#f70"/><stop offset=".74" stop-color="#d900b5"/><stop offset="1" stop-color="#d900b5"/></linearGradient></defs><path fill="url(#a)" d="M9.1 13.58a8.85 8.85 0 0 1 4.69-7.87 9.27 9.27 0 0 1 8.76.31l24.31 14.8a9.28 9.28 0 0 0 9.53 0l24.31-14.8a9.27 9.27 0 0 1 8.76-.31 8.85 8.85 0 0 1 4.69 7.87v51.36a8.85 8.85 0 0 1-4.69 7.87 9.27 9.27 0 0 1-8.76-.31L56.21 57.7a9.28 9.28 0 0 0-9.53 0L22.37 72.5a9.27 9.27 0 0 1-8.76.31 8.85 8.85 0 0 1-4.69-7.87Z"/><path fill="#fff" d="M46.48 67.54 22.37 52.83a2.34 2.34 0 0 1-1.17-2V26.59a2.17 2.17 0 0 1 .16-.81 2.32 2.32 0 0 1 1.57-1.42 2.44 2.44 0 0 1 1.6.09l24.11 14.69a2.33 2.33 0 0 1 1.12 2v24.25a2.33 2.33 0 0 1-1.12 2 2.44 2.44 0 0 1-1.16.15Zm-23.23-17 23.23 14.15V43.24L23.25 29.09Z"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+							<path d="M4.5 4.5C4.5 3.67 5.17 3 6 3H12C12.83 3 13.5 3.67 13.5 4.5V9H4.5V4.5Z" fill="#FF6B6B"/>
+							<path d="M4.5 9H13.5V19.5C13.5 20.33 12.83 21 12 21H6C5.17 21 4.5 20.33 4.5 19.5V9Z" fill="#FF8E53"/>
+							<path d="M13.5 4.5C13.5 3.67 14.17 3 15 3H18C18.83 3 19.5 3.67 19.5 4.5V9H13.5V4.5Z" fill="#4FACFE"/>
+							<path d="M13.5 9H19.5V14.5C19.5 15.33 18.83 16 18 16H15C14.17 16 13.5 15.33 13.5 14.5V9Z" fill="#00F2FE"/>
+							<path d="M6 11H7.5V17H6V11Z" fill="white"/>
+							<path d="M10.5 11H12V17H10.5V11Z" fill="white"/>
+						</svg>
 					</div>
-					<h1 class="scg-welcome-title"><?php esc_html_e( 'Welcome to ShortcodeGlut', 'shortcodeglut' ); ?></h1>
+					<h1><?php esc_html_e( 'Welcome to ShortcodeGlut', 'shortcodeglut' ); ?></h1>
 					<p class="scg-welcome-subtitle"><?php esc_html_e( 'Powerful WooCommerce Product Shortcodes', 'shortcodeglut' ); ?></p>
 				</div>
 
@@ -380,8 +356,7 @@ class WelcomePage {
 					</div>
 				</div>
 			</div>
-		</body>
-		</html>
+		</div>
 		<?php
 	}
 

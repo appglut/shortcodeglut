@@ -465,7 +465,7 @@ class ShortcodeglutTools {
 					data: {
 						action: 'shortcodeglut_duplicate_template',
 						template_id: templateId,
-						nonce: '<?php echo wp_create_nonce('shortcodeglut_duplicate_template'); ?>'
+						nonce: '<?php echo esc_js( wp_create_nonce( 'shortcodeglut_duplicate_template' ) ); ?>'
 					},
 					success: function(response) {
 						if (response.success) {

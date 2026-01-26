@@ -62,6 +62,7 @@ add_action( 'admin_init', function() {
 		delete_transient( 'shortcodeglut_activation_redirect' );
 
 		// Don't redirect if activating from network admin or bulk activation
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checking WordPress core parameter during plugin activation
 		if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
 			return;
 		}

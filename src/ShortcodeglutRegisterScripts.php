@@ -162,6 +162,7 @@ class ShortcodeglutRegisterScripts {
             );
 
             // Load code editors for template editor
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not required for loading code editors based on GET parameter
             if (isset($_GET['editor']) && 'woo_template' === sanitize_text_field(wp_unslash($_GET['editor']))) {
                 wp_enqueue_code_editor(array('type' => 'text/html'));
                 wp_enqueue_code_editor(array('type' => 'text/css'));

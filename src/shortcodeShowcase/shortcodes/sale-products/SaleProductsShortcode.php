@@ -67,7 +67,7 @@ class SaleProductsShortcode {
 			'orderby' => 'date',                 // Order field: date, title, price, popularity, rating
 			'order' => 'DESC',                   // Order direction: ASC or DESC
 			'category' => '',                    // Filter by category slug
-			'exclude' => '',                     // Exclude product IDs (comma-separated)
+			'exclude' => '',                     // Exclude product IDs (comma-separated) - phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized below
 			'template' => '',                    // Template ID from WooTemplates
 			'columns' => 4,                      // Number of columns (1-6)
 			'rows' => 1,                         // Number of rows
@@ -87,6 +87,7 @@ class SaleProductsShortcode {
 		$atts['orderby'] = sanitize_text_field( $atts['orderby'] );
 		$atts['order'] = strtoupper( sanitize_text_field( $atts['order'] ) );
 		$atts['category'] = sanitize_text_field( $atts['category'] );
+		// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized before use
 		$atts['exclude'] = sanitize_text_field( $atts['exclude'] );
 		$atts['template'] = sanitize_text_field( $atts['template'] );
 		$atts['columns'] = absint( $atts['columns'] );
@@ -174,6 +175,7 @@ class SaleProductsShortcode {
 
 		// Filter by category if specified
 		if ( ! empty( $atts['category'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Taxonomy query required for product category filtering
 			$query_args['tax_query'] = array(
 				array(
 					'taxonomy' => 'product_cat',
@@ -186,17 +188,21 @@ class SaleProductsShortcode {
 		// Exclude specific products
 		if ( ! empty( $atts['exclude'] ) ) {
 			$exclude_ids = array_map( 'absint', explode( ',', $atts['exclude'] ) );
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Exclude parameter properly sanitized with absint
 			$query_args['post__not_in'] = $exclude_ids;
 		}
 
 		// Handle special orderby cases
 		if ( $atts['orderby'] === 'price' ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Meta query required for price ordering
 			$query_args['meta_key'] = '_price';
 			$query_args['orderby'] = 'meta_value_num';
 		} elseif ( $atts['orderby'] === 'popularity' ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Meta query required for popularity ordering
 			$query_args['meta_key'] = 'total_sales';
 			$query_args['orderby'] = 'meta_value_num';
 		} elseif ( $atts['orderby'] === 'rating' ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Meta query required for rating ordering
 			$query_args['meta_key'] = '_wc_average_rating';
 			$query_args['orderby'] = 'meta_value_num';
 		}
@@ -495,7 +501,7 @@ class SaleProductsShortcode {
 		// Product rating
 		if ( $atts['show_rating'] ) {
 			echo '<div class="shopglut-sale-product-rating">';
-			echo wc_get_rating_html( $product->get_average_rating() );
+			echo wp_kses_post( wc_get_rating_html( $product->get_average_rating() ) );
 			echo '</div>';
 		}
 
@@ -535,23 +541,35 @@ class SaleProductsShortcode {
 		// Previous button
 		if ( $current_page > 1 ) {
 			$prev_link = $atts['async'] ? '#' : get_pagenum_link( $current_page - 1 );
-			$data_attr = $atts['async'] ? ' data-page="' . ( $current_page - 1 ) . '"' : '';
-			echo '<li><a class="prev page-numbers" href="' . esc_url( $prev_link ) . '"' . $data_attr . '>&laquo;</a></li>';
+			$data_page = $atts['async'] ? $current_page - 1 : '';
+			if ( $data_page !== '' ) {
+				echo '<li><a class="prev page-numbers" href="' . esc_url( $prev_link ) . '" data-page="' . esc_attr( $data_page ) . '">&laquo;</a></li>';
+			} else {
+				echo '<li><a class="prev page-numbers" href="' . esc_url( $prev_link ) . '">&laquo;</a></li>';
+			}
 		}
 
 		// Page numbers
 		for ( $i = 1; $i <= $max_pages; $i++ ) {
 			$active_class = ( $i === $current_page ) ? ' current' : '';
 			$page_link = $atts['async'] ? '#' : get_pagenum_link( $i );
-			$data_attr = $atts['async'] ? ' data-page="' . $i . '"' : '';
-			echo '<li><a class="page-numbers' . esc_attr( $active_class ) . '" href="' . esc_url( $page_link ) . '"' . $data_attr . '>' . esc_html( $i ) . '</a></li>';
+			$data_page = $atts['async'] ? $i : '';
+			if ( $data_page !== '' ) {
+				echo '<li><a class="page-numbers' . esc_attr( $active_class ) . '" href="' . esc_url( $page_link ) . '" data-page="' . esc_attr( $data_page ) . '">' . esc_html( $i ) . '</a></li>';
+			} else {
+				echo '<li><a class="page-numbers' . esc_attr( $active_class ) . '" href="' . esc_url( $page_link ) . '">' . esc_html( $i ) . '</a></li>';
+			}
 		}
 
 		// Next button
 		if ( $current_page < $max_pages ) {
 			$next_link = $atts['async'] ? '#' : get_pagenum_link( $current_page + 1 );
-			$data_attr = $atts['async'] ? ' data-page="' . ( $current_page + 1 ) . '"' : '';
-			echo '<li><a class="next page-numbers" href="' . esc_url( $next_link ) . '"' . $data_attr . '>&raquo;</a></li>';
+			$data_page = $atts['async'] ? $current_page + 1 : '';
+			if ( $data_page !== '' ) {
+				echo '<li><a class="next page-numbers" href="' . esc_url( $next_link ) . '" data-page="' . esc_attr( $data_page ) . '">&raquo;</a></li>';
+			} else {
+				echo '<li><a class="next page-numbers" href="' . esc_url( $next_link ) . '">&raquo;</a></li>';
+			}
 		}
 
 		echo '</ul>';
@@ -568,22 +586,23 @@ class SaleProductsShortcode {
 
 		// Get attributes from AJAX request
 		$atts = array(
-			'limit' => isset( $_POST['limit'] ) ? absint( $_POST['limit'] ) : 12,
+			'limit' => isset( $_POST['limit'] ) ? absint( wp_unslash( $_POST['limit'] ) ) : 12,
 			'orderby' => isset( $_POST['orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['orderby'] ) ) : 'date',
 			'order' => isset( $_POST['order'] ) ? sanitize_text_field( wp_unslash( $_POST['order'] ) ) : 'DESC',
 			'category' => isset( $_POST['category'] ) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ) : '',
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized before use
 			'exclude' => isset( $_POST['exclude'] ) ? sanitize_text_field( wp_unslash( $_POST['exclude'] ) ) : '',
 			'template' => isset( $_POST['template'] ) ? sanitize_text_field( wp_unslash( $_POST['template'] ) ) : '',
-			'columns' => isset( $_POST['columns'] ) ? absint( $_POST['columns'] ) : 4,
-			'rows' => isset( $_POST['rows'] ) ? absint( $_POST['rows'] ) : 1,
-			'paging' => isset( $_POST['paging'] ) ? absint( $_POST['paging'] ) : 0,
-			'items_per_page' => isset( $_POST['items_per_page'] ) ? absint( $_POST['items_per_page'] ) : 12,
-			'show_image' => isset( $_POST['show_image'] ) ? filter_var( $_POST['show_image'], FILTER_VALIDATE_BOOLEAN ) : true,
-			'show_title' => isset( $_POST['show_title'] ) ? filter_var( $_POST['show_title'], FILTER_VALIDATE_BOOLEAN ) : true,
-			'show_price' => isset( $_POST['show_price'] ) ? filter_var( $_POST['show_price'], FILTER_VALIDATE_BOOLEAN ) : true,
-			'show_button' => isset( $_POST['show_button'] ) ? filter_var( $_POST['show_button'], FILTER_VALIDATE_BOOLEAN ) : true,
-			'show_rating' => isset( $_POST['show_rating'] ) ? filter_var( $_POST['show_rating'], FILTER_VALIDATE_BOOLEAN ) : false,
-			'show_badge' => isset( $_POST['show_badge'] ) ? filter_var( $_POST['show_badge'], FILTER_VALIDATE_BOOLEAN ) : true,
+			'columns' => isset( $_POST['columns'] ) ? absint( wp_unslash( $_POST['columns'] ) ) : 4,
+			'rows' => isset( $_POST['rows'] ) ? absint( wp_unslash( $_POST['rows'] ) ) : 1,
+			'paging' => isset( $_POST['paging'] ) ? absint( wp_unslash( $_POST['paging'] ) ) : 0,
+			'items_per_page' => isset( $_POST['items_per_page'] ) ? absint( wp_unslash( $_POST['items_per_page'] ) ) : 12,
+			'show_image' => isset( $_POST['show_image'] ) ? filter_var( wp_unslash( $_POST['show_image'] ), FILTER_VALIDATE_BOOLEAN ) : true,
+			'show_title' => isset( $_POST['show_title'] ) ? filter_var( wp_unslash( $_POST['show_title'] ), FILTER_VALIDATE_BOOLEAN ) : true,
+			'show_price' => isset( $_POST['show_price'] ) ? filter_var( wp_unslash( $_POST['show_price'] ), FILTER_VALIDATE_BOOLEAN ) : true,
+			'show_button' => isset( $_POST['show_button'] ) ? filter_var( wp_unslash( $_POST['show_button'] ), FILTER_VALIDATE_BOOLEAN ) : true,
+			'show_rating' => isset( $_POST['show_rating'] ) ? filter_var( wp_unslash( $_POST['show_rating'] ), FILTER_VALIDATE_BOOLEAN ) : false,
+			'show_badge' => isset( $_POST['show_badge'] ) ? filter_var( wp_unslash( $_POST['show_badge'] ), FILTER_VALIDATE_BOOLEAN ) : true,
 		);
 
 		// Render products
