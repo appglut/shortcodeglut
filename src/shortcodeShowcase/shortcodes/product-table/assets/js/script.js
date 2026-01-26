@@ -444,7 +444,7 @@
 
             // Show loading state
             var originalHtml = $button.html();
-            $button.html('<span class="sgpt-loading-spinner"></span> Adding...');
+            $button.text('Adding');
             $button.prop('disabled', true);
 
             // AJAX add to cart

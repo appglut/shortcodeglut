@@ -74,7 +74,7 @@ class ProductTableShortcode {
 			'orderby' => 'date',
 			'order' => 'DESC',
 			'categories' => '',
-			'exclude' => '',
+			'exclude' => '',                    // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized
 			'include' => '',
 			'thumb' => 0,
 			'thumb_width' => 48,
@@ -94,7 +94,7 @@ class ProductTableShortcode {
 		$atts['orderby'] = sanitize_text_field( $atts['orderby'] );
 		$atts['order'] = strtoupper( sanitize_text_field( $atts['order'] ) );
 		$atts['categories'] = sanitize_text_field( $atts['categories'] );
-		$atts['exclude'] = sanitize_text_field( $atts['exclude'] );
+		$atts['exclude'] = sanitize_text_field( $atts['exclude'] ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized before use
 		$atts['include'] = sanitize_text_field( $atts['include'] );
 		$atts['thumb'] = absint( $atts['thumb'] );
 		$atts['thumb_width'] = absint( $atts['thumb_width'] );
@@ -200,9 +200,10 @@ class ProductTableShortcode {
 		echo '<thead>';
 		echo '<tr>';
 		foreach ( $headers as $index => $header ) {
-			$no_sort_class = ( ! $atts['sorting'] ) ? ' class="no-sort"' : '';
-			$data_column = ' data-column="' . esc_attr( $column_data_attrs[ $index ] ) . '"';
-			echo '<th' . $no_sort_class . $data_column . '>' . esc_html( $header ) . '</th>';
+			$no_sort_class = ( ! $atts['sorting'] ) ? 'no-sort' : '';
+					$data_column = $column_data_attrs[ $index ];
+
+					echo '<th class="' . esc_attr( $no_sort_class ) . '" data-column="' . esc_attr( $data_column ) . '">' . esc_html( $header ) . '</th>';
 		}
 		echo '</tr>';
 		echo '</thead>';
@@ -246,12 +247,13 @@ class ProductTableShortcode {
 					'data-stock' => $stock_status,
 				);
 
-				// Build data attributes string
-				$attrs = array();
+				// Build data attributes string - properly escaped
+				$attrs_array = array();
 				foreach ( $row_data_attrs as $key => $value ) {
-					$attrs[] = $key . '="' . esc_attr( $value ) . '"';
+					$attrs_array[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
 				}
-				echo '<tr ' . implode( ' ', $attrs ) . '>';
+				$attrs_string = implode( ' ', $attrs_array );
+				echo '<tr ' . $attrs_string . '>';
 				foreach ( $columns as $col_index => $column_fields ) {
 					echo '<td data-label="' . esc_attr( $headers[ $col_index ] ) . '">';
 					foreach ( $column_fields as $field ) {
@@ -458,6 +460,7 @@ class ProductTableShortcode {
 		);
 
 		if ( ! empty( $atts['categories'] ) ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Taxonomy query required for product filtering
 			$args['tax_query'] = array(
 				array(
 					'taxonomy' => 'product_cat',
@@ -472,6 +475,7 @@ class ProductTableShortcode {
 		}
 
 		if ( ! empty( $atts['exclude'] ) ) {
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Properly sanitized with absint
 			$args['post__not_in'] = array_map( 'absint', explode( ',', $atts['exclude'] ) );
 		}
 
@@ -585,18 +589,32 @@ class ProductTableShortcode {
 				$add_to_cart_class = 'shopglut-table-add-to-cart';
 				$product_id = $product->get_id();
 				$is_purchasable = $product->is_purchasable() && $product->is_in_stock();
+				$is_variable = $product->is_type( 'variable' );
 
-				if ( $is_purchasable ) {
-					$add_to_cart_class .= ' ajax_add_to_cart';
+				// Variable products - show "Select Options" button
+				if ( $is_variable ) {
+					$value = sprintf(
+						'<a href="%s" class="button">%s</a>',
+						esc_url( get_permalink( $product->get_id() ) ),
+						esc_html__( 'Select Options', 'shortcodeglut' )
+					);
+				} elseif ( $is_purchasable ) {
+					// Simple products - AJAX add to cart
+					$value = sprintf(
+						'<a href="%s" class="button %s" data-product_id="%s">%s</a>',
+						esc_url( $product->add_to_cart_url() ),
+						esc_attr( $add_to_cart_class . ' ajax_add_to_cart' ),
+						esc_attr( $product_id ),
+						esc_html__( 'Add to Cart', 'shortcodeglut' )
+					);
+				} else {
+					// Not purchasable or out of stock
+					$value = sprintf(
+						'<a href="%s" class="button">%s</a>',
+						esc_url( get_permalink( $product->get_id() ) ),
+						esc_html__( 'Read More', 'shortcodeglut' )
+					);
 				}
-
-				$value = sprintf(
-					'<a href="%s" class="button %s" data-product_id="%s">%s</a>',
-					esc_url( $product->add_to_cart_url() ),
-					esc_attr( $add_to_cart_class ),
-					esc_attr( $product_id ),
-					esc_html( $is_purchasable ? __( 'Add to Cart', 'shortcodeglut' ) : __( 'Read More', 'shortcodeglut' ) )
-				);
 				break;
 
 			case 'view':

@@ -1,17 +1,18 @@
 <?php
 /**
  * Plugin Name: ShortcodeGlut - Product Shortcodes for WooCommerce 11
- * Plugin URI: https://shopglut.com/
+ * Plugin URI: https://wordpress.org/plugins/shortcodeglut
  * Description: Beautiful WooCommerce product shortcodes with grid, list, and table layouts for displaying products, sale items, and category listings.
  * Version: 1.0.0
- * Author: ShopGlut
- * Author URI: https://shopglut.com/
+ * Author: AppGlut
+ * Author URI: https://appglut.com/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: shortcodeglut
  * Domain Path: /languages
  * Requires at least: 5.8
  * Requires PHP: 7.4
+ * Requires Plugins: woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

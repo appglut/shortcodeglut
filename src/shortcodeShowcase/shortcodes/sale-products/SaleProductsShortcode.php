@@ -67,7 +67,8 @@ class SaleProductsShortcode {
 			'orderby' => 'date',                 // Order field: date, title, price, popularity, rating
 			'order' => 'DESC',                   // Order direction: ASC or DESC
 			'category' => '',                    // Filter by category slug
-			'exclude' => '',                     // Exclude product IDs (comma-separated) - phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized below
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Properly sanitized below
+			'exclude' => '',                     // Exclude product IDs (comma-separated)
 			'template' => '',                    // Template ID from WooTemplates
 			'columns' => 4,                      // Number of columns (1-6)
 			'rows' => 1,                         // Number of rows
