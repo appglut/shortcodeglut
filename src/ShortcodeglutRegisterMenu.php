@@ -19,6 +19,25 @@ class ShortcodeglutRegisterMenu {
 
 	public function shortcodeglutMenuRegister() {
 
+		// Check if ShopGlut is active and if we should suppress the menu
+		$suppress_menu = false;
+		if ( function_exists( 'shortcodeglut_is_shopglut_active' ) && shortcodeglut_is_shopglut_active() ) {
+			// ShopGlut is active, check the setting
+			// AGSHOPGLUT stores all fields as an array under the settings ID
+			$options = get_option( 'shopglut_tools_settings', array() );
+			$show_menu = isset( $options['shortcodeglut-show-menu'] ) ? $options['shortcodeglut-show-menu'] : false;
+
+			// Suppress menu if setting is disabled (false, '', '0', or 0)
+			if ( ! $show_menu ) {
+				$suppress_menu = true;
+			}
+		}
+
+		// If menu should be suppressed, don't register it
+		if ( $suppress_menu ) {
+			return;
+		}
+
 		$shopt_menu = new ShortcodeglutTools();
 
 		// Add main menu page for tools

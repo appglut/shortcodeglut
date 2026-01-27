@@ -152,7 +152,7 @@ class ShortcodeglutRegisterScripts {
         // Enqueue admin assets
         $screen = get_current_screen();
 
-        if ($screen && false !== strpos($screen->id, 'shortcodeglut')) {
+        if ($screen && false !== (strpos($screen->id, 'shortcodeglut') || strpos($screen->id, 'shopglut_tools'))) {
             // Admin CSS
             wp_enqueue_style(
                 'shortcodeglut-admin',

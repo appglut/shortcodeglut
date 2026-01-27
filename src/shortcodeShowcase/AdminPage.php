@@ -27,7 +27,7 @@ class AdminPage {
 		$woo_active = class_exists( 'WooCommerce' );
 		?>
 		<div class="wrap shopglut-admin-contents">
-			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0;">
+			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0; margin-bottom:0px; margin-top:10px;">
 				Shortcode Showcase
 			</h1>
 			<p class="subheading" style="text-align: center; margin-bottom: 30px; margin-top: 8px; color: #6b7280;">

@@ -36,6 +36,9 @@ require_once SHORTCODEGLUT_PATH . 'src/WelcomePage.php';
 require_once SHORTCODEGLUT_PATH . 'src/wooTemplates/WooTemplatesEntity.php';
 require_once SHORTCODEGLUT_PATH . 'src/wooTemplates/SettingsPage.php';
 
+// Load ShopGlut integration - suppresses ShortcodeGlut menu when ShopGlut is active
+require_once SHORTCODEGLUT_PATH . 'shopglut-integration.php';
+
 // Initialize WelcomePage early to register menu
 \Shortcodeglut\WelcomePage::get_instance();
 
