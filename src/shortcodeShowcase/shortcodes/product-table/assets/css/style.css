@@ -1,0 +1,797 @@
+/**
+ * ShopGlut Product Table Styles
+ * Supports classic and modern designs
+ */
+
+/* ============================================================
+ * Main Table Container (Common)
+ * ============================================================ */
+.shopglut-product-table-wrapper {
+    margin: 20px auto;
+    box-sizing: border-box;
+}
+
+.sgpt-table-container {
+    box-sizing: border-box;
+}
+
+/* ============================================================
+ * CLASSIC DESIGN (Default)
+ * ============================================================ */
+
+.sgpt-design-classic .shopglut-product-table-wrapper {
+    max-width: 100%;
+}
+
+.sgpt-design-classic .sgpt-table-container {
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+/* Filter bar - classic style */
+.sgpt-design-classic .sgpt-filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.sgpt-design-classic .sgpt-filter-cell {
+    display: flex;
+    align-items: center;
+}
+
+.sgpt-design-classic .sgpt-filter-start {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sgpt-design-classic .sgpt-filter-end {
+    justify-content: flex-end;
+}
+
+/* Length dropdown */
+.sgpt-design-classic .sgpt-length-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.sgpt-design-classic .sgpt-length-control select {
+    padding: 6px 30px 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 65px;
+}
+
+.sgpt-design-classic .sgpt-length-control label {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Category, tag, stock dropdowns */
+.sgpt-design-classic .sgpt-category-wrap,
+.sgpt-design-classic .sgpt-tag-wrap,
+.sgpt-design-classic .sgpt-stock-wrap {
+    display: inline-block;
+}
+
+.sgpt-design-classic .sgpt-category-select,
+.sgpt-design-classic .sgpt-tag-select,
+.sgpt-design-classic .sgpt-stock-select {
+    padding: 6px 30px 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.sgpt-design-classic .sgpt-category-select:focus,
+.sgpt-design-classic .sgpt-tag-select:focus,
+.sgpt-design-classic .sgpt-stock-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Search section - classic */
+.sgpt-design-classic .sgpt-search-control {
+    display: flex;
+    align-items: center;
+}
+
+.sgpt-design-classic .sgpt-search-input {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 200px;
+}
+
+.sgpt-design-classic .sgpt-search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.sgpt-design-classic .sgpt-search-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Table - classic style */
+.sgpt-design-classic .shopglut-product-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+}
+
+.sgpt-design-classic .shopglut-product-table thead th {
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    color: #374151;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 15px;
+    text-align: left;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sgpt-design-classic .shopglut-product-table thead th:hover {
+    background-color: #f3f4f6;
+}
+
+.sgpt-design-classic .shopglut-product-table thead th.no-sort {
+    cursor: default;
+}
+
+.sgpt-design-classic .shopglut-product-table thead th.no-sort:hover {
+    background-color: #f9fafb;
+}
+
+/* Sort indicators - classic */
+.sgpt-design-classic .shopglut-product-table thead th.sort-asc::after {
+    content: ' ↑';
+    opacity: 0.7;
+}
+
+.sgpt-design-classic .shopglut-product-table thead th.sort-desc::after {
+    content: ' ↓';
+    opacity: 0.7;
+}
+
+.sgpt-design-classic .shopglut-product-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.sgpt-design-classic .shopglut-product-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.sgpt-design-classic .shopglut-product-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.sgpt-design-classic .shopglut-product-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+.sgpt-design-classic .shopglut-product-table tbody tr:nth-child(even):hover {
+    background-color: #f3f4f6;
+}
+
+/* Stock status - classic */
+.sgpt-design-classic .in-stock {
+    color: #10b981;
+    font-weight: 500;
+}
+
+.sgpt-design-classic .out-of-stock {
+    color: #ef4444;
+    font-weight: 500;
+}
+
+/* Buttons - classic */
+.sgpt-design-classic .shopglut-product-table .button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-table-add-to-cart {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-table-add-to-cart:hover {
+    background-color: #2563eb;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-table-add-to-cart.ajax_add_to_cart {
+    background-color: #10b981;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-table-add-to-cart.ajax_add_to_cart:hover {
+    background-color: #059669;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-view-cart {
+    background-color: #8b5cf6;
+    color: #fff;
+}
+
+.sgpt-design-classic .shopglut-product-table .shopglut-view-cart:hover {
+    background-color: #7c3aed;
+}
+
+/* Price - classic */
+.sgpt-design-classic .shopglut-product-table .price {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sgpt-design-classic .shopglut-product-table .price del {
+    color: #9ca3af;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
+.sgpt-design-classic .shopglut-product-table .price ins {
+    text-decoration: none;
+    color: #ef4444;
+}
+
+/* Links - classic */
+.sgpt-design-classic .shopglut-product-table a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sgpt-design-classic .shopglut-product-table a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* ============================================================
+ * MODERN DESIGN
+ * ============================================================ */
+
+.sgpt-design-modern .shopglut-product-table-wrapper {
+    max-width: 1200px;
+}
+
+.sgpt-design-modern .sgpt-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Header Section */
+.sgpt-design-modern .sgpt-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.sgpt-design-modern .sgpt-header h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.sgpt-design-modern .sgpt-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Controls Section */
+.sgpt-design-modern .sgpt-controls {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.sgpt-design-modern .sgpt-items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sgpt-design-modern .sgpt-items-per-page label {
+    font-size: 14px;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.sgpt-design-modern .sgpt-items-per-page select {
+    padding: 8px 30px 8px 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.3s;
+    min-width: 70px;
+}
+
+.sgpt-design-modern .sgpt-items-per-page select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.sgpt-design-modern .sgpt-items-per-page span {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.sgpt-design-modern .sgpt-filter-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.sgpt-design-modern .sgpt-filter-group label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.sgpt-design-modern .sgpt-filter-group select {
+    padding: 8px 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    background: white;
+    transition: all 0.3s;
+    min-width: 140px;
+}
+
+.sgpt-design-modern .sgpt-filter-group select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.sgpt-design-modern .sgpt-search-box {
+    margin-left: auto;
+}
+
+.sgpt-design-modern .sgpt-search-box input {
+    width: 200px;
+    padding: 10px 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.sgpt-design-modern .sgpt-search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Results Count */
+.sgpt-design-modern .sgpt-results-count {
+    padding: 10px 30px;
+    color: #6c757d;
+    font-size: 14px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Table Wrapper */
+.sgpt-design-modern .sgpt-table-wrapper {
+    overflow-x: auto;
+    padding: 30px;
+}
+
+/* Table - modern style */
+.sgpt-design-modern .shopglut-product-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.sgpt-design-modern .shopglut-product-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.sgpt-design-modern .shopglut-product-table thead th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background 0.3s;
+}
+
+.sgpt-design-modern .shopglut-product-table thead th:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sgpt-design-modern .shopglut-product-table thead th.no-sort {
+    cursor: default;
+}
+
+.sgpt-design-modern .shopglut-product-table thead th.no-sort:hover {
+    background: transparent;
+}
+
+/* Sort indicators */
+.sgpt-design-modern .shopglut-product-table thead th::after {
+    content: '⇅';
+    margin-left: 8px;
+    opacity: 0.5;
+    font-size: 12px;
+}
+
+.sgpt-design-modern .shopglut-product-table thead th.no-sort::after {
+    content: '';
+}
+
+.sgpt-design-modern .shopglut-product-table thead th.sort-asc::after {
+    content: '↑';
+    opacity: 1;
+}
+
+.sgpt-design-modern .shopglut-product-table thead th.sort-desc::after {
+    content: '↓';
+    opacity: 1;
+}
+
+/* Table body - modern */
+.sgpt-design-modern .shopglut-product-table tbody tr {
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s;
+}
+
+.sgpt-design-modern .shopglut-product-table tbody tr:hover {
+    background: #f8f9fa;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.sgpt-design-modern .shopglut-product-table tbody td {
+    padding: 15px;
+    color: #495057;
+}
+
+.sgpt-design-modern .shopglut-product-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Status Badges - modern */
+.sgpt-design-modern .sgpt-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sgpt-design-modern .sgpt-status.in-stock {
+    background: #d4edda;
+    color: #155724;
+}
+
+.sgpt-design-modern .sgpt-status.out-of-stock {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.sgpt-design-modern .sgpt-status.on-backorder {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Buttons - modern */
+.sgpt-design-modern .shopglut-product-table .button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-table-add-to-cart {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-table-add-to-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-table-add-to-cart.ajax_add_to_cart {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-table-add-to-cart.ajax_add_to_cart:hover {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-view-cart {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: #fff;
+}
+
+.sgpt-design-modern .shopglut-product-table .shopglut-view-cart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+/* Links - modern */
+.sgpt-design-modern .shopglut-product-table a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sgpt-design-modern .shopglut-product-table a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Price - modern */
+.sgpt-design-modern .shopglut-product-table .price {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sgpt-design-modern .shopglut-product-table .price del {
+    color: #9ca3af;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
+.sgpt-design-modern .shopglut-product-table .price ins {
+    text-decoration: none;
+    color: #ef4444;
+}
+
+/* No Results State */
+.sgpt-no-results {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Loading State */
+.sgpt-loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.sgpt-loading-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(102, 126, 234, 0.1);
+    border-right-color: #667eea;
+    border-radius: 50%;
+    animation: sgpt-spin 0.75s linear infinite;
+}
+
+@keyframes sgpt-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+ * Common Elements
+ * ============================================================ */
+
+/* Product Image */
+.shopglut-product-table img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.shopglut-product-table .product-thumbnail {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Rating Stars */
+.shopglut-product-table .star-rating {
+    color: #fbbf24;
+}
+
+/* Login Message */
+.shopglut-product-table-login-message {
+    padding: 30px;
+    text-align: center;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    color: #1e40af;
+}
+
+.shopglut-product-table-login-message .button {
+    margin-top: 15px;
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+/* Error Message */
+.shopglut-error {
+    padding: 15px 20px;
+    margin: 20px 0;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #991b1b;
+}
+
+/* Empty State */
+.shopglut-product-table-empty {
+    padding: 40px;
+    text-align: center;
+    color: #6c757d;
+}
+
+/* ============================================================
+ * Responsive Design
+ * ============================================================ */
+@media screen and (max-width: 767px) {
+    .shopglut-product-table,
+    .shopglut-product-table thead,
+    .shopglut-product-table tbody,
+    .shopglut-product-table th,
+    .shopglut-product-table td,
+    .shopglut-product-table tr {
+        display: block;
+    }
+
+    .shopglut-product-table thead {
+        display: none;
+    }
+
+    .shopglut-product-table tbody tr {
+        margin-bottom: 15px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .shopglut-product-table tbody td {
+        border: none;
+        border-bottom: 1px solid #e9ecef;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .shopglut-product-table tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .shopglut-product-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .sgpt-controls,
+    .sgpt-filter-row {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .sgpt-items-per-page,
+    .sgpt-filter-group,
+    .sgpt-length-control,
+    .sgpt-search-control,
+    .sgpt-search-box {
+        width: 100% !important;
+    }
+
+    .sgpt-filter-group {
+        flex-wrap: wrap;
+    }
+
+    .sgpt-filter-group select {
+        flex: 1;
+    }
+
+    .sgpt-table-wrapper,
+    .sgpt-design-modern .sgpt-table-wrapper {
+        padding: 15px;
+    }
+
+    .sgpt-header h2 {
+        font-size: 1.5em;
+    }
+
+    .sgpt-header {
+        padding: 20px;
+    }
+
+    .sgpt-controls {
+        padding: 15px 20px;
+    }
+
+    .sgpt-results-count {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shopglut-product-table .button {
+        padding: 8px 16px;
+        font-size: 13px;
+        width: 100%;
+    }
+
+    .sgpt-design-modern .sgpt-search-box input {
+        width: 100%;
+    }
+}
+
+/* ============================================================
+ * Hide DataTables controls (we use custom)
+ * ============================================================ */
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info {
+    display: none !important;
+}
+
+.dataTables_wrapper {
+    width: auto !important;
+}

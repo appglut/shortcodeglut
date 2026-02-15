@@ -1,0 +1,259 @@
+/* Woo Templates Admin Page Styles */
+
+/* Default Badge */
+.scg-badge {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 12px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	margin-left: 8px;
+}
+.scg-badge--default {
+	background: #d1fae5;
+	color: #10b981;
+	border: 1px solid #a7f3d0;
+}
+
+/* Template ID Wrapper with Copy Button */
+.shopglut-template-id-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.shopglut-template-id-code {
+	background: #f0f0f1;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.shopglut-copy-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 28px;
+	height: 28px;
+	padding: 0 6px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.1s ease;
+}
+
+.shopglut-copy-btn:hover {
+	background: #e9e9eb;
+	border-color: #50575e;
+}
+
+.shopglut-copy-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	color: #50575e;
+}
+
+.shopglut-template-id-wrapper.shopglut-copied .shopglut-copy-btn {
+	background: #d1fae5;
+	border-color: #10b981;
+}
+
+.shopglut-template-id-wrapper.shopglut-copied .shopglut-copy-btn .dashicons {
+	color: #10b981;
+}
+
+/* Template Actions Buttons */
+.shopglut-template-actions {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.shopglut-action-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.1s ease;
+	text-decoration: none;
+}
+
+/* Preview Button - Blue */
+.shopglut-preview-btn {
+	background: #e7f3ff;
+	border-color: #b8daff;
+	color: #0066cc;
+}
+
+.shopglut-preview-btn:hover {
+	background: #cce5ff;
+	border-color: #0066cc;
+	color: #0052a3;
+}
+
+.shopglut-preview-btn .dashicons {
+	color: #0066cc;
+}
+
+/* Duplicate Button - Green */
+.shopglut-duplicate-btn {
+	background: #d1fae5;
+	border-color: #a7f3d0;
+	color: #059669;
+}
+
+.shopglut-duplicate-btn:hover {
+	background: #a7f3d0;
+	border-color: #059669;
+	color: #047857;
+}
+
+.shopglut-duplicate-btn .dashicons {
+	color: #059669;
+}
+
+/* Preview Modal */
+#shortcodeglut-preview-modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100000;
+}
+
+#shortcodeglut-preview-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+#shortcodeglut-preview-modal-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90%;
+	max-width: 900px;
+	max-height: 85vh;
+	background: #fff;
+	border: 1px solid #8c8f94;
+	border-radius: 8px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+}
+
+#shortcodeglut-preview-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 20px;
+	border-bottom: 1px solid #8c8f94;
+}
+
+#shortcodeglut-preview-modal-title {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0;
+	color: #1d2327;
+}
+
+#shortcodeglut-preview-modal-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	border-radius: 4px;
+	transition: background 0.1s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#shortcodeglut-preview-modal-close:hover {
+	background: #f0f0f1;
+}
+
+#shortcodeglut-preview-modal-close .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	color: #1d2327;
+}
+
+#shortcodeglut-preview-modal-body {
+	flex: 1;
+	overflow: auto;
+	padding: 24px;
+	background: #f6f7f7;
+}
+
+#shortcodeglut-preview-content {
+	background: #fff;
+	border-radius: 8px;
+	padding: 32px;
+	border: 1px solid #8c8f94;
+}
+
+#shortcodeglut-preview-content-inner {
+	/* Wrapper for template content */
+}
+
+/* Control image sizes in preview */
+#shortcodeglut-preview-content img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+#shortcodeglut-preview-content-inner img {
+	max-width: 300px;
+	height: auto;
+}
+
+#shortcodeglut-preview-styles {
+	display: none;
+}
+
+/* Preview Loader */
+.shopglut-preview-loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 60px 20px;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #8c8f94;
+}
+
+.shopglut-preview-loader .spinner {
+	float: none;
+	margin: 0;
+}
+
+/* Star rating for preview */
+.shopglut-star-rating {
+	color: #ffb400;
+	font-size: 16px;
+	display: flex;
+	gap: 2px;
+}
+.shopglut-star-rating .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}

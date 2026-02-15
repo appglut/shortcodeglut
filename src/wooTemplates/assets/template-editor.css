@@ -1,0 +1,466 @@
+/* Main Editor Wrapper */
+.wrap.shopglut-admin-contents.woo-templates-editor {
+    background: #f8f9fb !important;
+    padding: 25px 40px 40px !important;
+    margin: 5px 0 0 -20px !important;
+}
+
+.woo-templates-editor .wp-heading-inline {
+    font-size: 23px;
+    font-weight: 400;
+    margin: 0;
+    padding: 9px 0 4px;
+    padding-top:5px;
+    color: #1d2327;
+    line-height:0.67;
+    margin-left: 10px;
+}
+
+.woo-templates-editor .page-title-action {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 1px 0 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #ffffff;
+    vertical-align: top;
+}
+
+.woo-templates-editor .page-title-action:hover,
+.woo-templates-editor .page-title-action:focus {
+    background: #f0f0f1;
+    border-color: #0a4b78;
+    color: #0a4b78;
+}
+
+.woo-templates-editor .page-title-action:active {
+    background: #f6f7f7;
+    border-color: #0a4b78;
+    color: #0a4b78;
+    box-shadow: none;
+}
+
+.woo-templates-editor .wp-header-end {
+    margin: 0 0 20px;
+    border: none;
+    height: 0;
+}
+
+/* Template Settings Section */
+.shopglut-template-settings {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 28px;
+    margin: 24px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease;
+}
+
+.shopglut-template-settings:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.shopglut-template-settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.shopglut-template-setting label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-template-setting input[type="text"] {
+    width: 100%;
+    padding: 11px 15px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background: #fff;
+    color: #1e293b;
+}
+
+.shopglut-template-setting input[type="text"]:hover {
+    border-color: #9ca3af;
+}
+
+.shopglut-template-setting input[type="text"]:focus {
+    border-color: #2271b1;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
+}
+
+.shopglut-template-setting .description {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Save Button Section */
+.shopglut-template-save-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    gap: 14px;
+}
+
+.shopglut-save-message {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #d1f4e0 0%, #c3e6cb 100%);
+    border: 1px solid #a3d9b8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(21, 87, 36, 0.08);
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.shopglut-save-message .success {
+    color: #0f5132;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.shopglut-save-message .dashicons {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Editor Container */
+.shopglut-template-editor-container {
+    display: flex;
+    gap: 24px;
+}
+
+.shopglut-template-editor-main {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease;
+}
+
+.shopglut-template-editor-main:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Editor Tabs */
+.shopglut-template-editor-tabs {
+    display: flex;
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+    border-bottom: 2px solid #e5e7eb;
+    padding: 0;
+}
+
+.shopglut-template-editor-tab {
+    background: transparent;
+    border: none;
+    padding: 15px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-template-editor-tab:hover {
+    color: #2271b1;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.shopglut-template-editor-tab.active {
+    color: #2271b1;
+    background: #fff;
+}
+
+.shopglut-template-editor-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2271b1 0%, #135e96 100%);
+    box-shadow: 0 2px 8px rgba(34, 113, 177, 0.3);
+}
+
+/* Editor Content */
+.shopglut-template-editor-content {
+    position: relative;
+}
+
+.shopglut-template-editor-panel {
+    display: none;
+    padding: 0;
+}
+
+.shopglut-template-editor-panel.active {
+    display: block;
+}
+
+.shopglut-code-editor-field {
+    padding: 0;
+}
+
+.shopglut-code-editor-title {
+    display: none;
+}
+
+.shopglut-code-editor-container {
+    border: none;
+}
+
+.shopglut-code-editor-container .CodeMirror {
+    border: none;
+    font-size: 14px;
+    height: 600px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* Sidebar */
+.shopglut-template-editor-sidebar {
+    flex: 0 0 340px;
+    max-width: 340px;
+}
+
+.shopglut-template-tags {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    max-height: 80vh;
+    overflow-y: auto;
+    transition: box-shadow 0.2s ease;
+}
+
+.shopglut-template-tags:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.shopglut-template-tags h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+}
+
+.shopglut-template-tags .description {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.shopglut-template-tags-category {
+    margin-bottom: 24px;
+}
+
+.shopglut-template-tags-category:last-child {
+    margin-bottom: 0;
+}
+
+.shopglut-template-tag {
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 1.5px solid transparent;
+    background: #fff;
+}
+
+.shopglut-template-tag:hover {
+    background: linear-gradient(135deg, #f0f6fc 0%, #e8f2ff 100%);
+    border-color: #b8d7f5;
+    transform: translateX(4px);
+    box-shadow: 0 2px 6px rgba(5, 80, 174, 0.1);
+}
+
+.shopglut-template-tag code {
+    font-size: 12px;
+    padding: 5px 10px;
+    background: linear-gradient(135deg, #f6f8fa 0%, #eef1f4 100%);
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    color: #0550ae;
+    white-space: nowrap;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    width: fit-content;
+}
+
+.shopglut-template-tag-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.shopglut-template-tag-info strong {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1e293b;
+    font-weight: 600;
+    display: block;
+}
+
+.shopglut-template-tag-info small {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+    display: block;
+}
+
+/* Bottom Actions */
+.shopglut-template-editor-actions {
+    margin-top: 24px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    text-align: right;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease;
+}
+
+.shopglut-template-editor-actions:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.shopglut-template-editor-actions .button-primary {
+    padding: 12px 28px;
+    height: auto;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+    background: linear-gradient(135deg, #2271b1 0%, #135e96 100%);
+    border: none;
+    box-shadow: 0 2px 4px rgba(34, 113, 177, 0.2);
+}
+
+.shopglut-template-editor-actions .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 113, 177, 0.3);
+    background: linear-gradient(135deg, #135e96 0%, #0e4e7e 100%);
+}
+
+/* Scrollbar Styling */
+.shopglut-template-tags::-webkit-scrollbar {
+    width: 10px;
+}
+
+.shopglut-template-tags::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+    margin: 4px 0;
+}
+
+.shopglut-template-tags::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+    border-radius: 10px;
+    border: 2px solid #f3f4f6;
+    transition: background 0.2s ease;
+}
+
+.shopglut-template-tags::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1400px) {
+    .shopglut-template-editor-sidebar {
+        flex: 0 0 310px;
+        max-width: 310px;
+    }
+
+    .shopglut-template-editor-tab {
+        padding: 15px 22px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .wrap.shopglut-admin-contents.woo-templates-editor {
+        padding: 24px 24px 40px !important;
+    }
+
+    .shopglut-template-editor-container {
+        flex-direction: column;
+    }
+
+    .shopglut-template-editor-sidebar {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    .shopglut-template-settings-row {
+        grid-template-columns: 1fr;
+    }
+
+    .shopglut-template-tags {
+        max-height: 500px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .wrap.shopglut-admin-contents.woo-templates-editor {
+        padding: 20px 16px 32px !important;
+    }
+
+    .woo-templates-editor .wp-heading-inline {
+        font-size: 22px;
+    }
+
+    .shopglut-template-settings {
+        padding: 20px;
+    }
+
+    .shopglut-template-editor-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+
+    .shopglut-template-editor-actions {
+        padding: 20px;
+    }
+}
