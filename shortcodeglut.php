@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: ShortcodeGlut - Product Shortcodes for WooCommerce
- * Plugin URI: https://wordpress.org/plugins/shortcodeglut
+ * Plugin URI: https://wordpress.org/plugins/shopglut
  * Description: Beautiful WooCommerce product shortcodes with grid, list, and table layouts for displaying products, sale items, and category listings.
  * Version: 1.0.0
  * Author: AppGlut
