@@ -1,0 +1,13 @@
+{
+  "name": "ShortcodeGlut",
+  "slug": "shortcodeglut",
+  "version": "1.0.1",
+  "download_url": "https://updates.appglut.com/plugins/shortcodeglut.zip",
+  "homepage": "https://github.com/appglut/shortcodeglut",
+  "requires": "5.8",
+  "tested": "6.5",
+  "requires_php": "7.4",
+  "last_updated": "2025-02-19 00:00:00",
+  "author": "AppGlut",
+  "author_homepage": "https://appglut.com"
+}

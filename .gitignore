@@ -1,0 +1,8 @@
+# Ignore everything
+/*
+
+# But track these
+!shortcodeglut.zip
+!shortcodeglut-version.json
+!.github/
+!.gitignore
