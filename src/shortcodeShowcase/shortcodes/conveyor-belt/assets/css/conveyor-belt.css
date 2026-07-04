@@ -1,0 +1,482 @@
+/**
+ * Conveyor Belt Shortcode Styles
+ * Infinite scrolling horizontal carousel for product display
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+.shortcodeglut-conveyor-wrapper {
+	max-width: 100%;
+	padding: 40px 0;
+	overflow: hidden;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.shortcodeglut-conveyor {
+	position: relative;
+	overflow: hidden;
+	padding: 30px 0;
+}
+
+.shortcodeglut-conveyor-track {
+	display: flex;
+	gap: 30px;
+	animation: scroll 40s linear infinite;
+	width: max-content;
+}
+
+.shortcodeglut-conveyor-wrapper.pause-on-hover .shortcodeglut-conveyor-track:hover {
+	animation-play-state: paused;
+}
+
+@keyframes scroll {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+/* Dark Card Style */
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-item {
+	background: #1a1a2e;
+	border: 2px solid transparent;
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-item:hover {
+	border-color: #667eea;
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-title {
+	color: #fff;
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-title a {
+	color: #fff;
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-title a:hover {
+	color: #667eea;
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-desc {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.shortcodeglut-conveyor-style-dark .shortcodeglut-conveyor-price {
+	color: #fff;
+}
+
+/* Light Card Style */
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-item {
+	background: #ffffff;
+	border: 2px solid #e5e7eb;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-item:hover {
+	border-color: #667eea;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-title {
+	color: #1a1a1a;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-title a {
+	color: #1a1a1a;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-title a:hover {
+	color: #667eea;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-desc {
+	color: #666666;
+}
+
+.shortcodeglut-conveyor-style-light .shortcodeglut-conveyor-price {
+	color: #1a1a1a;
+}
+
+/* Conveyor Item */
+.shortcodeglut-conveyor-item {
+	width: 300px;
+	height: 400px;
+	border-radius: 20px;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+}
+
+.shortcodeglut-conveyor-item:hover {
+	transform: scale(1.05);
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Conveyor Icon */
+.shortcodeglut-conveyor-icon {
+	width: 80px;
+	height: 80px;
+	margin-bottom: 20px;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.shortcodeglut-conveyor-icon img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 20px;
+}
+
+.shortcodeglut-conveyor-icon svg {
+	width: 40px;
+	height: 40px;
+	fill: #fff;
+}
+
+/* Gradient Icons for Each Item */
+.shortcodeglut-conveyor-1 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.shortcodeglut-conveyor-2 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.shortcodeglut-conveyor-3 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.shortcodeglut-conveyor-4 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.shortcodeglut-conveyor-5 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.shortcodeglut-conveyor-6 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.shortcodeglut-conveyor-7 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+}
+
+.shortcodeglut-conveyor-8 .shortcodeglut-conveyor-icon {
+	background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+}
+
+/* Conveyor Title */
+.shortcodeglut-conveyor-title {
+	font-size: 18px;
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.shortcodeglut-conveyor-title a {
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+/* Conveyor Description */
+.shortcodeglut-conveyor-desc {
+	font-size: 13px;
+	text-align: center;
+	margin-bottom: 20px;
+	line-height: 1.5;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Conveyor Price */
+.shortcodeglut-conveyor-price {
+	font-size: 28px;
+	font-weight: 900;
+	margin-bottom: 15px;
+}
+
+.shortcodeglut-conveyor-price del {
+	font-size: 18px;
+	font-weight: 500;
+	opacity: 0.7;
+	margin-right: 6px;
+}
+
+.shortcodeglut-conveyor-price ins {
+	text-decoration: none;
+}
+
+/* Conveyor Button */
+.shortcodeglut-conveyor-btn {
+	padding: 12px 28px;
+	background: #667eea;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s;
+	white-space: nowrap;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.shortcodeglut-conveyor-btn:hover {
+	background: #764ba2;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.shortcodeglut-conveyor-btn:active {
+	transform: translateY(0);
+}
+
+/* Conveyor Tag */
+.shortcodeglut-conveyor-tag {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: #ef4444;
+	color: #fff;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+/* Add to Cart Button States */
+.shortcodeglut-conveyor-btn.shortcodeglut-added {
+	background: #22c55e;
+}
+
+.shortcodeglut-conveyor-btn.shortcodeglut-added:hover {
+	background: #16a34a;
+}
+
+.shortcodeglut-conveyor-btn.shortcodeglut-loading {
+	opacity: 0.8;
+	cursor: not-allowed;
+}
+
+.shortcodeglut-conveyor-btn.shortcodeglut-loading::before {
+	content: '';
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border: 2px solid #fff;
+	border-top-color: transparent;
+	border-radius: 50%;
+	animation: shortcodeglut-conveyor-spin 0.8s linear infinite;
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+@keyframes shortcodeglut-conveyor-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Hide WooCommerce default elements */
+.shortcodeglut-conveyor-item .added_to_cart,
+.shortcodeglut-conveyor-btn + .added_to_cart,
+.shortcodeglut-conveyor-btn ~ .added_to_cart {
+	display: none !important;
+}
+
+.shortcodeglut-conveyor-btn .ajax-loading,
+.shortcodeglut-conveyor-btn::after {
+	display: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+	.shortcodeglut-conveyor-item {
+		width: 260px;
+		height: 360px;
+	}
+
+	.shortcodeglut-conveyor-icon {
+		width: 70px;
+		height: 70px;
+	}
+
+	.shortcodeglut-conveyor-icon svg {
+		width: 35px;
+		height: 35px;
+	}
+
+	.shortcodeglut-conveyor-title {
+		font-size: 16px;
+	}
+
+	.shortcodeglut-conveyor-desc {
+		font-size: 12px;
+	}
+
+	.shortcodeglut-conveyor-price {
+		font-size: 24px;
+	}
+}
+
+@media (max-width: 768px) {
+	.shortcodeglut-conveyor-wrapper {
+		padding: 30px 0;
+	}
+
+	.shortcodeglut-conveyor-item {
+		width: 250px;
+		height: 350px;
+		padding: 20px;
+	}
+
+	.shortcodeglut-conveyor-icon {
+		width: 60px;
+		height: 60px;
+		margin-bottom: 15px;
+	}
+
+	.shortcodeglut-conveyor-icon svg {
+		width: 30px;
+		height: 30px;
+	}
+
+	.shortcodeglut-conveyor-title {
+		font-size: 15px;
+	}
+
+	.shortcodeglut-conveyor-desc {
+		font-size: 12px;
+		margin-bottom: 15px;
+	}
+
+	.shortcodeglut-conveyor-price {
+		font-size: 22px;
+		margin-bottom: 12px;
+	}
+
+	.shortcodeglut-conveyor-btn {
+		padding: 10px 20px;
+		font-size: 12px;
+	}
+
+	.shortcodeglut-conveyor-tag {
+		top: 15px;
+		right: 15px;
+		font-size: 9px;
+		padding: 5px 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.shortcodeglut-conveyor {
+		padding: 20px 0;
+	}
+
+	.shortcodeglut-conveyor-item {
+		width: 220px;
+		height: 320px;
+		padding: 15px;
+		border-radius: 16px;
+	}
+
+	.shortcodeglut-conveyor-icon {
+		width: 50px;
+		height: 50px;
+		border-radius: 16px;
+	}
+
+	.shortcodeglut-conveyor-icon svg {
+		width: 25px;
+		height: 25px;
+	}
+
+	.shortcodeglut-conveyor-title {
+		font-size: 14px;
+	}
+
+	.shortcodeglut-conveyor-desc {
+		font-size: 11px;
+		-webkit-line-clamp: 2;
+	}
+
+	.shortcodeglut-conveyor-price {
+		font-size: 20px;
+	}
+
+	.shortcodeglut-conveyor-btn {
+		padding: 8px 16px;
+		font-size: 11px;
+	}
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+	.shortcodeglut-conveyor-track {
+		animation: none;
+	}
+
+	.shortcodeglut-conveyor-item {
+		transition: none;
+	}
+
+	.shortcodeglut-conveyor-item:hover {
+		transform: none;
+	}
+
+	.shortcodeglut-conveyor-btn {
+		transition: none;
+	}
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+	.shortcodeglut-conveyor-item {
+		border: 3px solid currentColor;
+	}
+
+	.shortcodeglut-conveyor-btn {
+		border: 2px solid currentColor;
+	}
+}
+
+/* Focus Visible for Accessibility */
+.shortcodeglut-conveyor-btn:focus-visible {
+	outline: 3px solid #667eea;
+	outline-offset: 3px;
+}
+
+.shortcodeglut-conveyor-item:focus-within {
+	border-color: #667eea;
+}
+
+/* Print Styles */
+@media print {
+	.shortcodeglut-conveyor-track {
+		animation: none;
+	}
+
+	.shortcodeglut-conveyor-item {
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+}

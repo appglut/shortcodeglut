@@ -1,0 +1,358 @@
+/* Woo Templates Admin Page Styles */
+
+/* Default Badge */
+.scg-badge {
+	display: inline-block;
+	padding: 3px 10px;
+	border-radius: 12px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	margin-left: 8px;
+}
+.scg-badge--default {
+	background: #d1fae5;
+	color: #10b981;
+	border: 1px solid #a7f3d0;
+}
+
+/* Template ID Wrapper with Copy Button */
+.shortcodeglut-template-id-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.shortcodeglut-template-id-code {
+	background: #f0f0f1;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.shortcodeglut-copy-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 28px;
+	height: 28px;
+	padding: 0 6px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.1s ease;
+}
+
+.shortcodeglut-copy-btn:hover {
+	background: #e9e9eb;
+	border-color: #50575e;
+}
+
+.shortcodeglut-copy-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	color: #50575e;
+}
+
+.shortcodeglut-template-id-wrapper.shortcodeglut-copied .shortcodeglut-copy-btn {
+	background: #d1fae5;
+	border-color: #10b981;
+}
+
+.shortcodeglut-template-id-wrapper.shortcodeglut-copied .shortcodeglut-copy-btn .dashicons {
+	color: #10b981;
+}
+
+/* Template Actions Buttons */
+.shortcodeglut-template-actions {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.shortcodeglut-action-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.1s ease;
+	text-decoration: none;
+}
+
+/* Preview Button - Blue */
+.shortcodeglut-preview-btn {
+	background: #e7f3ff;
+	border-color: #b8daff;
+	color: #0066cc;
+}
+
+.shortcodeglut-preview-btn:hover {
+	background: #cce5ff;
+	border-color: #0066cc;
+	color: #0052a3;
+}
+
+.shortcodeglut-preview-btn .dashicons {
+	color: #0066cc;
+}
+
+/* Duplicate Button - Green */
+.shortcodeglut-duplicate-btn {
+	background: #d1fae5;
+	border-color: #a7f3d0;
+	color: #059669;
+}
+
+.shortcodeglut-duplicate-btn:hover {
+	background: #a7f3d0;
+	border-color: #059669;
+	color: #047857;
+}
+
+.shortcodeglut-duplicate-btn .dashicons {
+	color: #059669;
+}
+
+/* Preview Modal */
+#shortcodeglut-preview-modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100000;
+}
+
+#shortcodeglut-preview-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.75);
+	backdrop-filter: blur(2px);
+}
+
+#shortcodeglut-preview-modal-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 92%;
+	max-width: 1100px;
+	max-height: 90vh;
+	background: #fff;
+	border: none;
+	border-radius: 12px;
+	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+	display: flex;
+	flex-direction: column;
+	animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
+}
+
+#shortcodeglut-preview-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 25px;
+	border-bottom: 1px solid #e0e0e0;
+	background: #f8f9fa;
+	border-radius: 12px 12px 0 0;
+}
+
+#shortcodeglut-preview-modal-title {
+	font-size: 20px;
+	font-weight: 600;
+	margin: 0;
+	color: #1d2327;
+}
+
+#shortcodeglut-preview-modal-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 8px;
+	border-radius: 6px;
+	transition: all 0.15s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	min-height: 36px;
+}
+
+#shortcodeglut-preview-modal-close:hover {
+	background: #e0e0e0;
+}
+
+#shortcodeglut-preview-modal-close .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	color: #50575e;
+}
+
+#shortcodeglut-preview-modal-body {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 0px;
+	background: #f8f9fa;
+}
+
+#shortcodeglut-preview-content {
+	background: #fff;
+	border-radius: 12px;
+	padding: 40px;
+	padding-left:0px;
+	padding-right: 0px;
+	border: 1px solid #e0e0e0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+	min-height: 400px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#shortcodeglut-preview-content-inner {
+	/* Template content wrapper - centered and constrained */
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+/* Control image sizes in preview */
+#shortcodeglut-preview-content img {
+	max-width: 100%;
+	height: 300px;
+	display: block;
+}
+
+#shortcodeglut-preview-content-inner img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+#shortcodeglut-preview-styles {
+	display: none;
+}
+
+/* Preview Loader */
+.shortcodeglut-preview-loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 60px 20px;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #8c8f94;
+}
+
+.shortcodeglut-preview-loader .spinner {
+	float: none;
+	margin: 0;
+}
+
+/* Star rating for preview */
+.shortcodeglut-star-rating {
+	color: #ffb400;
+	font-size: 16px;
+	display: flex;
+	gap: 2px;
+}
+.shortcodeglut-star-rating .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Template preview fixes */
+#shortcodeglut-preview-content-inner > div {
+	width: 100%;
+	margin: 0 auto;
+}
+
+/* Ensure template buttons display properly in preview */
+#shortcodeglut-preview-content-inner .button,
+#shortcodeglut-preview-content-inner a.button,
+#shortcodeglut-preview-content-inner .add_to_cart_button {
+	display: inline-block;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	border: none;
+}
+
+/* Fix product image in preview */
+#shortcodeglut-preview-content-inner .scg-tmpl-classic-image img,
+#shortcodeglut-preview-content-inner .scg-tmpl-premium-image img,
+#shortcodeglut-preview-content-inner .scg-tmpl-shop-image img,
+#shortcodeglut-preview-content-inner .scg-tmpl-elegant-image-wrapper img {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+/* Additional template preview fixes */
+#shortcodeglut-preview-content-inner > div[class*="scg-tmpl-"] {
+	/* Ensure all template cards are properly sized in preview */
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+/* Specific fixes for each template */
+.scg-tmpl-classic {
+	max-width: 350px;
+}
+
+.scg-tmpl-premium {
+	max-width: 380px;
+}
+
+.scg-tmpl-shop {
+	max-width: 320px;
+}
+
+.scg-tmpl-elegant {
+	max-width: 360px;
+}
+
+/* Ensure buttons display properly */
+#shortcodeglut-preview-content-inner a,
+#shortcodeglut-preview-content-inner .button {
+	display: inline-block;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/* Fix image display in preview */
+#shortcodeglut-preview-content-inner img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}

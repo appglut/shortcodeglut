@@ -1,0 +1,418 @@
+/* Timeline Wrapper */
+.shortcodeglut-timeline-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #1a1a2e;
+}
+
+/* Timeline Container */
+.shortcodeglut-timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+/* Vertical Line - centered by default (alternate layout) */
+.shortcodeglut-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 3px;
+}
+
+/* Left layout - line on the right side */
+.shortcodeglut-timeline.layout-left::before {
+    left: auto;
+    right: 30px;
+    transform: none;
+}
+
+/* Right layout - line on the left side */
+.shortcodeglut-timeline.layout-right::before {
+    left: 30px;
+    right: auto;
+    transform: none;
+}
+
+/* Timeline Item */
+.shortcodeglut-timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+}
+
+/* Timeline Dot */
+.shortcodeglut-timeline-dot {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border: 4px solid var(--sg-timeline-accent, #667eea);
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+}
+
+/* Alternate layout - dot centered */
+.sg-timeline-left .shortcodeglut-timeline-dot,
+.sg-timeline-right .shortcodeglut-timeline-dot {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Dot color variations for alternate layout */
+.shortcodeglut-timeline-item:nth-child(even) .shortcodeglut-timeline-dot {
+    border-color: #764ba2;
+    box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.2);
+}
+
+.shortcodeglut-timeline-item:nth-child(3n) .shortcodeglut-timeline-dot {
+    border-color: #f093fb;
+    box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.2);
+}
+
+/* Left layout - dot on right */
+.layout-left .shortcodeglut-timeline-dot {
+    left: auto;
+    right: 19px;
+    transform: none;
+}
+
+/* Right layout - dot on left */
+.layout-right .shortcodeglut-timeline-dot {
+    left: 19px;
+    right: auto;
+    transform: none;
+}
+
+/* Content Wrapper */
+.shortcodeglut-timeline-content {
+    position: relative;
+}
+
+/* Alternate layout - left item */
+.sg-timeline-left .shortcodeglut-timeline-content {
+    width: calc(50% - 40px);
+    padding-right: 40px;
+    text-align: left;
+}
+
+/* Alternate layout - right item */
+.sg-timeline-right .shortcodeglut-timeline-content {
+    width: calc(50% - 40px);
+    padding-left: 40px;
+    margin-left: 50%;
+    text-align: right;
+}
+
+/* Left layout - all items on the left */
+.layout-left .shortcodeglut-timeline-content {
+    width: calc(100% - 80px);
+    padding-right: 60px;
+    text-align: left;
+}
+
+/* Right layout - all items on the right */
+.layout-right .shortcodeglut-timeline-content {
+    width: calc(100% - 80px);
+    padding-left: 60px;
+    margin-left: 60px;
+    text-align: left;
+}
+
+/* Card */
+.shortcodeglut-timeline-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+    position: relative;
+}
+
+.shortcodeglut-timeline-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Arrow */
+.shortcodeglut-timeline-card::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+/* Alternate - left item arrow points right */
+.sg-timeline-left .shortcodeglut-timeline-card::before {
+    right: -10px;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #fff;
+}
+
+/* Alternate - right item arrow points left */
+.sg-timeline-right .shortcodeglut-timeline-card::before {
+    left: -10px;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Left layout - arrow points right */
+.layout-left .shortcodeglut-timeline-card::before {
+    right: -10px;
+    left: auto;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #fff;
+}
+
+/* Right layout - arrow points left */
+.layout-right .shortcodeglut-timeline-card::before {
+    left: -10px;
+    right: auto;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #fff transparent transparent;
+}
+
+/* Date Badge */
+.shortcodeglut-timeline-date {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+/* Title */
+.shortcodeglut-timeline-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.shortcodeglut-timeline-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.shortcodeglut-timeline-title a:hover {
+    color: var(--sg-timeline-accent, #667eea);
+}
+
+/* Excerpt */
+.shortcodeglut-timeline-excerpt {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+/* Meta */
+.shortcodeglut-timeline-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #888;
+    flex-wrap: wrap;
+}
+
+.shortcodeglut-timeline-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Footer */
+.shortcodeglut-timeline-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f1;
+}
+
+/* Price */
+.shortcodeglut-timeline-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: #2271b1;
+}
+
+/* Button */
+.shortcodeglut-timeline-btn {
+    padding: 10px 20px;
+    background: #2271b1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.shortcodeglut-timeline-btn:hover {
+    background: #135e96;
+    color: #fff;
+    text-decoration: none !important;
+}
+
+.shortcodeglut-timeline-btn i {
+    text-decoration: none !important;
+}
+
+/* Hide WooCommerce loaders on timeline buttons */
+.shortcodeglut-timeline-btn .ajax-loading,
+.shortcodeglut-timeline-btn .loading,
+.shortcodeglut-timeline-btn::after,
+.shortcodeglut-timeline-btn .spinner,
+.shortcodeglut-timeline-btn .icon_loader {
+    display: none !important;
+}
+
+/* Loading state */
+.shortcodeglut-timeline-btn.shortcodeglut-add-to-cart-loading {
+    opacity: 0.7;
+    pointer-events: none;
+    justify-content: center;
+}
+
+.shortcodeglut-timeline-btn.shortcodeglut-add-to-cart-loading .fa-spinner {
+    margin-right: 4px;
+}
+
+/* View Cart state */
+.shortcodeglut-timeline-wrapper .shortcodeglut-timeline-btn.shortcodeglut-view-cart {
+    width: auto !important;
+    height: auto !important;
+    background: #00a32a;
+    text-decoration: none !important;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-timeline-btn.shortcodeglut-view-cart:hover {
+    background: #008a20;
+    text-decoration: none !important;
+}
+
+/* Prevent WooCommerce added_to_cart link from showing */
+.shortcodeglut-timeline-btn + .added_to_cart,
+.shortcodeglut-timeline-btn ~ .added_to_cart {
+    display: none !important;
+}
+
+/* Empty State */
+.shortcodeglut-timeline-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+    font-size: 16px;
+}
+
+/* Breadcrumb */
+.shortcodeglut-timeline-wrapper .shortcodeglut-breadcrumb {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #888;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-breadcrumb a {
+    color: var(--sg-timeline-accent, #667eea);
+    text-decoration: none;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.shortcodeglut-timeline-wrapper .shortcodeglut-breadcrumb span {
+    margin: 0 8px;
+}
+
+/* Responsive - collapse all layouts to single column */
+@media (max-width: 768px) {
+    .shortcodeglut-timeline::before {
+        left: 20px !important;
+        right: auto !important;
+        transform: none !important;
+    }
+
+    .shortcodeglut-timeline-dot {
+        left: 20px !important;
+        right: auto !important;
+        transform: none !important;
+    }
+
+    .shortcodeglut-timeline-content {
+        width: calc(100% - 60px) !important;
+        margin-left: 60px !important;
+        text-align: left !important;
+        padding: 0 !important;
+    }
+
+    .shortcodeglut-timeline-card::before {
+        left: -10px !important;
+        right: auto !important;
+        border-width: 10px 10px 10px 0 !important;
+        border-color: transparent #fff transparent transparent !important;
+    }
+
+    .shortcodeglut-timeline-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .shortcodeglut-timeline-price {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shortcodeglut-timeline-wrapper {
+        padding: 20px 10px;
+    }
+
+    .shortcodeglut-timeline-card {
+        padding: 16px;
+    }
+
+    .shortcodeglut-timeline-title {
+        font-size: 16px;
+    }
+
+    .shortcodeglut-timeline-date {
+        font-size: 11px;
+        padding: 5px 10px;
+    }
+
+    .shortcodeglut-timeline-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}

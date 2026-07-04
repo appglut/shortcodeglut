@@ -1,0 +1,419 @@
+/**
+ * ShopGlut Carousel Slider Styles
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+.shopglut-archive {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.shopglut-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.shopglut-title {
+    font-size: 48px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shopglut-code-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #fff;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.shopglut-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+}
+
+.shopglut-carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shopglut-carousel-slide {
+    min-width: 100%;
+    position: relative;
+}
+
+.shopglut-slide-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.shopglut-slide-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 80px 100px; /* Increased right/left padding to account for arrows */
+}
+ 
+.shopglut-slide-text {
+    color: #fff;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.shopglut-slide-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.shopglut-slide-title {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.1;
+    color: #fff;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+}
+
+.shopglut-slide-excerpt {
+    font-size: 18px;
+    opacity: 0.9;
+    margin-bottom: 32px;
+    line-height: 1.6;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+}
+
+.shopglut-slide-price {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.shopglut-slide-price span.woocommerce-Price-amount.amount {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.shopglut-slide-price del {
+    text-decoration: line-through;
+    text-decoration-color: currentColor;
+    opacity: 0.6;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.shopglut-slide-price del .woocommerce-Price-amount {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.shopglut-slide-price ins {
+    text-decoration: none;
+}
+
+.shopglut-slide-btn {
+    padding: 16px 40px;
+    background: #fff;
+    color: #667eea;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.shopglut-slide-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.shopglut-slide-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shopglut-slide-icon {
+    width: 280px;
+    height: 280px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.shopglut-slide-icon img.shopglut-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.shopglut-slide-icon svg {
+    width: 140px;
+    height: 140px;
+    fill: rgba(255, 255, 255, 0.8);
+}
+
+.shopglut-carousel-nav {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.shopglut-carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    padding: 0;
+}
+
+.shopglut-carousel-dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.shopglut-carousel-dot.active {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    transform: scale(1.3);
+}
+
+.shopglut-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.shopglut-carousel-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.shopglut-carousel-arrow.prev {
+    left: 30px;
+}
+
+.shopglut-carousel-arrow.next {
+    right: 30px;
+}
+
+.shopglut-carousel-arrow i {
+    font-size: 18px;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shopglut-carousel:not(.show-arrows) .shopglut-carousel-arrow {
+    display: none;
+}
+
+.shopglut-carousel:not(.show-dots) .shopglut-carousel-nav {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .shopglut-slide-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 40px 70px; /* Increased right/left padding for arrows on tablet */
+    }
+
+    .shopglut-slide-title {
+        font-size: 32px;
+    }
+
+    .shopglut-slide-price span.woocommerce-Price-amount.amount {
+        font-size: 32px;
+    }
+
+    .shopglut-slide-price del .woocommerce-Price-amount {
+        font-size: 20px;
+    }
+
+    .shopglut-slide-icon {
+        width: 180px;
+        height: 180px;
+        margin: 0 auto;
+    }
+
+    .shopglut-slide-icon svg {
+        width: 90px;
+        height: 90px;
+    }
+
+    .shopglut-carousel-arrow.prev {
+        left: 10px;
+    }
+
+    .shopglut-carousel-arrow.next {
+        right: 10px;
+    }
+
+    .shopglut-carousel-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .shopglut-carousel-arrow i {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .shopglut-title {
+        font-size: 32px;
+    }
+
+    .shopglut-code-info {
+        font-size: 11px;
+        padding: 8px 16px;
+    }
+
+    .shopglut-slide-content {
+        padding: 30px 60px; /* Increased right/left padding for arrows on mobile */
+        min-height: 400px;
+    }
+
+    .shopglut-slide-title {
+        font-size: 24px;
+    }
+
+    .shopglut-slide-excerpt {
+        font-size: 16px;
+    }
+
+    .shopglut-slide-price span.woocommerce-Price-amount.amount {
+        font-size: 24px;
+    }
+
+    .shopglut-slide-price del .woocommerce-Price-amount {
+        font-size: 16px;
+    }
+
+    .shopglut-slide-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .shopglut-slide-icon {
+        width: 140px;
+        height: 140px;
+        border-radius: 20px;
+    }
+
+    .shopglut-slide-icon svg {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+ /* Add to Cart Button Size Constraints */
+  .shopglut-slide-btn {
+      min-width: 160px;
+      max-width: 220px;
+      width: auto;
+  }
+
+  .shopglut-slide-btn.shortcodeglut-add-to-cart-loading {
+      min-width: 160px;
+      max-width: 220px;
+  }
+
+  .shopglut-slide-btn.shortcodeglut-view-cart {                                                                                       
+      min-width: 160px;
+      max-width: 220px;                                                                                                               
+      width: auto !important;                               
+  }
+
+  /* Ensure View Cart button text stays on one line */
+  .shopglut-slide-btn.shortcodeglut-view-cart {
+      white-space: nowrap;
+  }
+
+  /* Fix icon alignment in View Cart button */
+  .shopglut-slide-btn i {
+      margin-right: 8px;
+  }

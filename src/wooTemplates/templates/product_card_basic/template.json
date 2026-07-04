@@ -1,0 +1,7 @@
+{
+  "template_id": "product_card_basic",
+  "name": "Product Card: Basic",
+  "description": "A classic vertical product card with image on top and details below",
+  "category": "general",
+  "is_default": 1
+}

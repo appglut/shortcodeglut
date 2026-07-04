@@ -1,0 +1,388 @@
+/* Shortcodeglut Template: product_card_basic */
+/* All styles are scoped to .shortcodeglut-product-cards to prevent conflicts */
+
+
+.shortcodeglut-product-cards .product-container{
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: space-around;
+        }
+.shortcodeglut-product-cards .product-template1{
+      background: #ffff;
+      border-radius: 8px;
+      overflow: hidden;                                                                                          
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;                                                     
+      outline: none;
+      border: none;
+  }
+.shortcodeglut-product-cards .product-template1:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    outline: none;
+}
+
+    /* Ensure overflow is hidden on template to prevent shadow bleed */
+  .shortcodeglut-product-cards .product-template1 {
+      overflow: hidden;
+  }
+ .shortcodeglut-product-cards .product-item{
+      position: relative;
+      overflow: hidden;
+  }
+.shortcodeglut-product-cards .product-thumb{
+      position: relative;
+      overflow: hidden;
+      outline: none;
+      border: none;
+      z-index: 1;
+  }
+  .shortcodeglut-product-cards .product-thumb img{
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      outline: none;
+      border: none;
+      display: block;
+  }
+      .shortcodeglut-product-cards .product-template1:hover .product-thumb img {
+          transform: scale(1.05);
+      }
+.shortcodeglut-product-cards .product-badge{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+.shortcodeglut-product-cards .product-label{
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+.shortcodeglut-product-cards .new-badge{
+            background: #4CAF50;
+        }
+.shortcodeglut-product-cards .featured-badge{
+            background: #FF9800;
+        }
+.shortcodeglut-product-cards .discount-badge{
+            background: #f44336;
+        }
+.shortcodeglut-product-cards .outofstock-badge{
+            background: #9E9E9E;
+        }
+.shortcodeglut-product-cards .button-group{
+            position: absolute;
+            top: 50%;
+            right: -50px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: right 0.3s ease;
+        }
+        .shortcodeglut-product-cards .product-template1:hover .button-group {
+            right: 10px;
+        }
+.shortcodeglut-product-cards .button-group a{
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 50%;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .shortcodeglut-product-cards .button-group a:hover {
+            background: #333;
+            color: #fff;
+        }
+    .shortcodeglut-product-cards .box-cart{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.95);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+      outline: none;
+      pointer-events: none;
+      opacity: 0;
+      will-change: transform, opacity;
+      border-radius: 0;
+      z-index: 5;
+  }                                                                                                              
+      .shortcodeglut-product-cards .product-template1:hover .box-cart {
+          transform: translateY(0);
+          pointer-events: auto;
+          opacity: 1;
+      }
+.shortcodeglut-product-cards .btn-cart{
+      display: block;
+      width: 91%;
+      padding: 12px;
+      background: #333;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      outline: none;
+      box-shadow: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+  }
+  .shortcodeglut-product-cards .btn-cart button,
+  .shortcodeglut-product-cards button.btn-cart {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+  }
+      .shortcodeglut-product-cards .btn-cart:hover {
+          background: #555;
+      }
+      .shortcodeglut-product-cards .btn-cart:focus {
+          outline: none;
+          box-shadow: none;
+      }
+.shortcodeglut-product-cards .product-caption{
+            padding: 15px;
+            padding-top:5px;
+        }
+.shortcodeglut-product-cards .product-category{
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+.shortcodeglut-product-cards .product-category a{
+            color: #888;
+            text-decoration: none;
+        }
+        .shortcodeglut-product-cards .product-category a:hover {
+            color: #333;
+        }
+.shortcodeglut-product-cards .product-title{
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .product-title a{
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .shortcodeglut-product-cards .product-title a:hover {
+            color: #666;
+        }
+.shortcodeglut-product-cards .ratings{
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .ratings i{
+            color: #FFC107 !important;
+            color: #FFC107;
+            font-size: 12px;
+        }
+.shortcodeglut-product-cards .price-box{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+.shortcodeglut-product-cards .product-price{
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+.shortcodeglut-product-cards .price-old del{
+            color: #999;
+            font-size: 14px;
+        }
+.shortcodeglut-product-cards .header{
+            text-align: center;
+            margin-bottom: 30px;
+        }
+.shortcodeglut-product-cards .header h1{
+            color: #333;
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .header p{
+            color: #666;
+        }
+
+
+/* Add to cart handler styles */
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart {
+    background: #4CAF50;
+    color: #fff;
+}
+
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:hover {
+    background: #45a049;
+}
+
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+/* Hide WooCommerce's View cart link after our button */
+.shortcodeglut-product-cards .product-cart-action .added_to_cart,
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn + .added_to_cart {
+    display: none !important;
+}
+
+/* Ensure all links have no underline */
+.shortcodeglut-product-cards a {
+    text-decoration: none !important;
+}
+
+.shortcodeglut-product-cards a:hover {
+    text-decoration: none !important;
+}
+
+/* Add spacing for cart icon */
+.shortcodeglut-product-cards .btn-cart i {
+    margin-right: 5px;
+}
+
+/* Fix star rating color */
+.shortcodeglut-product-cards .ratings i,
+.shortcodeglut-product-cards .ratings .star-rating,
+.shortcodeglut-product-cards .ratings .fa-star,
+.shortcodeglut-product-cards .ratings .fas,
+.shortcodeglut-product-cards .ratings .far {
+    color: #FFC107 !important;
+}
+.shortcodeglut-product-cards .ratings .fa-regular.fa-star,
+.shortcodeglut-product-cards .ratings .far.fa-star {
+    color: #e0e0e0 !important;
+}
+
+/* Center add to cart button with spacing on both sides */
+.shortcodeglut-product-cards .box-cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.shortcodeglut-product-cards .product-cart-action {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.shortcodeglut-product-cards .btn-cart {
+    width: auto;
+    min-width: 140px;
+    max-width: 90%;
+    padding: 12px 24px;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+/* Ensure equal spacing on both sides of the button */
+.shortcodeglut-product-cards .box-cart .product-cart-action .btn-cart {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* Remove focus outline from all interactive elements to prevent blink */
+  .shortcodeglut-product-cards .btn-cart:focus,
+  .shortcodeglut-product-cards .button-group a:focus,
+  .shortcodeglut-product-cards button.btn-cart:focus {
+      outline: none;                                                                                                                                    
+      box-shadow: none;
+  }                                                                                                                                                     
+                  
+  /* Smooth transition for box-cart to prevent flicker */
+  .shortcodeglut-product-cards .product-thumb {
+      overflow: hidden;
+  }
+
+  .shortcodeglut-product-cards .product-template1 {
+      position: relative;
+  }
+
+   /* Prevent all focus outlines and blinks */
+  .shortcodeglut-product-cards * {
+      outline: none !important;
+  }                                                                                                              
+   
+  .shortcodeglut-product-cards .btn-cart:focus,                                                                  
+  .shortcodeglut-product-cards .button-group a:focus,
+  .shortcodeglut-product-cards .product-template1:focus,
+  .shortcodeglut-product-cards .product-thumb:focus {
+      outline: none !important;
+      box-shadow: none !important;
+  }
+
+  /* Remove any default browser borders */
+  .shortcodeglut-product-cards a,
+  .shortcodeglut-product-cards button,
+  .shortcodeglut-product-cards .btn-cart {
+      border: none !important;
+      outline: none !important;
+  }
+
+  /* Smooth image zoom without border artifacts */                                                               
+  .shortcodeglut-product-cards .product-thumb {
+      position: relative;                                                                                        
+      z-index: 1; 
+  }
+
+  .shortcodeglut-product-cards .box-cart {
+      z-index: 10;
+  }
+
+  /* Prevent any flicker during hover transitions */
+  .shortcodeglut-product-cards .product-template1:hover * {
+      outline: none !important;
+  }
+
+  .shortcodeglut-product-cards .product-thumb {
+      overflow: hidden;
+      position: relative;
+  }
+
+  .shortcodeglut-product-cards .box-cart {
+      z-index: 10;
+  }
+
+  /* Hide box-cart shadow when not hovering - prevent shadow bleed */
+  .shortcodeglut-product-cards .product-item {
+      overflow: hidden;
+  }
+
+  /* Remove all outlines */
+  .shortcodeglut-product-cards * {
+      outline: none !important;
+  }
+
+  .shortcodeglut-product-cards .btn-cart:focus,
+  .shortcodeglut-product-cards .button-group a:focus,
+  .shortcodeglut-product-cards button.btn-cart:focus {
+      outline: none !important;                                                                                  
+      box-shadow: none !important;
+  }                                                                                                              
+    
+

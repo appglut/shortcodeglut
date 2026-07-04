@@ -1,0 +1,2474 @@
+<?php
+/**
+ * Shortcode Showcase Admin Page
+ *
+ * Displays the admin page for shortcode showcase with documentation
+ * and examples of available shortcodes
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+namespace Shortcodeglut\shortcodeShowcase;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class AdminPage {
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminAssets' ) );
+	}
+
+	/**
+	 * Enqueue assets for admin page
+	 */
+	public function enqueueAdminAssets( $hook ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe admin page parameter check for script loading
+		if ( isset( $_GET['page'] ) && 'shortcodeglut' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			// Enqueue styles
+			wp_enqueue_style(
+				'shortcodeglut-shortcode-showcase',
+				SHORTCODEGLUT_URL . 'global-assets/css/shortcode-showcase.css',
+				array(),
+				SHORTCODEGLUT_VERSION
+			);
+
+			// Enqueue scripts
+			wp_enqueue_script(
+				'shortcodeglut-shortcode-showcase',
+				SHORTCODEGLUT_URL . 'global-assets/js/shortcode-showcase.js',
+				array( 'jquery' ),
+				SHORTCODEGLUT_VERSION,
+				true
+			);
+
+			// Enqueue admin JavaScript (contains modal and copy functionality)
+			wp_enqueue_script(
+				'shortcodeglut-shortcode-showcase-admin',
+				SHORTCODEGLUT_URL . 'global-assets/js/shortcode-showcase-admin.js',
+				array( 'jquery', 'shortcodeglut-shortcode-showcase' ),
+				SHORTCODEGLUT_VERSION,
+				true
+			);
+
+			// Localize script with translation strings
+			wp_localize_script( 'shortcodeglut-shortcode-showcase', 'shortcodeglutShowcase', array(
+				'i18n' => array(
+					'description' => esc_html__( 'Description', 'shortcodeglut' ),
+					'shortcodeSyntax' => esc_html__( 'Shortcode Syntax', 'shortcodeglut' ),
+					'howToUse' => esc_html__( 'How to Use', 'shortcodeglut' ),
+					'copyShortcode' => esc_html__( 'Copy the shortcode using the button above or the copy button on the card', 'shortcodeglut' ),
+					'pasteShortcode' => esc_html__( 'Paste it into any WordPress page, post, or widget', 'shortcodeglut' ),
+					'customizeParams' => esc_html__( 'Customize parameters as needed', 'shortcodeglut' ),
+					'createTemplate' => esc_html__( 'For custom styling, create a WooTemplate in the Woo Templates section', 'shortcodeglut' ),
+					'availableParams' => esc_html__( 'Available Parameters', 'shortcodeglut' ),
+					'parameter' => esc_html__( 'Parameter', 'shortcodeglut' ),
+					'searchPlaceholder' => esc_attr__( 'Search...', 'shortcodeglut' ),
+					'orderByDate' => esc_html__( 'Order By: Date', 'shortcodeglut' ),
+					'orderByTitle' => esc_html__( 'Order By: Title', 'shortcodeglut' ),
+					'orderByPrice' => esc_html__( 'Order By: Price', 'shortcodeglut' ),
+					'descending' => esc_html__( 'Descending', 'shortcodeglut' ),
+					'ascending' => esc_html__( 'Ascending', 'shortcodeglut' ),
+					'apply' => esc_html__( 'Apply', 'shortcodeglut' ),
+					'title' => esc_html__( 'Title', 'shortcodeglut' ),
+					'price' => esc_html__( 'Price', 'shortcodeglut' ),
+					'stock' => esc_html__( 'Stock', 'shortcodeglut' ),
+					'action' => esc_html__( 'Action', 'shortcodeglut' ),
+					'inStock' => esc_html__( 'In Stock', 'shortcodeglut' ),
+					'outOfStock' => esc_html__( 'Out of Stock', 'shortcodeglut' ),
+					'addToCart' => esc_html__( 'Add to Cart', 'shortcodeglut' ),
+					'readMore' => esc_html__( 'Read more', 'shortcodeglut' ),
+					'showingProducts' => esc_html__( 'Showing 3 of 25 products', 'shortcodeglut' ),
+					'wooCategoryPreview' => esc_html__( 'WooCommerce Category Products Preview', 'shortcodeglut' ),
+					'productTablePreview' => esc_html__( 'Product Table Preview', 'shortcodeglut' ),
+					'saleProductsPreview' => esc_html__( 'Products On Sale Preview', 'shortcodeglut' ),
+					'wirelessHeadphones' => esc_html__( 'Wireless Headphones', 'shortcodeglut' ),
+					'smartWatchPro' => esc_html__( 'Smart Watch Pro', 'shortcodeglut' ),
+					'bluetoothSpeaker' => esc_html__( 'Bluetooth Speaker', 'shortcodeglut' ),
+					'laptopStand' => esc_html__( 'Laptop Stand', 'shortcodeglut' ),
+					'browseElectronicProducts' => esc_html__( 'Browse our electronic products', 'shortcodeglut' ),
+					'electronics' => esc_html__( 'Electronics', 'shortcodeglut' ),
+					'copiedToClipboard' => esc_html__( 'Shortcode copied to clipboard!', 'shortcodeglut' ),
+					'failedToCopy' => esc_html__( 'Failed to copy shortcode', 'shortcodeglut' ),
+				)
+			) );
+		}
+	}
+
+	/**
+	 * Render the shortcode showcase admin page content
+	 */
+	public function renderShortcodeShowcaseContent() {
+		$woo_active = class_exists( 'WooCommerce' );
+		?>
+		<div class="wrap shortcodeglut-admin-contents">
+			<h1 style="text-align: center; font-weight: 600; font-size: 32px; margin: 30px 0;">
+				Shortcode Showcase
+			</h1>
+			<p class="subheading" style="text-align: center; margin-bottom: 30px; margin-top: 8px; color: #6b7280;">
+				Display WooCommerce content with powerful shortcodes
+			</p>
+
+			<?php if ( ! $woo_active ) : ?>
+				<div class="notice notice-warning inline" style="max-width: 800px; margin: 0 auto 30px;">
+					<p><?php esc_html_e( 'WooCommerce is not active. Some shortcodes may not work until WooCommerce is activated.', 'shortcodeglut' ); ?></p>
+				</div>
+			<?php endif; ?>
+
+			<div class="shopg-tab-container">
+				<ul class="shopg-tabs">
+					<li class="shopg-tab active" data-tab="tab-all" style="font-size: 16px; font-weight: 600;">All Shortcodes</li>
+					<li class="shopg-tab" data-tab="tab-free" style="font-size: 16px; font-weight: 600;">Free Shortcodes</li>
+					<li class="shopg-tab" data-tab="tab-pro" style="font-size: 16px; font-weight: 600;">Pro Shortcodes</li>
+				</ul>
+
+				<!-- All Shortcodes Tab -->
+				<div class="shopg-tab-content active" id="tab-all">
+					<div class="image-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+
+						<?php
+						// WooCommerce Category Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_woo_category',
+							'WooCommerce Category Products',
+							'Query and display products from one or more WooCommerce categories with customizable layout, sorting, and pagination. Features product display with multiple templates, responsive grid layout, and AJAX support. Perfect for creating product catalogs, category pages, and featured product displays.',
+							array(
+								'basic' => '[shortcodeglut_woo_category categories="your-category-slug"]',
+								'advanced' => '[shortcodeglut_woo_category categories="electronics,accessories" title="1" desc="1" items_per_page="12" cols="3" toolbar="1" ajax="on"]',
+							),
+							array(
+								'categories' => 'Category slug(s) - comma-separated for multiple (required)',
+								'cat_field' => 'Field type: slug or id (default: slug)',
+								'operator' => 'Query operator: IN, NOT IN, AND, EXISTS, NOT EXISTS (default: IN)',
+								'title' => 'Custom title or "1" for category name',
+								'desc' => 'Custom description or "1" for category description',
+								'icon' => 'Custom icon URL',
+								'icon_width' => 'Icon width in pixels (default: 64)',
+								'items_per_page' => 'Number of products per page (default: 10)',
+								'orderby' => 'Order by: id, title, date, modified, price, total_sales, menu_order, rating, popularity (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+								'toolbar' => 'Show toolbar: 1, 0, or "compact" (default: 1)',
+								'tbgrid' => 'Toolbar grid allocation (default: 6,2,2,2)',
+								'paging' => 'Show pagination: 1 or 0 (default: 1)',
+								'cols' => 'Number of columns on desktop (default: 3)',
+								'colspad' => 'Number of columns on tablet (default: 1)',
+								'colsphone' => 'Number of columns on mobile (default: 1)',
+								'ajax' => 'Enable AJAX for filtering/pagination: on or off (default: off)',
+								'ajax_pagination' => 'Enable AJAX specifically for pagination: on or off (default: off)',
+							),
+							'woo-category',
+							array(
+								'features' => array(
+									'Display products from single or multiple categories',
+									'Flexible query operators for complex category filtering',
+									'Sort by date, title, price, sales, rating, or popularity',
+									'Responsive grid layout with customizable columns for desktop, tablet, and mobile',
+									'Built-in pagination for large product catalogs',
+									'AJAX support for seamless filtering and pagination without page reload',
+									'Customizable product display using WooTemplates (default: product_card_basic)',
+									'Category icon, title, and description display',
+									'Flexible toolbar with standard or compact layout options',
+								),
+								'useCases' => array(
+									'Create category-specific product pages',
+									'Build featured product sections from specific categories',
+									'Display products from multiple categories simultaneously',
+									'Show new arrivals from specific categories',
+									'Create product catalogs with custom layouts',
+									'Build responsive product grids for e-commerce sites',
+								),
+								'tips' => array(
+									'Use <code>cat_field="id"</code> when working with dynamic category IDs from code',
+									'Set <code>toolbar="compact"</code> for a smaller, space-saving toolbar',
+									'Enable <code>ajax="on"</code> and <code>ajax_pagination="on"</code> for seamless experience without page refresh',
+									'Use <code>title="1"</code> and <code>desc="1"</code> to auto-display category info',
+									'Combine with WooTemplates for fully custom product card designs',
+									'Use <code>operator="NOT IN"</code> to exclude specific categories',
+									'Use <code>orderby="rating"</code> to display highest-rated products first',
+								),
+							)
+						);
+
+					// Table List Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_archive_table',
+						'WooCommerce Table List',
+						'Display products in a clean, table layout with customizable columns for product information. Perfect for creating product catalogs, price lists, 
+                        and inventory displays. Supports sorting, AJAX pagination, and multiple column types.',
+						array(
+							'basic' => '[shortcodeglut_archive_table]',
+							'advanced' => '[shortcodeglut_archive_table order_by="title" items_per_page="25" columns="icon|title|price|stock|actions" show_sku="1"]',
+						),
+						array(
+						'order_by' => 'Order by: title, date, price, modified (default: title)',                                                                      
+						'order' => 'Order direction: ASC or DESC (default: ASC)',                
+						'items_per_page' => 'Products per page (default: 9)',
+						'columns' => 'Table columns (| separated) - available: icon, title, price, date, stock, category, excerpt, rating, sales, sku, attributes, 
+				actions. Default: icon|title|price|date|actions', 
+						'colheads' => 'Column headers (| separated) - default: Product|Price|Date|Actions',
+						'paging' => 'Show pagination: 1 or 0 (default: 1)',
+						'ajax' => 'Enable AJAX pagination: on or off (default: off)',                                                                                 
+						'category' => 'Filter by category slug',
+		// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.
+						'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+						'show_icon' => 'Show product icon/image: 1 or 0 (default: 1)',           
+						'icon_width' => 'Icon width in pixels (default: 44)',
+						'show_sku' => 'Show SKU in title column: 1 or 0 (default: 1)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',                                                                       
+						'title' => 'Section title (optional)',
+					),                                                                                                                                                
+					'table-list',                                                                
+					array(
+						'features' => array(
+							'Clean table layout with sortable columns',
+							'Product icons/images with customizable size',
+							'Multiple column types: title, price, date, stock, category, excerpt, rating, sales, SKU, attributes',
+							'View and Add to Cart action buttons',
+							'AJAX pagination for seamless browsing',                                                                                                  
+							'Optional breadcrumb navigation',
+							'Filter by category, exclude specific products',                                                                                          
+						),                                                                       
+						'useCases' => array(
+							'Create product catalogs and price lists',
+							'Display inventory with quick actions',
+							'Show new products in a table format',
+							'Create downloadable product lists',
+							'Build product archives with filtering',
+						),                                        
+						'tips' => array(                               
+							'Use <code>show_breadcrumb="1"</code> to add navigation breadcrumb',
+							'Customize columns with <code>columns</code> parameter (| separated: icon|title|price|stock|actions)',                                    
+							'Add <code>stock</code> column to show in-stock/out-of-stock status',
+							'Enable <code>ajax="on"</code> for faster pagination without page reload',                                                                
+							'Set <code>show_sku="0"</code> to hide SKU from product title',      
+						),
+					)
+                   );
+
+					 // Basic Grid Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_grid',
+					'WooCommerce Basic Grid',
+					'Display products in a responsive grid card layout with images, titles, prices, ratings, and add-to-cart buttons. Features dynamic sorting (AJAX 
+				or URL-based), toolbar, optional pagination, and WooTemplate support.',
+					array(                                        
+						'basic' => '[shortcodeglut_grid]',             
+						'advanced' => '[shortcodeglut_grid columns="4" order_by="price-desc" template="product_card_basic"]',
+					),                                                                                                                                                
+					array(
+						'columns' => 'Grid columns for desktop (1-6, default: 4)',                                                                                    
+						'rows' => 'Number of rows to display (default: 0)',                      
+						'limit' => 'Total limit (0 = use columns × rows, default: 0)',
+						'order_by' => 'Order by: date, date-desc, title-asc, title-desc, price-asc, price-desc, popularity-asc, popularity-desc, rating-asc, 
+				(default: date-desc)',                
+						'order' => 'Order direction: ASC or DESC (default: DESC) - Note: overridden by combined order_by values',
+						'items_per_page' => 'Items per page when paging enabled (default: 12)',
+						'template' => 'WooTemplate ID for custom product card design (default: product_card_basic)',                                                  
+						'paging' => 'Enable pagination: 1 or 0 (default: 1)',
+						'ajax' => 'AJAX mode for sorting/pagination: on or off. Sorting uses AJAX; when off, pagination uses URL parameters (default: off)',          
+						'category' => 'Filter by category slug',
+// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.                                 
+						'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+						'toolbar' => 'Show toolbar: 1, 0, or compact (default: 1)',                                                                                   
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+					),                                                                                                                                                
+					'basic-grid',                                                                
+					array(                                             
+						'features' => array(
+							'Responsive grid layout with 1-6 columns',                                                                                                
+							'Product cards with image, title, price, rating',
+							'Dynamic sorting toolbar (date, title, price, popularity, rating)',                                                                       
+							'AJAX sorting and URL-based pagination support',                     
+							'Optional pagination for large catalogs',
+							'Full WooTemplate support for custom card designs',
+							'Breadcrumb navigation option',
+						),
+						'useCases' => array(
+							'Create product showcase pages',
+							'Display featured products',
+							'Build category-specific grids',
+							'Show new arrivals or bestsellers',
+							'Create sale product grids',
+						),                                        
+						'tips' => array(                               
+							'Use <code>columns="3"</code> for a balanced 3-column layout',
+							'Set <code>toolbar="compact"</code> for a smaller toolbar',                                                                               
+							'Set <code>paging="0"</code> to disable pagination',
+							'Use <code>order_by="price-desc"</code> to show highest prices first',                                                                    
+							'Combine with WooTemplates for fully custom card designs',           
+						),
+					)
+				);
+
+						// Category Tree Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_category_tree',
+							'WooCommerce Category Tree',
+							'Displays a hierarchical, collapsible tree view of WooCommerce product categories with icons, product counts, and expand/collapse functionality.',
+							array(
+								'basic' => '[shortcodeglut_category_tree]',
+								'advanced' => '[shortcodeglut_category_tree title="Browse by Category" show_count="1" expandable="1" expanded_depth="1"]',
+							),
+							array(
+								'title' => 'Section title',
+								'show_count' => 'Show product counts: 1 or 0 (default: 1)',
+								'expandable' => 'Enable expand/collapse: 1 or 0 (default: 1)',
+								'expanded_depth' => 'Initial expansion depth (default: 0)',
+								'hide_empty' => 'Hide empty categories: 1 or 0 (default: 0)',
+								'parent' => 'Parent category ID or slug (default: 0 = all top level)',
+								'orderby' => 'Order by: name, slug, count, term_group (default: name)',
+								'order' => 'Order direction: ASC or DESC (default: ASC)',
+				// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.
+								'exclude' => 'Exclude category IDs or slugs (comma-separated)',
+								'include' => 'Include only category IDs or slugs (comma-separated)',
+								'number' => 'Maximum number of categories to show',
+								'show_icon' => 'Show category icons: 1 or 0 (default: 1)',
+								'icon_style' => 'Icon style: fontawesome or gradient (default: fontawesome)',
+								'show_breadcrumb' => 'Show breadcrumb: 1 or 0 (default: 0)',
+								'link_products' => 'Show products under categories: 1 or 0 (default: 0)',
+								'link_target' => 'Link target: _self or _blank (default: _self)',
+								'product_fields' => 'Product fields to show: name,price,add_to_cart,image (default: name,price)',
+								'width' => 'Container width (e.g., 300px, 500px, 100%, default: 500px)',
+							),
+							'category-tree',
+							array(
+								'features' => array(
+									'Hierarchical category tree display',
+									'Expandable/collapsible categories',
+									'Product count badges',
+									'Colorful gradient icons',
+									'Optional breadcrumb navigation',
+									'Font Awesome icons support',
+									'Responsive column layout',
+								),
+								'useCases' => array(
+									'Create category navigation menus',
+									'Display product category hierarchy',
+									'Build store directory pages',
+									'Show category filters',
+									'Create sitemap pages',
+								),
+								'tips' => array(
+									'Set <code>expanded_depth="1"</code> to show first level expanded by default',
+									'Use <code>hide_empty="1"</code> to hide categories without products',
+									'Enable <code>link_products="1"</code> to show products under each category',
+									'Use <code>icon_style="fontawesome"</code> for folder icons',
+									'Set <code>width="100%"</code> for full-width layout',
+								),
+							)
+						);
+
+						// SideOne Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_sideone',
+							'WooCommerce SideOne Layout',
+							'Displays products in an alternating left-right zigzag layout with image on one side and content on the other. Perfect for showcasing featured products, collections, or highlighting specific items with a modern asymmetric design.',
+							array(
+								'basic' => '[shortcodeglut_sideone]',
+								'advanced' => '[shortcodeglut_sideone items_per_page="6" image_position="alternate" image_width="50%" show_excerpt="1" gap_size="50px"]',
+							),
+							array(
+								'columns' => 'Products per row (default: 4)',
+								'order_by' => 'Order products by: date-desc, date-asc, title-asc, title-desc, price-asc, price-desc (default: date-desc)',
+								'items_per_page' => 'Total items to display (default: 12)',
+								'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+								'paging' => 'Enable pagination: 1 or 0 (default: 1)',
+								'ajax' => 'AJAX pagination: on or off (default: off)',
+								'category' => 'Filter by category slug',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Help text only, not query usage.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+								'image_position' => 'Image position: left, right, or alternate (default: alternate)',
+								'image_width' => 'Image width percentage (default: 50%)',
+								'show_excerpt' => 'Show product excerpt: 1 or 0 (default: 1)',
+								'show_price' => 'Show product price: 1 or 0 (default: 1)',
+								'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+								'gap_size' => 'Gap between items (default: 40px)',
+								'show_title' => 'Show section title: 1 or 0 (default: 0)',
+								'section_title' => 'Section title text',
+								'show_breadcrumb' => 'Show breadcrumb: 1 or 0 (default: 0)',
+							),
+							'sideone',
+							array(
+								'features' => array(
+									'Alternating left-right image layout',
+									'Customizable image width and position',
+									'AJAX pagination support',
+									'Responsive mobile layout',
+									'Hover effects and animations',
+									'Optional breadcrumb navigation',
+									'Category filtering support',
+								),
+								'useCases' => array(
+									'Showcase featured products collections',
+									'Create product highlight sections',
+									'Display new arrivals with emphasis',
+									'Build promotional product displays',
+									'Create storytelling product layouts',
+								),
+								'tips' => array(
+									'Use <code>image_position="alternate"</code> for zigzag pattern',
+									'Set <code>image_width="60%"</code> for larger images',
+									'Use <code>gap_size="60px"</code> for more spacing between items',
+									'Enable <code>show_breadcrumb="1"</code> for navigation',
+									'Set <code>show_title="1"</code> and <code>section_title="Your Title"</code> to add section heading',
+								),
+							)
+						);
+
+						// phpcs:ignore Generic.Files.LineLength.TooLong -- Help text array
+						$this->render_shortcode_card(
+							'shortcodeglut_kanban',
+							'WooCommerce Kanban Board',
+							'Displays products in a 3-column Kanban board layout with Featured, New Arrivals, and On Sale columns. Includes load more functionality for each column.',
+							array(
+								'basic' => '[shortcodeglut_kanban]',
+								'advanced' => '[shortcodeglut_kanban per_column="6" category="electronics" section_title="Tech Products"]',
+							),
+							array(
+								'columns' => 'Number of columns, max 3 (default: 3)',
+								'per_column' => 'Products per column initial load (default: 4)',
+								'show_header' => 'Show header section: 1 or 0 (default: 1)',
+								'section_title' => 'Custom section title (default: Kanban Board)',                                  
+								'show' => 'Columns to display: featured, new, onsale, low_stock (comma-separated)',
+								'category' => 'Filter by category slug', 
+							// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-controlled product exclusion, limited and bounded.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+							),
+							'kanban',
+							array(
+								'features' => array(
+									'3-column Kanban layout',
+									'Featured products column',
+									'New arrivals column',
+									'On sale products column',
+									'Last Chance column (low stock)',
+								'Column filter (show only selected columns)',
+									'Responsive layout',
+								),
+								'styles' => array(
+									'Colorful gradient icons',
+									'Priority color indicators',
+									'Smooth hover effects',
+									'Mobile responsive',
+									'Light theme (works with any theme)'
+								),
+							),
+						);
+
+
+										// Tabs Layout Shortcode (Free)                                                                                       
+				$this->render_shortcode_card(                                                                                         
+					'shortcodeglut_tabs',                                                                                             
+					'WooCommerce Tabs Layout',                                                                                        
+					'Display products in a beautiful tabbed interface with customizable navigation styles. Perfect for organizing     
+				products by category with smooth animations and AJAX loading for seamless browsing.',                                 
+					array(                                                                                                            
+						'basic' => '[shortcodeglut_tabs]',                                                                            
+						'advanced' => '[shortcodeglut_tabs categories="electronics,clothing,accessories" style="pill" animation="fade"
+				posts_per_page="12" columns="4" header_bg_color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"]',               
+					),                                                                                                                
+					array(                                                                                                            
+						'style' => 'Tab style: pill, underline, or boxed (default: pill)',                                            
+						'animation' => 'Tab animation: fade, slide, or none (default: fade)',                                         
+						'header_bg_color' => 'Header background color or gradient (default: linear-gradient(135deg, #667eea 0%,       
+				#764ba2 100%))',                                                                                                      
+						'show_header' => 'Show header section: 1 or 0 (default: 1)',                                                  
+						'section_title' => 'Section title text (default: Browse by Category)',                                        
+						'categories' => 'Category slugs to display as tabs (comma-separated, default: auto from all categories)',     
+						'posts_per_page' => 'Products per tab (default: 8)',                                                          
+						'columns' => 'Grid columns per tab (default: 4)',                                                             
+						'show_empty' => 'Show empty categories: 1 or 0 (default: 1)',                                                 
+					),                                                                                                                
+					'tabs',                                                                                                           
+					array(                                                                                                            
+						'features' => array(                                                                                          
+							'Beautiful tabbed navigation with multiple styles',                                                       
+							'Smooth animations (fade, slide) between tabs',                                                           
+							'AJAX loading for tab content',                                                                           
+							'Customizable header with gradient backgrounds',                                                          
+							'Responsive grid layout for products',                                                                    
+							'Auto-populate tabs from WooCommerce categories',                                                         
+							'Custom category selection',                                                                              
+						),                                                                                                            
+						'useCases' => array(                                                                                          
+							'Organize products by category in tabs',                                                                  
+							'Create category-based product showcases',                                                                
+							'Build interactive product catalogs',                                                                     
+							'Display featured collections',                                                                           
+							'Create shop-by-category pages',                                                                          
+						),                                                                                                            
+						'tips' => array(                                                                                              
+							'Use <code>style="pill"</code> for modern rounded tabs',                                                  
+							'Set <code>animation="fade"</code> for smooth transitions',                                               
+							'Use <code>style="underline"</code> for minimal design',                                                  
+							'Customize <code>header_bg_color</code> to match your theme',                                             
+							'Set <code>show_empty="0"</code> to hide empty categories',                                               
+						),                                                                                                            
+					)                                                                                                                 
+				);                                                                                                                    
+								
+				// Carousel Slider Shortcode (Free)                                                                                   
+				$this->render_shortcode_card(
+					'shortcodeglut_carousel',                                                                                         
+					'Woocommerce Carousel Slider',
+					'Display products in an elegant carousel slider with navigation arrows and dot indicators. Features autoplay,     
+				colorful gradients, custom slide backgrounds, and responsive design for showcasing featured products.',                                         
+					array(
+						'basic' => '[shortcodeglut_carousel]',                                                                        
+						'advanced' => '[shortcodeglut_carousel autoplay="3000" arrows="true" dots="true" posts_per_page="8"
+				category="electronics" section_title="Featured Products" order_by="price-desc" product_bgs="123:#ff0000|456:linear-gradient(135deg, #00ff00 0%, #0000ff 100%)|789:url(bg.jpg)" default_bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"]',                                     
+					),                                                                                                                
+					array(                                                                                                            
+						'autoplay' => 'Autoplay interval in milliseconds (0 to disable, default: 5000)',
+						'arrows' => 'Show navigation arrows: true or false (default: true)',                                          
+						'dots' => 'Show dot indicators: true or false (default: true)',                                               
+						'section_title' => 'Section title (default: Featured Products)',                                              
+						'posts_per_page' => 'Number of products in carousel (default: 6)',                                            
+						'category' => 'Filter by category slug',                                                                      
+						'order_by' => 'Order by: date-desc, date-asc, price-asc, price-desc, popularity-desc, rating-desc (default:   
+				date-desc)',                                                                                                          
+						'show_price' => 'Show product price: 1 or 0 (default: 1)',                                                    
+						'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+							'product_bgs' => 'Product ID:background pairs for custom backgrounds. Format: "ID1:bg1|ID2:bg2". Backgrounds can be solid colors (#ff0000), gradients (linear-gradient(...)), or image URLs (url(bg.jpg) or https://...). (default: empty)',
+							'default_bg' => 'Default fallback gradient for products without custom background (default: linear-gradient(135deg, #667eea 0%, #764ba2 100%))',
+					),
+					'carousel',                                                                                                       
+					array(                                                                                                            
+						'features' => array(
+							'Beautiful carousel with smooth transitions',                                                             
+							'Navigation arrows and dot indicators',                                                                   
+							'Autoplay with configurable interval',                                                                    
+							'Colorful gradient backgrounds',                                                                          
+							'Product tags (Best Seller, Hot Deal, New Release, etc.)',                                                
+							'Responsive design for all devices',                                                                      
+							'Optional price and add-to-cart button',
+								'Custom background per slide (color, gradient, or image)',
+						),                                                                                                            
+						'useCases' => array(                                                                                          
+							'Showcase featured products on homepage',                                                                 
+							'Highlight new arrivals',                                                                                 
+							'Display promotional items',                                                                              
+							'Create product sliders for categories',                                                                  
+							'Build hero sections with products',                                                                      
+						),      
+						'tips' => array(
+							'Set <code>autoplay="0"</code> to disable auto-rotation',                                                 
+							'Use <code>category="your-slug"</code> to filter by category',                                            
+							'Set <code>arrows="false"</code> for dot-only navigation',                                                
+							'Use <code>order_by="price-desc"</code> to show highest prices first',
+								'Use <code>product_bgs="123:#ff0000|456:url(bg.jpg)"</code> for custom slide backgrounds',
+								'Set <code>default_bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"</code> for fallback background',
+						),
+					)
+				);
+					
+
+				// Accordion List Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_accordion',
+					'WooCommerce Accordion List',
+					'Display products in an expandable accordion layout with gradient icons, pricing, feature tags, and add-to-cart buttons. Supports single/multi expand modes, AJAX pagination, and category filtering.',
+					array(
+						'basic' => '[shortcodeglut_accordion]',
+						'advanced' => '[shortcodeglut_accordion expand="single" show_price="true" show_excerpt="true" show_features="true" items_per_page="10" ajax="on"]',
+					),
+					array(
+						'expand' => 'Expand mode: single (one at a time) or multi (default: single)',
+						'show_price' => 'Show product price in header: true or false (default: true)',
+						'show_excerpt' => 'Show product description: true or false (default: true)',
+						'show_features' => 'Show product tags as feature badges: true or false (default: true)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+						'title' => 'Section title (optional)',
+						'items_per_page' => 'Products per page (default: 10)',
+						'paging' => 'Show pagination: 1 or 0 (default: 1)',
+						'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+						'order_by' => 'Order by: title, date, price (default: title)',
+						'order' => 'Order direction: ASC or DESC (default: ASC)',
+						'category' => 'Filter by category slug',
+						// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.
+						'exclude' => 'Exclude product IDs (comma-separated)',
+						'icon_width' => 'Product icon size in pixels (default: 56)',
+					),
+					'accordion',
+					array(
+						'features' => array(
+							'Expandable accordion with smooth animations',
+							'Single or multi-item expand modes',
+							'Colorful gradient product icons',
+							'Feature tags from product attributes',
+							'Add to Cart and View Product buttons',
+							'AJAX pagination support',
+							'Category filtering and product exclusion',
+						),
+						'useCases' => array(
+							'Create interactive product catalogs',
+							'Display product FAQs with details',
+							'Build space-saving product listings',
+							'Show product features in expandable sections',
+							'Create mobile-friendly product displays',
+						),
+						'tips' => array(
+							'Use <code>expand="single"</code> to keep only one item open at a time',
+							'Set <code>expand="multi"</code> to allow multiple items open simultaneously',
+							'Enable <code>ajax="on"</code> for seamless pagination without page reload',
+							'Set <code>show_features="true"</code> to display product tags as badges',
+							'Use <code>title="Product Catalog"</code> to add a section heading',
+						),
+					)
+				);
+
+				// Timeline View Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_timeline',
+					'WooCommerce Timeline View',
+					'Display products in a beautiful vertical timeline layout with alternating left/right cards, gradient date badges, and customizable layout options. Supports left-only, right-only, or alternating layouts with AJAX pagination.',
+					array(
+						'basic' => '[shortcodeglut_timeline]',
+						'advanced' => '[shortcodeglut_timeline layout="alternate" title="Release Timeline" group_by="month" items_per_page="10" accent_color="#667eea"]',
+					),
+					array(
+						'layout' => 'Layout: alternate, left, or right (default: alternate)',
+						'group_by' => 'Date format: month, year, date, or none (default: month)',
+						'title' => 'Section title (optional)',
+						'category' => 'Filter by category slug',
+						'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+						'items_per_page' => 'Products per page (default: 10)',
+						'order_by' => 'Order by: date, title, or price (default: date)',
+						'order' => 'Order direction: ASC or DESC (default: DESC)',
+						'show_price' => 'Show product price: true or false (default: true)',
+						'show_excerpt' => 'Show product description: true or false (default: true)',
+						'show_date' => 'Show date badge: true or false (default: true)',
+						'show_meta' => 'Show category/SKU/stock info: true or false (default: true)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+						'paging' => 'Show pagination: 1 or 0 (default: 1)',
+						'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+						'accent_color' => 'Timeline accent color hex (default: #667eea)',
+					),
+					'timeline',
+					array(
+						'features' => array(
+							'Beautiful vertical timeline with gradient line',
+							'Three layout modes: alternate, left-only, right-only',
+							'Colorful gradient date badges',
+							'Product cards with hover effects',
+							'Add to Cart and View Product buttons',
+							'AJAX pagination support',
+							'Responsive design - collapses on mobile',
+							'Customizable accent color',
+						),
+						'useCases' => array(
+							'Create product release timelines',
+							'Display product history or changelog',
+							'Showcase featured products chronologically',
+							'Build storytelling product layouts',
+							'Create event-based product showcases',
+						),
+						'tips' => array(
+							'Use <code>layout="alternate"</code> for left/right alternating cards',
+							'Set <code>layout="left"</code> to show all cards on the left side',
+							'Set <code>layout="right"</code> to show all cards on the right side',
+							'Use <code>group_by="year"</code> to show only the year in date badges',
+							'Set <code>accent_color="#e74c3c"</code> to change the timeline line color',
+						),
+					)
+				);
+
+					// Zigzag Layout Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_zigzag',
+						'WooCommerce Zigzag Layout',
+						'Display products in an alternating zigzag layout with visual on one side and content on the other. Features colorful gradient backgrounds, product tags, feature lists, and add-to-cart buttons. Perfect for showcasing products with visual emphasis.',
+						array(
+							'basic' => '[shortcodeglut_zigzag]',
+							'advanced' => '[shortcodeglut_zigzag alternate="true" title="Featured Products" category="electronics" items_per_page="6" accent_color="#667eea" show_tag="true"]',
+						),
+						array(
+							'alternate' => 'Enable alternating left-right layout: true or false (default: true)',
+							'title' => 'Section title (optional)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+							'items_per_page' => 'Products per page (default: 10)',
+							'order_by' => 'Order by: date, title, or price (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'show_price' => 'Show product price: true or false (default: true)',
+							'show_excerpt' => 'Show product description: true or false (default: true)',
+							'show_features' => 'Show product features list: true or false (default: true)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+							'paging' => 'Show pagination: 1 or 0 (default: 1)',
+							'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+							'accent_color' => 'Accent color hex (default: #667eea)',
+							'show_tag' => 'Show product tags (New, Sale, Featured): true or false (default: true)',
+							'template' => 'WooTemplate ID for custom product display (optional)',
+						),
+						'zigzag',
+						array(
+							'features' => array(
+								'Alternating left-right zigzag layout',
+								'Colorful gradient visual sections',
+								'Product image or icon display',
+								'Product tags (New, Sale, Featured, Out of Stock)',
+								'Feature list with checkmarks',
+								'Add to Cart and View Product buttons',
+								'AJAX pagination support',
+								'Full WooTemplate support',
+							),
+							'useCases' => array(
+								'Showcase featured products visually',
+								'Create product storytelling layouts',
+								'Display product collections with emphasis',
+								'Build promotional product sections',
+								'Create landing page product showcases',
+							),
+							'tips' => array(
+								'Use <code>alternate="false"</code> to disable alternating layout',
+								'Set <code>show_features="false"</code> to hide the feature list',
+								'Use <code>accent_color="#e74c3c"</code> to change gradient colors',
+								'Enable <code>show_tag="true"</code> to display product status badges',
+								'Combine with WooTemplates for custom product cards',
+							),
+						)
+					);
+
+					// Drawer Panels Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_drawer',
+						'WooCommerce Drawer Panels',
+						'Display products in an interactive drawer/panel layout with sidebar navigation and smooth slide-in animations. Features product details panel, feature grid, and seamless navigation between products.',
+						array(
+							'basic' => '[shortcodeglut_drawer]',
+							'advanced' => '[shortcodeglut_drawer nav_title="Choose Your Plan" category="courses" items_per_page="5" accent_color="#0071e3" show_features="true"]',
+						),
+						array(
+							'nav_title' => 'Navigation section title (default: Select Product)',
+							'title' => 'Section title (optional)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+							'items_per_page' => 'Products per page (default: 10)',
+							'order_by' => 'Order by: date, title, or price (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'show_price' => 'Show product price: true or false (default: true)',
+							'show_desc' => 'Show product description: true or false (default: true)',
+							'show_features' => 'Show feature grid: true or false (default: true)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+							'accent_color' => 'Accent color hex (default: #0071e3)',
+							'show_tag' => 'Show product tags (New, Sale, Featured): true or false (default: true)',
+							'template' => 'WooTemplate ID for custom product display (optional)',
+						),
+						'drawer',
+						array(
+							'features' => array(
+								'Interactive sidebar navigation with product thumbnails',
+								'Smooth slide-in panel animations',
+								'Product image, tag, title, description, and price',
+								'Feature grid with 4-item layout',
+								'Add to Cart and View Product buttons',
+								'Full WooTemplate support',
+								'Responsive design for all devices',
+							),
+							'useCases' => array(
+								'Create interactive product showcases',
+								'Display service plans or packages',
+								'Build product comparison displays',
+								'Showcase course or product collections',
+								'Create featured product selectors',
+							),
+							'tips' => array(
+								'Use <code>nav_title="Your Title"</code> to customize navigation header',
+								'Set <code>show_features="false"</code> to hide the feature grid',
+								'Use <code>accent_color="#667eea"</code> to match your brand colors',
+								'Enable <code>show_tag="true"</code> to display product status badges',
+								'Combine with WooTemplates for custom panel content',
+							),
+						)
+					);
+
+						// Masonry Grid Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_masonry_grid',
+							'WooCommerce Masonry Grid',
+							'Display products in a beautiful masonry/pinterest-style layout with responsive columns, card styles, and sorting options. Perfect for creating product galleries with varying content heights and visual appeal.',
+							array(
+								'basic' => '[shortcodeglut_masonry_grid]',
+								'advanced' => '[shortcodeglut_masonry_grid columns="4" card_style="modern" gap="20" border_radius="16" shadow="1" hover_lift="1"]',
+							),
+							array(
+								'columns' => 'Masonry columns for desktop (1-6, default: 4)',
+								'rows' => 'Number of rows to display (default: 0)',
+								'limit' => 'Total limit (0 = use columns × rows, default: 0)',
+								'order_by' => 'Order by: date, title, price, popularity, rating (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'items_per_page' => 'Items per page when paging enabled (default: 12)',
+								'template' => 'WooTemplate ID for custom product card design (default: product_card_basic)',
+								'paging' => 'Enable pagination: 1 or 0 (default: 1)',
+								'ajax' => 'AJAX mode for sorting/pagination: on or off (default: off)',
+								'category' => 'Filter by category slug',
+								'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+								'toolbar' => 'Show toolbar: 1, 0, or compact (default: 1)',
+								'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+								'card_style' => 'Card style: modern, classic, or minimal (default: modern)',
+								'gap' => 'Gap between items in px (default: 20)',
+								'border_radius' => 'Card border radius in px (default: 16)',
+								'shadow' => 'Enable shadow: 1 or 0 (default: 1)',
+								'hover_lift' => 'Enable hover lift effect: 1 or 0 (default: 1)',
+								'image_height' => 'Image height: auto, tall, medium, or short (default: auto)',
+								'show_tags' => 'Show product tags: 1 or 0 (default: 1)',
+								'show_excerpt' => 'Show product excerpt: 1 or 0 (default: 1)',
+								'tag_color' => 'Tag background color hex (default: #fef3c7)',
+								'tag_text_color' => 'Tag text color hex (default: #92400e)',
+							),
+							'masonry-grid',
+							array(
+								'features' => array(
+									'Responsive masonry/pinterest-style layout',
+									'1-6 customizable columns for desktop, tablet, mobile',
+									'Multiple card styles: modern, classic, minimal',
+									'Product cards with image, title, price, rating',
+									'Dynamic sorting toolbar (date, title, price, popularity, rating)',
+									'AJAX sorting and pagination support',
+									'Full WooTemplate support for custom card designs',
+									'Optional breadcrumb navigation',
+									'Hover lift effects and customizable shadows',
+								),
+								'useCases' => array(
+									'Create product showcase galleries',
+									'Display featured products with visual appeal',
+									'Build category-specific masonry grids',
+									'Show new arrivals or bestsellers',
+									'Create sale product displays',
+									'Build portfolio-style product catalogs',
+								),
+								'tips' => array(
+									'Use <code>columns="3"</code> for a balanced 3-column layout',
+									'Set <code>toolbar="compact"</code> for a smaller toolbar',
+									'Use <code>card_style="classic"</code> for traditional design',
+									'Set <code>hover_lift="1"</code> for engaging hover effects',
+									'Combine with WooTemplates for fully custom card designs',
+									'Use <code>image_height="tall"</code> for dramatic product images',
+								),
+							)
+						);
+
+						// Conveyor Belt Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_conveyor_belt',
+							'WooCommerce Conveyor Belt',
+							'Display products in an infinite scrolling horizontal carousel with auto-scroll animation. Features pause on hover, gradient icons, customizable speed, and seamless looping. Perfect for showcasing products in a dynamic, eye-catching display.',
+							array(
+								'basic' => '[shortcodeglut_conveyor_belt]',
+								'advanced' => '[shortcodeglut_conveyor_belt limit="16" speed="continuous" direction="left" card_width="300" card_height="400" pause_on_hover="1"]',
+							),
+							array(
+								'limit' => 'Number of products to show (default: 16)',
+								'columns' => 'Number of items visible at once (default: 4)',
+								'speed' => 'Scroll speed: slow, continuous, fast, or paused (default: continuous)',
+								'direction' => 'Scroll direction: left or right (default: left)',
+								'card_width' => 'Card width in pixels (default: 300)',
+								'card_height' => 'Card height in pixels (default: 400)',
+								'gap' => 'Gap between cards in pixels (default: 30)',
+								'border_radius' => 'Card border radius in pixels (default: 20)',
+								'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+								'category' => 'Filter by category slug',
+								'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+								'order_by' => 'Order by: date, title, price, popularity, rating (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'show_title' => 'Show product title: 1 or 0 (default: 1)',
+								'show_desc' => 'Show product description: 1 or 0 (default: 1)',
+								'show_price' => 'Show product price: 1 or 0 (default: 1)',
+								'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+								'show_tag' => 'Show "Hot" tag for first item: 1 or 0 (default: 0)',
+								'button_text' => 'Button text (default: "Add to Cart")',
+								'card_style' => 'Card style: dark or light (default: dark)',
+								'pause_on_hover' => 'Pause animation on hover: 1 or 0 (default: 1)',
+							),
+							'conveyor-belt',
+							array(
+								'features' => array(
+									'Infinite scrolling horizontal carousel',
+									'Seamless auto-looping animation',
+									'Pause on hover functionality',
+									'Colorful gradient product icons',
+									'Customizable scroll speed (slow, continuous, fast, paused)',
+									'Scroll direction control (left or right)',
+									'AJAX loading for dynamic content',
+									'Full WooTemplate support',
+									'Responsive design with customizable card dimensions',
+								),
+								'useCases' => array(
+									'Showcase featured products on homepage',
+									'Create dynamic product carousels',
+									'Display promotional items',
+									'Build animated product showcases',
+									'Highlight new arrivals or sales',
+									'Create engaging product displays',
+								),
+								'tips' => array(
+									'Use <code>speed="continuous"</code> for smooth auto-scroll',
+									'Set <code>pause_on_hover="1"</code> for better user interaction',
+									'Use <code>direction="right"</code> to reverse scroll direction',
+									'Adjust <code>card_width</code> and <code>card_height</code> for custom dimensions',
+									'Enable <code>show_tag="1"</code> to highlight the first product',
+									'Use <code>card_style="light"</code> for lighter theme designs',
+								),
+							)
+						);
+
+
+						// Horizontal Left Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_horizontal_left',
+							'WooCommerce Horizontal Image Left',
+							'Display products in a horizontal list layout with product images positioned on the left side. Features product badges, ratings, categories, descriptions, and add-to-cart buttons. Supports AJAX pagination, category filtering, and customizable image dimensions.',
+							array(
+								'basic' => '[shortcodeglut_horizontal_left]',
+								'advanced' => '[shortcodeglut_horizontal_left category="electronics" items_per_page="8" show_rating="1" show_description="1" ajax="on" image_width="220"]',
+							),
+							array(
+								'title' => 'Section title (optional)',
+								'category' => 'Filter by category slug',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Exclude parameter is user-configurable for hiding specific products.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+								'items_per_page' => 'Products per page (default: 10)',
+								'order_by' => 'Order by: date-desc, date-asc, title-asc, title-desc, price-asc, price-desc, rating-desc, rating-asc (default: date-desc)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'paging' => 'Show pagination: 1 or 0 (default: 1)',
+								'ajax' => 'AJAX pagination: on or off (default: off)',
+								'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+								'show_rating' => 'Show product rating: 1 or 0 (default: 1)',
+								'show_category' => 'Show product category: 1 or 0 (default: 1)',
+								'show_description' => 'Show product description: 1 or 0 (default: 1)',
+								'image_width' => 'Image width in pixels (default: 200)',
+								'image_height' => 'Image height in pixels (default: 160)',
+								'badge_type' => 'Badge type: auto, none (default: auto)',
+							),
+							'horizontal-left',
+							array(
+								'features' => array(
+									'Horizontal list layout with left-aligned images',
+									'Product badges (New, Sale, Best Seller)',
+									'Star ratings display',
+									'Product category labels',
+									'Product descriptions',
+									'Add to Cart and View Details buttons',
+									'AJAX pagination support',
+									'Customizable image dimensions',
+								),
+								'useCases' => array(
+									'Create product list views with thumbnails',
+									'Display category products with details',
+									'Build product comparison lists',
+									'Show featured products horizontally',
+									'Create product archive displays',
+								),
+								'tips' => array(
+									'Use <code>image_width="220"</code> for larger thumbnails',
+									'Enable <code>show_description="1"</code> for detailed product info',
+									'Set <code>badge_type="none"</code> to hide product badges',
+									'Enable <code>ajax="on"</code> for seamless pagination',
+									'Use <code>show_breadcrumb="1"</code> for navigation',
+								),
+							)
+						);
+
+							// Radial Circle Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_radial',
+								'WooCommerce Radial Circle',
+								'Display products in a circular/orbit layout with a featured center product and orbiting products around it. Features static positioning with hover effects, always-visible detail panel, and vibrant gradient backgrounds. Perfect for showcasing featured or sale items.',
+								array(
+									'basic' => '[shortcodeglut_radial]',
+									'advanced' => '[shortcodeglut_radial orbit="8" center_product="71" distance="285" show_price="1" show_tags="1"]',
+								),
+								array(
+									'orbit' => 'Number of products around center (default: 8)',
+									'center_product' => 'Product ID to center (default: 0 = auto-select featured)',
+									'category' => 'Filter by category slug',
+									// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-configurable option, documented usage.
+									'exclude' => 'Comma-separated product IDs to exclude',
+									'order_by' => 'Sorting: date-desc, date-asc, title-desc, title-asc, price-desc, price-asc (default: date-desc)',
+									'distance' => 'Distance from center in pixels (default: 285)',
+									'show_price' => 'Show price: 1 or 0 (default: 1)',
+									'show_tags' => 'Show badges: 1 or 0 (default: 1)',
+								),
+								'radial-circle',
+								array(
+									'features' => array(
+										'Circular orbit layout with center featured product',
+										'Always-visible detail panel showing center product',
+										'Hover to view orbit product details',
+										'Vibrant gradient backgrounds',
+										'Product badges (Sale, Featured, New)',
+										'Click to view product details',
+										'Responsive design',
+									),
+									'useCases' => array(
+										'Showcase featured products dynamically',
+										'Highlight sale items with center focus',
+										'Create interactive product displays',
+										'Display category highlights',
+										'Build engaging landing page sections',
+									),
+									'tips' => array(
+										'Use <code>center_product="71"</code> to feature a specific product',
+										'Use <code>category="electronics"</code> to filter by category',
+										'Adjust <code>distance="320"</code> to change orbit size',
+										'Use <code>show_tags="0"</code> to hide product badges',
+									),
+								)
+							);
+
+							// Book Flip Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_book_flip',
+								'WooCommerce Book Flip',
+								'Display products in a beautiful 3D book with page-turn animations. Features a central spine, left and right pages that flip with navigation buttons, and vintage book design. Perfect for showcasing product catalogs.',
+								array(
+									'basic' => '[shortcodeglut_book_flip]',
+									'advanced' => '[shortcodeglut_book_flip limit="6" category="electronics" show_price="1" show_button="1"]',
+								),
+								array(
+									'limit' => 'Number of products to display (default: 6)',
+									'category' => 'Filter by category slug',
+									// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-configurable option, documented usage.
+									'exclude' => 'Comma-separated product IDs to exclude',
+									'order_by' => 'Sorting: date-desc, date-asc, title-desc, title-asc, price-desc, price-asc (default: date-desc)',
+									'show_price' => 'Show price: 1 or 0 (default: 1)',
+									'show_button' => 'Show button: 1 or 0 (default: 1)',
+									'button_text' => 'Button text (default: View Details)',
+								),
+								'book-flip',
+								array(
+									'features' => array(
+										'3D book with central spine',
+										'Page-turn animations',
+										'Left and right pages',
+										'Previous/Next navigation',
+										'Page indicator',
+										'Vintage paper texture',
+										'Product icons with gradients',
+										'Click to view product',
+									),
+									'useCases' => array(
+										'Showcase product catalogs',
+										'Display featured collections',
+										'Create interactive portfolios',
+										'Build product showcases',
+										'Digital magazine layouts',
+									),
+									'tips' => array(
+										'Use <code>category="electronics"</code> to filter by category',
+										'Use <code>limit="8"</code> to show more products',
+										'Adjust <code>show_price="0"</code> to hide prices',
+										'Use <code>button_text="Buy Now"</code> to change button text',
+									),
+								)
+							);
+
+							// Magazine Grid Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_magazine',
+								'WooCommerce Magazine Grid',
+								'Display products in a magazine-style grid layout with varying item sizes creating a dynamic visual hierarchy. Features hero items, featured spots, and standard grids with overlay information.',
+								array(
+									'basic' => '[shortcodeglut_magazine]',
+									'advanced' => '[shortcodeglut_magazine limit="12" columns="4" layout="masonry" hover_effect="zoom" pagination="true"]',
+								),
+								array(
+									'limit' => 'Number of products to display (default: 12)',
+									'category' => 'Filter by category slug',
+									'columns' => 'Grid columns: 2, 3, 4, 5, or 6 (default: 4)',
+									'gap' => 'Gap between items in pixels (default: 20)',
+									'layout' => 'Layout style: masonry, grid, or balanced (default: masonry)',
+									'show_overlay' => 'Show product overlay: true or false (default: true)',
+									'show_price' => 'Show price in overlay: true or false (default: true)',
+									'show_category' => 'Show category badge: true or false (default: true)',
+									'hover_effect' => 'Hover effect: zoom, slide, fade, or none (default: zoom)',
+									'pagination' => 'Enable load more: true or false (default: false)',
+								),
+								'magazine-grid',
+								array(
+									'features' => array(
+										'Magazine-style masonry layout',
+										'Variable item sizes (hero, large, medium, small)',
+										'Product overlay with details',
+										'Category badges',
+										'Hover zoom effects',
+										'Load more pagination',
+										'Responsive grid columns',
+									),
+									'useCases' => array(
+										'Create Pinterest-style product grids',
+										'Display product collections visually',
+										'Build modern magazine layouts',
+										'Showcase featured products dynamically',
+										'Design landing page galleries',
+									),
+									'tips' => array(
+										'Use <code>layout="balanced"</code> for uniform sizing',
+										'Set <code>columns="5"</code> for denser grids',
+										'Enable <code>pagination="true"</code> for large catalogs',
+										'Use <code>hover_effect="slide"</code> for subtle animations',
+									),
+								)
+							);
+
+							// PRO Shortcode - Advanced Filter
+							$this->render_pro_shortcode_card(
+								'shortcodeglut_advanced_filter',
+								'Advanced Filter',
+								'Display products with an advanced filtering sidebar featuring search, categories, price range, rating filters, and grid/list view toggle.',
+								array(
+									'basic' => '[shortcodeglut_advanced_filter]',
+									'advanced' => '[shortcodeglut_advanced_filter sidebar="left" items_per_page="12" columns="4" show_price_range="1" show_rating="1"]',
+								),
+								array(
+									'sidebar' => 'Sidebar position: left, right, or top (default: left)',
+									'items_per_page' => 'Number of products per page (default: 12)',
+									'columns' => 'Number of grid columns 1-6 (default: 4)',
+									'orderby' => 'Order by: date, title, price, popularity, rating (default: date)',
+									'order' => 'Order direction: ASC or DESC (default: DESC)',
+									'categories' => 'Filter by category slugs (comma-separated)',
+									'template' => 'WooTemplate ID for custom product display',
+									'show_search' => 'Show search in sidebar: 1 or 0 (default: 1)',
+									'show_categories' => 'Show categories filter: 1 or 0 (default: 1)',
+									'show_price_range' => 'Show price range filter: 1 or 0 (default: 1)',
+									'show_rating' => 'Show rating filter: 1 or 0 (default: 1)',
+									'show_sort_by' => 'Show sort by dropdown: 1 or 0 (default: 1)',
+									'match_mode' => 'Category match mode: any or all (default: any)',
+								),
+								'advanced-filter'
+
+							);
+
+							// PRO Shortcode - Compare Products
+							$this->render_pro_shortcode_card(
+								'shopglut_compare',
+								'Compare Products',
+								'Display a side-by-side product comparison table with features, pricing, ratings, stock status, and add-to-cart buttons. Perfect for helping customers make informed purchasing decisions.',
+								array(
+									'basic' => '[shopglut_compare]',
+									'advanced' => '[shopglut_compare products="1,2,3" features="price,rating,sku,stock,dimensions,weight" show_image="1" show_add_to_cart="1"]',
+								),
+								array(
+									'products' => 'Product IDs to compare, comma-separated (default: latest products)',
+									'category' => 'Load products from a category slug (used if products is empty)',
+									'limit' => 'Max products to compare: 2-4 (default: 3)',
+									'features' => 'Feature rows to display, comma-separated (default: price,rating,sku,stock,dimensions,weight)',
+									'show_image' => 'Show product image: 1 or 0 (default: 1)',
+									'show_price' => 'Show price in header: 1 or 0 (default: 1)',
+									'show_rating' => 'Show rating in feature rows: 1 or 0 (default: 1)',
+									'show_add_to_cart' => 'Show add to cart button row: 1 or 0 (default: 1)',
+									'show_title' => 'Show product title: 1 or 0 (default: 1)',
+									'header_bg' => 'Custom header background color or gradient',
+								),
+								'compare-products'
+							);
+
+							// PRO Shortcode - Price Range Filter
+							$this->render_pro_shortcode_card(
+								'shortcodeglut_price_range',
+								'Price Range Filter',
+								'Display products filtered by a dual-handle price range slider with min/max inputs, real-time AJAX filtering, and a responsive product grid.',
+								array(
+									'basic' => '[shortcodeglut_price_range]',
+									'advanced' => '[shortcodeglut_price_range min="0" max="500" step="10" columns="4" items_per_page="12" categories="electronics,accessories"]',
+								),
+								array(
+									'min' => 'Minimum price value (default: 0)',
+									'max' => 'Maximum price value (default: 500)',
+									'step' => 'Price step increment (default: 10)',
+									'columns' => 'Number of grid columns 1-6 (default: 4)',
+									'items_per_page' => 'Number of products per page (default: 12)',
+									'orderby' => 'Order by: date, title, price, popularity, rating (default: date)',
+									'order' => 'Order direction: ASC or DESC (default: DESC)',
+									'categories' => 'Filter by category slugs (comma-separated)',
+									'template' => 'WooTemplate ID for custom product display',
+									'show_inputs' => 'Show min/max price input fields: 1 or 0 (default: 1)',
+									'show_results' => 'Show results count info: 1 or 0 (default: 1)',
+								),
+								'price-range-filter'
+							);
+								?>
+
+					</div>
+				</div>
+
+				<!-- Free Shortcodes Tab -->
+				<div class="shopg-tab-content" id="tab-free">
+					<div class="image-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+
+						<?php
+						// WooCommerce Category Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_woo_category',
+							'WooCommerce Category Products',
+							'Query and display products from one or more WooCommerce categories with customizable layout, sorting, and pagination. Features product display with multiple templates, responsive grid layout, and AJAX support. Perfect for creating product catalogs, category pages, and featured product displays.',
+							array(
+								'basic' => '[shortcodeglut_woo_category categories="your-category-slug"]',
+								'advanced' => '[shortcodeglut_woo_category categories="electronics,accessories" title="1" desc="1" items_per_page="12" cols="3" toolbar="1" ajax="on"]',
+							),
+							array(
+								'categories' => 'Category slug(s) - comma-separated for multiple (required)',
+								'cat_field' => 'Field type: slug or id (default: slug)',
+								'operator' => 'Query operator: IN, NOT IN, AND, EXISTS, NOT EXISTS (default: IN)',
+								'title' => 'Custom title or "1" for category name',
+								'desc' => 'Custom description or "1" for category description',
+								'icon' => 'Custom icon URL',
+								'icon_width' => 'Icon width in pixels (default: 64)',
+								'items_per_page' => 'Number of products per page (default: 10)',
+								'orderby' => 'Order by: id, title, date, modified, price, total_sales, menu_order, rating, popularity (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+								'toolbar' => 'Show toolbar: 1, 0, or "compact" (default: 1)',
+								'tbgrid' => 'Toolbar grid allocation (default: 6,2,2,2)',
+								'paging' => 'Show pagination: 1 or 0 (default: 1)',
+								'cols' => 'Number of columns on desktop (default: 3)',
+								'colspad' => 'Number of columns on tablet (default: 1)',
+								'colsphone' => 'Number of columns on mobile (default: 1)',
+								'ajax' => 'Enable AJAX for filtering/pagination: on or off (default: off)',
+								'ajax_pagination' => 'Enable AJAX specifically for pagination: on or off (default: off)',
+							),
+							'woo-category',
+							array(
+								'features' => array(
+									'Display products from single or multiple categories',
+									'Flexible query operators for complex category filtering',
+									'Sort by date, title, price, sales, rating, or popularity',
+									'Responsive grid layout with customizable columns for desktop, tablet, and mobile',
+									'Built-in pagination for large product catalogs',
+									'AJAX support for seamless filtering and pagination without page reload',
+									'Customizable product display using WooTemplates (default: product_card_basic)',
+									'Category icon, title, and description display',
+									'Flexible toolbar with standard or compact layout options',
+								),
+								'useCases' => array(
+									'Create category-specific product pages',
+									'Build featured product sections from specific categories',
+									'Display products from multiple categories simultaneously',
+									'Show new arrivals from specific categories',
+									'Create product catalogs with custom layouts',
+									'Build responsive product grids for e-commerce sites',
+								),
+								'tips' => array(
+									'Use <code>cat_field="id"</code> when working with dynamic category IDs from code',
+									'Set <code>toolbar="compact"</code> for a smaller, space-saving toolbar',
+									'Enable <code>ajax="on"</code> and <code>ajax_pagination="on"</code> for seamless experience without page refresh',
+									'Use <code>title="1"</code> and <code>desc="1"</code> to auto-display category info',
+									'Combine with WooTemplates for fully custom product card designs',
+									'Use <code>operator="NOT IN"</code> to exclude specific categories',
+									'Use <code>orderby="rating"</code> to display highest-rated products first',
+								),
+							)
+						);
+
+						// Table List Shortcode (Free)                                                                                                                        
+					$this->render_shortcode_card(
+						'shortcodeglut_archive_table',                                                                                                                    
+						'WooCommerce Table List',                                                    
+						'Display products in a clean, table layout with customizable columns for product information. Perfect for creating product catalogs, price lists, 
+					and inventory displays. Supports sorting, AJAX pagination, and multiple column types.',
+						array(                                             
+							'basic' => '[shortcodeglut_archive_table]',
+							'advanced' => '[shortcodeglut_archive_table order_by="title" items_per_page="25" columns="icon|title|price|stock|actions" show_sku="1"]',     
+						),
+						array(                                                                                                                                            
+							'order_by' => 'Order by: title, date, price, modified (default: title)', 
+							'order' => 'Order direction: ASC or DESC (default: ASC)',
+							'items_per_page' => 'Products per page (default: 9)',
+							'columns' => 'Table columns (| separated) - available: icon, title, price, date, stock, category, excerpt, rating, sales, sku, attributes, 
+					actions. Default: icon|title|price|date|actions',
+							'colheads' => 'Column headers (| separated) - default: Product|Price|Date|Actions',                                                           
+							'paging' => 'Show pagination: 1 or 0 (default: 1)',
+							'ajax' => 'Enable AJAX pagination: on or off (default: off)',                                                                                 
+							'category' => 'Filter by category slug', 
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.                                
+							'exclude' => 'Exclude product IDs (comma-separated)',
+							'show_icon' => 'Show product icon/image: 1 or 0 (default: 1)',
+							'icon_width' => 'Icon width in pixels (default: 44)',                                                                                         
+							'show_sku' => 'Show SKU in title column: 1 or 0 (default: 1)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',                                                                       
+							'title' => 'Section title (optional)',                                   
+						),                                            
+						'table-list',                                      
+						array(
+							'features' => array(                                                                                                                          
+								'Clean table layout with sortable columns',
+								'Product icons/images with customizable size',                                                                                            
+								'Multiple column types: title, price, date, stock, category, excerpt, rating, sales, SKU, attributes',
+								'View and Add to Cart action buttons',
+								'AJAX pagination for seamless browsing',
+								'Optional breadcrumb navigation',
+								'Filter by category, exclude specific products',
+							),
+							'useCases' => array(
+								'Create product catalogs and price lists',
+								'Display inventory with quick actions',
+								'Show new products in a table format',
+								'Create downloadable product lists',       
+								'Build product archives with filtering',
+							),                                                                                                                                            
+							'tips' => array(
+								'Use <code>show_breadcrumb="1"</code> to add navigation breadcrumb',                                                                      
+								'Customize columns with <code>columns</code> parameter (| separated: icon|title|price|stock|actions)',
+								'Add <code>stock</code> column to show in-stock/out-of-stock status',
+								'Enable <code>ajax="on"</code> for faster pagination without page reload',
+								'Set <code>show_sku="0"</code> to hide SKU from product title',
+							),              
+						)                                             
+					);               
+
+						// Basic Grid Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_grid',
+					'WooCommerce Basic Grid',
+					'Display products in a responsive grid card layout with images, titles, prices, ratings, and add-to-cart buttons. Features dynamic sorting (AJAX 
+				or URL-based), toolbar, optional pagination, and WooTemplate support.',
+					array(                                        
+						'basic' => '[shortcodeglut_grid]',             
+						'advanced' => '[shortcodeglut_grid columns="4" order_by="price-desc" template="product_card_basic"]',
+					),                                                                                                                                                
+					array(
+						'columns' => 'Grid columns for desktop (1-6, default: 4)',                                                                                    
+						'rows' => 'Number of rows to display (default: 0)',                      
+						'limit' => 'Total limit (0 = use columns × rows, default: 0)',
+						'order_by' => 'Order by: date, date-desc, title-asc, title-desc, price-asc, price-desc, popularity-asc, popularity-desc, rating-asc, 
+				(default: date-desc)',
+						'order' => 'Order direction: ASC or DESC (default: DESC) - Note: overridden by combined order_by values',
+						'items_per_page' => 'Items per page when paging enabled (default: 12)',
+						'template' => 'WooTemplate ID for custom product card design (default: product_card_basic)',
+						'paging' => 'Enable pagination: 1 or 0 (default: 1)',                                                                                         
+						'ajax' => 'AJAX mode for sorting/pagination: on or off. Sorting uses AJAX; when off, pagination uses URL parameters (default: off)',
+						'category' => 'Filter by category slug',  
+		// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.                                                                                                    
+						'exclude' => 'Exclude product IDs (comma-separated)',                    
+						'toolbar' => 'Show toolbar: 1, 0, or compact (default: 1)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',                                                                       
+					),
+					'basic-grid',                                                                                                                                     
+					array(                                                                       
+						'features' => array(
+							'Responsive grid layout with 1-6 columns',
+							'Product cards with image, title, price, rating',
+							'Dynamic sorting toolbar (date, title, price, popularity, rating)',
+							'AJAX sorting and URL-based pagination support',
+							'Optional pagination for large catalogs',
+							'Full WooTemplate support for custom card designs',                                                                                       
+							'Breadcrumb navigation option',
+						),                                                                                                                                            
+						'useCases' => array(                                                     
+							'Create product showcase pages',
+							'Display featured products',
+							'Build category-specific grids',
+							'Show new arrivals or bestsellers',
+							'Create sale product grids',
+						),
+						'tips' => array(
+							'Use <code>columns="3"</code> for a balanced 3-column layout',
+							'Set <code>toolbar="compact"</code> for a smaller toolbar',
+							'Set <code>paging="0"</code> to disable pagination',
+							'Use <code>order_by="price-desc"</code> to show highest prices first',
+							'Combine with WooTemplates for fully custom card designs',                                                                                
+						),
+					)                                                                                                                                                 
+				);              
+
+						// Category Tree Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_category_tree',
+							'WooCommerce Category Tree',
+							'Displays a hierarchical, collapsible tree view of WooCommerce product categories with icons, product counts, and expand/collapse functionality. Perfect for category navigation menus.',
+							array(
+								'basic' => '[shortcodeglut_category_tree]',
+								'advanced' => '[shortcodeglut_category_tree title="Browse by Category" show_count="1" expandable="1" expanded_depth="1" link_products="1"]',
+							),
+							array(
+								'title' => 'Section title',
+								'show_count' => 'Show product counts: 1 or 0 (default: 1)',
+								'expandable' => 'Enable expand/collapse: 1 or 0 (default: 1)',
+								'expanded_depth' => 'Initial expansion depth (default: 0)',
+								'hide_empty' => 'Hide empty categories: 1 or 0 (default: 0)',
+								'parent' => 'Parent category ID or slug (0 = all top level)',
+								'orderby' => 'Order by: name, slug, count, term_group (default: name)',
+								'order' => 'Order direction: ASC or DESC (default: ASC)',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.                                                                                                    
+								'exclude' => 'Exclude category IDs or slugs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query is constructed here.
+								'include' => 'Include only category IDs or slugs (comma-separated)',
+								'number' => 'Maximum number of categories',
+								'show_icon' => 'Show category icons: 1 or 0 (default: 1)',
+								'icon_style' => 'Icon style: fontawesome or gradient (default: fontawesome)',
+								'show_breadcrumb' => 'Show breadcrumb: 1 or 0 (default: 0)',
+								'link_products' => 'Show products under categories: 1 or 0 (default: 0)',
+								'link_target' => 'Link target: _self or _blank (default: _self)',
+								'product_fields' => 'Product fields to show: name,price,add_to_cart,image (default: name,price)',
+								'width' => 'Container width (e.g., 300px, 500px, 100%, default: 500px)',
+							),
+							'category-tree',
+							array(
+								'features' => array(
+									'Hierarchical category tree display',
+									'Expandable/collapsible categories',
+									'Product count badges',
+									'Colorful gradient icons',
+									'Optional breadcrumb navigation',
+									'Font Awesome icons support',
+									'Responsive column layout',
+								),
+								'useCases' => array(
+									'Create category navigation menus',
+									'Display product category hierarchy',
+									'Build store directory pages',
+									'Show category filters',
+									'Create sitemap pages',
+								),
+								'tips' => array(
+									'Set <code>expanded_depth="1"</code> to show first level expanded by default',
+									'Use <code>hide_empty="1"</code> to hide categories without products',
+									'Enable <code>link_products="1"</code> to show products under each category',
+									'Use <code>icon_style="fontawesome"</code> for folder icons',
+									'Set <code>width="100%"</code> for full-width layout',
+								),
+							)
+						);
+
+						// SideOne Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_sideone',
+							'WooCommerce SideOne Layout',
+							'Displays products in an alternating left-right zigzag layout with image on one side and content on the other. Perfect for showcasing featured products, collections, or highlighting specific items with a modern asymmetric design.',
+							array(
+								'basic' => '[shortcodeglut_sideone]',
+								'advanced' => '[shortcodeglut_sideone items_per_page="6" image_position="alternate" image_width="50%" show_excerpt="1" gap_size="50px"]',
+							),
+							array(
+								'columns' => 'Products per row (default: 4)',
+								'order_by' => 'Order products by: date-desc, date-asc, title-asc, title-desc, price-asc, price-desc (default: date-desc)',
+								'items_per_page' => 'Total items to display (default: 12)',
+								'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+								'paging' => 'Enable pagination: 1 or 0 (default: 1)',
+								'ajax' => 'AJAX pagination: on or off (default: off)',
+								'category' => 'Filter by category slug',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Help text only, not query usage.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+								'image_position' => 'Image position: left, right, or alternate (default: alternate)',
+								'image_width' => 'Image width percentage (default: 50%)',
+								'show_excerpt' => 'Show product excerpt: 1 or 0 (default: 1)',
+								'show_price' => 'Show product price: 1 or 0 (default: 1)',
+								'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+								'gap_size' => 'Gap between items (default: 40px)',
+								'show_title' => 'Show section title: 1 or 0 (default: 0)',
+								'section_title' => 'Section title text',
+								'show_breadcrumb' => 'Show breadcrumb: 1 or 0 (default: 0)',
+							),
+							'sideone',
+							array(
+								'features' => array(
+									'Alternating left-right image layout',
+									'Customizable image width and position',
+									'AJAX pagination support',
+									'Responsive mobile layout',
+									'Hover effects and animations',
+									'Optional breadcrumb navigation',
+									'Category filtering support',
+								),
+								'useCases' => array(
+									'Showcase featured products collections',
+									'Create product highlight sections',
+									'Display new arrivals with emphasis',
+									'Build promotional product displays',
+									'Create storytelling product layouts',
+								),
+								'tips' => array(
+									'Use <code>image_position="alternate"</code> for zigzag pattern',
+									'Set <code>image_width="60%"</code> for larger images',
+									'Use <code>gap_size="60px"</code> for more spacing between items',
+									'Enable <code>show_breadcrumb="1"</code> for navigation',
+									'Set <code>show_title="1"</code> and <code>section_title="Your Title"</code> to add section heading',
+								),
+							)
+						);
+
+						// phpcs:ignore Generic.Files.LineLength.TooLong -- Help text array
+						$this->render_shortcode_card(
+							'shortcodeglut_kanban',
+							'WooCommerce Kanban Board',
+							'Displays products in a 3-column Kanban board layout with Featured, New Arrivals, and On Sale columns. Includes load more functionality for each column.',
+							array(
+								'basic' => '[shortcodeglut_kanban]',
+								'advanced' => '[shortcodeglut_kanban per_column="6" category="electronics" section_title="Tech Products"]',
+							),
+							array(
+								'columns' => 'Number of columns, max 3 (default: 3)',
+								'per_column' => 'Products per column initial load (default: 4)',
+								'show_header' => 'Show header section: 1 or 0 (default: 1)',
+								'section_title' => 'Custom section title (default: Kanban Board)',                                  
+								'show' => 'Columns to display: featured, new, onsale, low_stock (comma-separated)',
+								'category' => 'Filter by category slug', 
+							// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-controlled product exclusion, limited and bounded.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+							),
+							'kanban',
+							array(
+								'features' => array(
+									'3-column Kanban layout',
+									'Featured products column',
+									'New arrivals column',
+									'On sale products column',
+									'Last Chance column (low stock)',
+								'Column filter (show only selected columns)',
+									'Responsive layout',
+								),
+								'styles' => array(
+									'Colorful gradient icons',
+									'Priority color indicators',
+									'Smooth hover effects',
+									'Mobile responsive',
+									'Light theme (works with any theme)'
+								),
+							),
+						);
+
+						// Tabs Layout Shortcode (Free)                                                                                       
+				$this->render_shortcode_card(                                                                                         
+					'shortcodeglut_tabs',                                                                                             
+					'WooCommerce Tabs Layout',                                                                                        
+					'Display products in a beautiful tabbed interface with customizable navigation styles. Perfect for organizing     
+				products by category with smooth animations and AJAX loading for seamless browsing.',                                 
+					array(                                                                                                            
+						'basic' => '[shortcodeglut_tabs]',                                                                            
+						'advanced' => '[shortcodeglut_tabs categories="electronics,clothing,accessories" style="pill" animation="fade"
+				posts_per_page="12" columns="4" header_bg_color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"]',               
+					),                                                                                                                
+					array(                                                                                                            
+						'style' => 'Tab style: pill, underline, or boxed (default: pill)',                                            
+						'animation' => 'Tab animation: fade, slide, or none (default: fade)',                                         
+						'header_bg_color' => 'Header background color or gradient (default: linear-gradient(135deg, #667eea 0%,       
+				#764ba2 100%))',                                                                                                      
+						'show_header' => 'Show header section: 1 or 0 (default: 1)',                                                  
+						'section_title' => 'Section title text (default: Browse by Category)',                                        
+						'categories' => 'Category slugs to display as tabs (comma-separated, default: auto from all categories)',     
+						'posts_per_page' => 'Products per tab (default: 8)',                                                          
+						'columns' => 'Grid columns per tab (default: 4)',                                                             
+						'show_empty' => 'Show empty categories: 1 or 0 (default: 1)',                                                 
+					),                                                                                                                
+					'tabs',                                                                                                           
+					array(                                                                                                            
+						'features' => array(                                                                                          
+							'Beautiful tabbed navigation with multiple styles',                                                       
+							'Smooth animations (fade, slide) between tabs',                                                           
+							'AJAX loading for tab content',                                                                           
+							'Customizable header with gradient backgrounds',                                                          
+							'Responsive grid layout for products',                                                                    
+							'Auto-populate tabs from WooCommerce categories',                                                         
+							'Custom category selection',                                                                              
+						),                                                                                                            
+						'useCases' => array(                                                                                          
+							'Organize products by category in tabs',                                                                  
+							'Create category-based product showcases',                                                                
+							'Build interactive product catalogs',                                                                     
+							'Display featured collections',                                                                           
+							'Create shop-by-category pages',                                                                          
+						),                                                                                                            
+						'tips' => array(                                                                                              
+							'Use <code>style="pill"</code> for modern rounded tabs',                                                  
+							'Set <code>animation="fade"</code> for smooth transitions',                                               
+							'Use <code>style="underline"</code> for minimal design',                                                  
+							'Customize <code>header_bg_color</code> to match your theme',                                             
+							'Set <code>show_empty="0"</code> to hide empty categories',                                               
+						),                                                                                                            
+					)                                                                                                                 
+				);                                                                                                                    
+								
+				// Carousel Slider Shortcode (Free)                                                                                   
+				$this->render_shortcode_card(
+					'shortcodeglut_carousel',                                                                                         
+					'Woocommerce Carousel Slider',
+					'Display products in an elegant carousel slider with navigation arrows and dot indicators. Features autoplay,     
+				colorful gradients, custom slide backgrounds, and responsive design for showcasing featured products.',                                         
+					array(
+						'basic' => '[shortcodeglut_carousel]',                                                                        
+						'advanced' => '[shortcodeglut_carousel autoplay="3000" arrows="true" dots="true" posts_per_page="8"
+				category="electronics" section_title="Featured Products" order_by="price-desc" product_bgs="123:#ff0000|456:linear-gradient(135deg, #00ff00 0%, #0000ff 100%)|789:url(bg.jpg)" default_bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"]',                                     
+					),                                                                                                                
+					array(                                                                                                            
+						'autoplay' => 'Autoplay interval in milliseconds (0 to disable, default: 5000)',
+						'arrows' => 'Show navigation arrows: true or false (default: true)',                                          
+						'dots' => 'Show dot indicators: true or false (default: true)',                                               
+						'section_title' => 'Section title (default: Featured Products)',                                              
+						'posts_per_page' => 'Number of products in carousel (default: 6)',                                            
+						'category' => 'Filter by category slug',                                                                      
+						'order_by' => 'Order by: date-desc, date-asc, price-asc, price-desc, popularity-desc, rating-desc (default:   
+				date-desc)',                                                                                                          
+						'show_price' => 'Show product price: 1 or 0 (default: 1)',                                                    
+						'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+							'product_bgs' => 'Product ID:background pairs for custom backgrounds. Format: "ID1:bg1|ID2:bg2". Backgrounds can be solid colors (#ff0000), gradients (linear-gradient(...)), or image URLs (url(bg.jpg) or https://...). (default: empty)',
+							'default_bg' => 'Default fallback gradient for products without custom background (default: linear-gradient(135deg, #667eea 0%, #764ba2 100%))',
+					),
+					'carousel',                                                                                                       
+					array(                                                                                                            
+						'features' => array(
+							'Beautiful carousel with smooth transitions',                                                             
+							'Navigation arrows and dot indicators',                                                                   
+							'Autoplay with configurable interval',                                                                    
+							'Colorful gradient backgrounds',                                                                          
+							'Product tags (Best Seller, Hot Deal, New Release, etc.)',                                                
+							'Responsive design for all devices',                                                                      
+							'Optional price and add-to-cart button',
+								'Custom background per slide (color, gradient, or image)',
+						),                                                                                                            
+						'useCases' => array(                                                                                          
+							'Showcase featured products on homepage',                                                                 
+							'Highlight new arrivals',                                                                                 
+							'Display promotional items',                                                                              
+							'Create product sliders for categories',                                                                  
+							'Build hero sections with products',                                                                      
+						),      
+						'tips' => array(
+							'Set <code>autoplay="0"</code> to disable auto-rotation',                                                 
+							'Use <code>category="your-slug"</code> to filter by category',                                            
+							'Set <code>arrows="false"</code> for dot-only navigation',                                                
+							'Use <code>order_by="price-desc"</code> to show highest prices first',
+								'Use <code>product_bgs="123:#ff0000|456:url(bg.jpg)"</code> for custom slide backgrounds',
+								'Set <code>default_bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"</code> for fallback background',
+						),
+					)
+				);
+				// Accordion List Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_accordion',
+					'WooCommerce Accordion List',
+					'Display products in an expandable accordion layout with gradient icons, pricing, feature tags, and add-to-cart buttons. Supports single/multi expand modes, AJAX pagination, and category filtering.',
+					array(
+						'basic' => '[shortcodeglut_accordion]',
+						'advanced' => '[shortcodeglut_accordion expand="single" show_price="true" show_excerpt="true" show_features="true" items_per_page="10" ajax="on"]',
+					),
+					array(
+						'expand' => 'Expand mode: single (one at a time) or multi (default: single)',
+						'show_price' => 'Show product price in header: true or false (default: true)',
+						'show_excerpt' => 'Show product description: true or false (default: true)',
+						'show_features' => 'Show product tags as feature badges: true or false (default: true)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+						'title' => 'Section title (optional)',
+						'items_per_page' => 'Products per page (default: 10)',
+						'paging' => 'Show pagination: 1 or 0 (default: 1)',
+						'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+						'order_by' => 'Order by: title, date, price (default: title)',
+						'order' => 'Order direction: ASC or DESC (default: ASC)',
+						'category' => 'Filter by category slug',
+						// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only; no WP_Query constructed here.
+						'exclude' => 'Exclude product IDs (comma-separated)',
+						'icon_width' => 'Product icon size in pixels (default: 56)',
+					),
+					'accordion',
+					array(
+						'features' => array(
+							'Expandable accordion with smooth animations',
+							'Single or multi-item expand modes',
+							'Colorful gradient product icons',
+							'Feature tags from product attributes',
+							'Add to Cart and View Product buttons',
+							'AJAX pagination support',
+							'Category filtering and product exclusion',
+						),
+						'useCases' => array(
+							'Create interactive product catalogs',
+							'Display product FAQs with details',
+							'Build space-saving product listings',
+							'Show product features in expandable sections',
+							'Create mobile-friendly product displays',
+						),
+						'tips' => array(
+							'Use <code>expand="single"</code> to keep only one item open at a time',
+							'Set <code>expand="multi"</code> to allow multiple items open simultaneously',
+							'Enable <code>ajax="on"</code> for seamless pagination without page reload',
+							'Set <code>show_features="true"</code> to display product tags as badges',
+							'Use <code>title="Product Catalog"</code> to add a section heading',
+						),
+					)
+				);
+
+				// Timeline View Shortcode (Free)
+				$this->render_shortcode_card(
+					'shortcodeglut_timeline',
+					'WooCommerce Timeline View',
+					'Display products in a beautiful vertical timeline layout with alternating left/right cards, gradient date badges, and customizable layout options. Supports left-only, right-only, or alternating layouts with AJAX pagination.',
+					array(
+						'basic' => '[shortcodeglut_timeline]',
+						'advanced' => '[shortcodeglut_timeline layout="alternate" title="Release Timeline" group_by="month" items_per_page="10" accent_color="#667eea"]',
+					),
+					array(
+						'layout' => 'Layout: alternate, left, or right (default: alternate)',
+						'group_by' => 'Date format: month, year, date, or none (default: month)',
+						'title' => 'Section title (optional)',
+						'category' => 'Filter by category slug',
+						'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+						'items_per_page' => 'Products per page (default: 10)',
+						'order_by' => 'Order by: date, title, or price (default: date)',
+						'order' => 'Order direction: ASC or DESC (default: DESC)',
+						'show_price' => 'Show product price: true or false (default: true)',
+						'show_excerpt' => 'Show product description: true or false (default: true)',
+						'show_date' => 'Show date badge: true or false (default: true)',
+						'show_meta' => 'Show category/SKU/stock info: true or false (default: true)',
+						'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+						'paging' => 'Show pagination: 1 or 0 (default: 1)',
+						'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+						'accent_color' => 'Timeline accent color hex (default: #667eea)',
+					),
+					'timeline',
+					array(
+						'features' => array(
+							'Beautiful vertical timeline with gradient line',
+							'Three layout modes: alternate, left-only, right-only',
+							'Colorful gradient date badges',
+							'Product cards with hover effects',
+							'Add to Cart and View Product buttons',
+							'AJAX pagination support',
+							'Responsive design - collapses on mobile',
+							'Customizable accent color',
+						),
+						'useCases' => array(
+							'Create product release timelines',
+							'Display product history or changelog',
+							'Showcase featured products chronologically',
+							'Build storytelling product layouts',
+							'Create event-based product showcases',
+						),
+						'tips' => array(
+							'Use <code>layout="alternate"</code> for left/right alternating cards',
+							'Set <code>layout="left"</code> to show all cards on the left side',
+							'Set <code>layout="right"</code> to show all cards on the right side',
+							'Use <code>group_by="year"</code> to show only the year in date badges',
+							'Set <code>accent_color="#e74c3c"</code> to change the timeline line color',
+						),
+					)
+				);
+
+					// Zigzag Layout Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_zigzag',
+						'WooCommerce Zigzag Layout',
+						'Display products in an alternating zigzag layout with visual on one side and content on the other. Features colorful gradient backgrounds, product tags, feature lists, and add-to-cart buttons. Perfect for showcasing products with visual emphasis.',
+						array(
+							'basic' => '[shortcodeglut_zigzag]',
+							'advanced' => '[shortcodeglut_zigzag alternate="true" title="Featured Products" category="electronics" items_per_page="6" accent_color="#667eea" show_tag="true"]',
+						),
+						array(
+							'alternate' => 'Enable alternating left-right layout: true or false (default: true)',
+							'title' => 'Section title (optional)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+							'items_per_page' => 'Products per page (default: 10)',
+							'order_by' => 'Order by: date, title, or price (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'show_price' => 'Show product price: true or false (default: true)',
+							'show_excerpt' => 'Show product description: true or false (default: true)',
+							'show_features' => 'Show product features list: true or false (default: true)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+							'paging' => 'Show pagination: 1 or 0 (default: 1)',
+							'ajax' => 'Enable AJAX pagination: on or off (default: off)',
+							'accent_color' => 'Accent color hex (default: #667eea)',
+							'show_tag' => 'Show product tags (New, Sale, Featured): true or false (default: true)',
+							'template' => 'WooTemplate ID for custom product display (optional)',
+						),
+						'zigzag',
+						array(
+							'features' => array(
+								'Alternating left-right zigzag layout',
+								'Colorful gradient visual sections',
+								'Product image or icon display',
+								'Product tags (New, Sale, Featured, Out of Stock)',
+								'Feature list with checkmarks',
+								'Add to Cart and View Product buttons',
+								'AJAX pagination support',
+								'Full WooTemplate support',
+							),
+							'useCases' => array(
+								'Showcase featured products visually',
+								'Create product storytelling layouts',
+								'Display product collections with emphasis',
+								'Build promotional product sections',
+								'Create landing page product showcases',
+							),
+							'tips' => array(
+								'Use <code>alternate="false"</code> to disable alternating layout',
+								'Set <code>show_features="false"</code> to hide the feature list',
+								'Use <code>accent_color="#e74c3c"</code> to change gradient colors',
+								'Enable <code>show_tag="true"</code> to display product status badges',
+								'Combine with WooTemplates for custom product cards',
+							),
+						)
+					);
+
+					// Drawer Panels Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_drawer',
+						'WooCommerce Drawer Panels',
+						'Display products in an interactive drawer/panel layout with sidebar navigation and smooth slide-in animations. Features product details panel, feature grid, and seamless navigation between products.',
+						array(
+							'basic' => '[shortcodeglut_drawer]',
+							'advanced' => '[shortcodeglut_drawer nav_title="Choose Your Plan" category="courses" items_per_page="5" accent_color="#0071e3" show_features="true"]',
+						),
+						array(
+							'nav_title' => 'Navigation section title (default: Select Product)',
+							'title' => 'Section title (optional)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only, not a query parameter.
+							'items_per_page' => 'Products per page (default: 10)',
+							'order_by' => 'Order by: date, title, or price (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'show_price' => 'Show product price: true or false (default: true)',
+							'show_desc' => 'Show product description: true or false (default: true)',
+							'show_features' => 'Show feature grid: true or false (default: true)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+							'accent_color' => 'Accent color hex (default: #0071e3)',
+							'show_tag' => 'Show product tags (New, Sale, Featured): true or false (default: true)',
+							'template' => 'WooTemplate ID for custom product display (optional)',
+						),
+						'drawer',
+						array(
+							'features' => array(
+								'Interactive sidebar navigation with product thumbnails',
+								'Smooth slide-in panel animations',
+								'Product image, tag, title, description, and price',
+								'Feature grid with 4-item layout',
+								'Add to Cart and View Product buttons',
+								'Full WooTemplate support',
+								'Responsive design for all devices',
+							),
+							'useCases' => array(
+								'Create interactive product showcases',
+								'Display service plans or packages',
+								'Build product comparison displays',
+								'Showcase course or product collections',
+								'Create featured product selectors',
+							),
+							'tips' => array(
+								'Use <code>nav_title="Your Title"</code> to customize navigation header',
+								'Set <code>show_features="false"</code> to hide the feature grid',
+								'Use <code>accent_color="#667eea"</code> to match your brand colors',
+								'Enable <code>show_tag="true"</code> to display product status badges',
+								'Combine with WooTemplates for custom panel content',
+							),
+						)
+					);
+
+					// Masonry Grid Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_masonry_grid',
+						'WooCommerce Masonry Grid',
+						'Display products in a beautiful masonry/pinterest-style layout with responsive columns, card styles, and sorting options. Perfect for creating product galleries with varying content heights and visual appeal.',
+						array(
+							'basic' => '[shortcodeglut_masonry_grid]',
+							'advanced' => '[shortcodeglut_masonry_grid columns="4" card_style="modern" gap="20" border_radius="16" shadow="1" hover_lift="1"]',
+						),
+						array(
+							'columns' => 'Masonry columns for desktop (1-6, default: 4)',
+							'rows' => 'Number of rows to display (default: 0)',
+							'limit' => 'Total limit (0 = use columns × rows, default: 0)',
+							'order_by' => 'Order by: date, title, price, popularity, rating (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'items_per_page' => 'Items per page when paging enabled (default: 12)',
+							'template' => 'WooTemplate ID for custom product card design (default: product_card_basic)',
+							'paging' => 'Enable pagination: 1 or 0 (default: 1)',
+							'ajax' => 'AJAX mode for sorting/pagination: on or off (default: off)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+							'toolbar' => 'Show toolbar: 1, 0, or compact (default: 1)',
+							'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+							'card_style' => 'Card style: modern, classic, or minimal (default: modern)',
+							'gap' => 'Gap between items in px (default: 20)',
+							'border_radius' => 'Card border radius in px (default: 16)',
+							'shadow' => 'Enable shadow: 1 or 0 (default: 1)',
+							'hover_lift' => 'Enable hover lift effect: 1 or 0 (default: 1)',
+							'image_height' => 'Image height: auto, tall, medium, or short (default: auto)',
+							'show_tags' => 'Show product tags: 1 or 0 (default: 1)',
+							'show_excerpt' => 'Show product excerpt: 1 or 0 (default: 1)',
+							'tag_color' => 'Tag background color hex (default: #fef3c7)',
+							'tag_text_color' => 'Tag text color hex (default: #92400e)',
+						),
+						'masonry-grid',
+						array(
+							'features' => array(
+								'Responsive masonry/pinterest-style layout',
+								'1-6 customizable columns for desktop, tablet, mobile',
+								'Multiple card styles: modern, classic, minimal',
+								'Product cards with image, title, price, rating',
+								'Dynamic sorting toolbar (date, title, price, popularity, rating)',
+								'AJAX sorting and pagination support',
+								'Full WooTemplate support for custom card designs',
+								'Optional breadcrumb navigation',
+								'Hover lift effects and customizable shadows',
+							),
+							'useCases' => array(
+								'Create product showcase galleries',
+								'Display featured products with visual appeal',
+								'Build category-specific masonry grids',
+								'Show new arrivals or bestsellers',
+								'Create sale product displays',
+								'Build portfolio-style product catalogs',
+							),
+							'tips' => array(
+								'Use <code>columns="3"</code> for a balanced 3-column layout',
+								'Set <code>toolbar="compact"</code> for a smaller toolbar',
+								'Use <code>card_style="classic"</code> for traditional design',
+								'Set <code>hover_lift="1"</code> for engaging hover effects',
+								'Combine with WooTemplates for fully custom card designs',
+								'Use <code>image_height="tall"</code> for dramatic product images',
+							),
+						)
+					);
+
+					// Conveyor Belt Shortcode (Free)
+					$this->render_shortcode_card(
+						'shortcodeglut_conveyor_belt',
+						'WooCommerce Conveyor Belt',
+						'Display products in an infinite scrolling horizontal carousel with auto-scroll animation. Features pause on hover, gradient icons, customizable speed, and seamless looping. Perfect for showcasing products in a dynamic, eye-catching display.',
+						array(
+							'basic' => '[shortcodeglut_conveyor_belt]',
+							'advanced' => '[shortcodeglut_conveyor_belt limit="16" speed="continuous" direction="left" card_width="300" card_height="400" pause_on_hover="1"]',
+						),
+						array(
+							'limit' => 'Number of products to show (default: 16)',
+							'columns' => 'Number of items visible at once (default: 4)',
+							'speed' => 'Scroll speed: slow, continuous, fast, or paused (default: continuous)',
+							'direction' => 'Scroll direction: left or right (default: left)',
+							'card_width' => 'Card width in pixels (default: 300)',
+							'card_height' => 'Card height in pixels (default: 400)',
+							'gap' => 'Gap between cards in pixels (default: 30)',
+							'border_radius' => 'Card border radius in pixels (default: 20)',
+							'template' => 'WooTemplate ID for custom product display (default: product_card_basic)',
+							'category' => 'Filter by category slug',
+							'exclude' => 'Exclude product IDs (comma-separated)', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Documentation string only.
+							'order_by' => 'Order by: date, title, price, popularity, rating (default: date)',
+							'order' => 'Order direction: ASC or DESC (default: DESC)',
+							'show_title' => 'Show product title: 1 or 0 (default: 1)',
+							'show_desc' => 'Show product description: 1 or 0 (default: 1)',
+							'show_price' => 'Show product price: 1 or 0 (default: 1)',
+							'show_button' => 'Show add to cart button: 1 or 0 (default: 1)',
+							'show_tag' => 'Show "Hot" tag for first item: 1 or 0 (default: 0)',
+							'button_text' => 'Button text (default: "Add to Cart")',
+							'card_style' => 'Card style: dark or light (default: dark)',
+							'pause_on_hover' => 'Pause animation on hover: 1 or 0 (default: 1)',
+						),
+						'conveyor-belt',
+						array(
+							'features' => array(
+								'Infinite scrolling horizontal carousel',
+								'Seamless auto-looping animation',
+								'Pause on hover functionality',
+								'Colorful gradient product icons',
+								'Customizable scroll speed (slow, continuous, fast, paused)',
+								'Scroll direction control (left or right)',
+								'AJAX loading for dynamic content',
+								'Full WooTemplate support',
+								'Responsive design with customizable card dimensions',
+							),
+							'useCases' => array(
+								'Showcase featured products on homepage',
+								'Create dynamic product carousels',
+								'Display promotional items',
+								'Build animated product showcases',
+								'Highlight new arrivals or sales',
+								'Create engaging product displays',
+							),
+							'tips' => array(
+								'Use <code>speed="continuous"</code> for smooth auto-scroll',
+								'Set <code>pause_on_hover="1"</code> for better user interaction',
+								'Use <code>direction="right"</code> to reverse scroll direction',
+								'Adjust <code>card_width</code> and <code>card_height</code> for custom dimensions',
+								'Enable <code>show_tag="1"</code> to highlight the first product',
+								'Use <code>card_style="light"</code> for lighter theme designs',
+							),
+						)
+					);
+
+
+						// Horizontal Left Shortcode (Free)
+						$this->render_shortcode_card(
+							'shortcodeglut_horizontal_left',
+							'WooCommerce Horizontal Image Left',
+							'Display products in a horizontal list layout with product images positioned on the left side. Features product badges, ratings, categories, descriptions, and add-to-cart buttons. Supports AJAX pagination, category filtering, and customizable image dimensions.',
+							array(
+								'basic' => '[shortcodeglut_horizontal_left]',
+								'advanced' => '[shortcodeglut_horizontal_left category="electronics" items_per_page="8" show_rating="1" show_description="1" ajax="on" image_width="220"]',
+							),
+							array(
+								'title' => 'Section title (optional)',
+								'category' => 'Filter by category slug',
+								// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Exclude parameter is user-configurable for hiding specific products.
+								'exclude' => 'Exclude product IDs (comma-separated)',
+								'paging' => 'Show pagination: 1 or 0 (default: 1)',
+								'ajax' => 'AJAX pagination: on or off (default: off)',
+								'show_breadcrumb' => 'Show breadcrumb navigation: 1 or 0 (default: 0)',
+								'show_rating' => 'Show product rating: 1 or 0 (default: 1)',
+								'show_category' => 'Show product category: 1 or 0 (default: 1)',
+								'show_description' => 'Show product description: 1 or 0 (default: 1)',
+								'image_width' => 'Image width in pixels (default: 200)',
+								'image_height' => 'Image height in pixels (default: 160)',
+								'badge_type' => 'Badge type: auto, none (default: auto)',
+							),
+							'horizontal-left',
+							array(
+								'features' => array(
+									'Horizontal list layout with left-aligned images',
+									'Product badges (New, Sale, Best Seller)',
+									'Star ratings display',
+									'Product category labels',
+									'Product descriptions',
+									'Add to Cart and View Details buttons',
+									'AJAX pagination support',
+									'Customizable image dimensions',
+								),
+								'useCases' => array(
+									'Create product list views with thumbnails',
+									'Display category products with details',
+									'Build product comparison lists',
+									'Show featured products horizontally',
+									'Create product archive displays',
+								),
+								'tips' => array(
+									'Use <code>image_width="220"</code> for larger thumbnails',
+									'Enable <code>show_description="1"</code> for detailed product info',
+									'Set <code>badge_type="none"</code> to hide product badges',
+									'Enable <code>ajax="on"</code> for seamless pagination',
+									'Use <code>show_breadcrumb="1"</code> for navigation',
+								),
+							)
+						);
+
+							// Radial Circle Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_radial',
+								'WooCommerce Radial Circle',
+								'Display products in a circular/orbit layout with a featured center product and orbiting products around it. Features static positioning with hover effects, always-visible detail panel, and vibrant gradient backgrounds. Perfect for showcasing featured or sale items.',
+								array(
+									'basic' => '[shortcodeglut_radial]',
+									'advanced' => '[shortcodeglut_radial orbit="8" center_product="71" distance="285" show_price="1" show_tags="1"]',
+								),
+								array(
+									'orbit' => 'Number of products around center (default: 8)',
+									'center_product' => 'Product ID to center (default: 0 = auto-select featured)',
+									'category' => 'Filter by category slug',
+										// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-configurable option, documented usage.
+									'exclude' => 'Comma-separated product IDs to exclude',
+									'order_by' => 'Sorting: date-desc, date-asc, title-desc, title-asc, price-desc, price-asc (default: date-desc)',
+									'distance' => 'Distance from center in pixels (default: 285)',
+									'show_price' => 'Show price: 1 or 0 (default: 1)',
+									'show_tags' => 'Show badges: 1 or 0 (default: 1)',
+								),
+								'radial-circle',
+								array(
+									'features' => array(
+										'Circular orbit layout with center featured product',
+										'Always-visible detail panel showing center product',
+										'Hover to view orbit product details',
+										'Vibrant gradient backgrounds',
+										'Product badges (Sale, Featured, New)',
+										'Click to view product details',
+										'Responsive design',
+									),
+									'useCases' => array(
+										'Showcase featured products dynamically',
+										'Highlight sale items with center focus',
+										'Create interactive product displays',
+										'Display category highlights',
+										'Build engaging landing page sections',
+									),
+									'tips' => array(
+										'Use <code>center_product="71"</code> to feature a specific product',
+										'Use <code>category="electronics"</code> to filter by category',
+										'Adjust <code>distance="320"</code> to change orbit size',
+										'Use <code>show_tags="0"</code> to hide product badges',
+									),
+								)
+							);
+
+							// Book Flip Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_book_flip',
+								'WooCommerce Book Flip',
+								'Display products in a beautiful 3D book with page-turn animations. Features a central spine, left and right pages that flip with navigation buttons, and vintage book design. Perfect for showcasing product catalogs.',
+								array(
+									'basic' => '[shortcodeglut_book_flip]',
+									'advanced' => '[shortcodeglut_book_flip limit="6" category="electronics" show_price="1" show_button="1"]',
+								),
+								array(
+									'limit' => 'Number of products to display (default: 6)',
+									'category' => 'Filter by category slug',
+									// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- User-configurable option, documented usage.
+									'exclude' => 'Comma-separated product IDs to exclude',
+									'order_by' => 'Sorting: date-desc, date-asc, title-desc, title-asc, price-desc, price-asc (default: date-desc)',
+									'show_price' => 'Show price: 1 or 0 (default: 1)',
+									'show_button' => 'Show button: 1 or 0 (default: 1)',
+									'button_text' => 'Button text (default: View Details)',
+								),
+								'book-flip',
+								array(
+									'features' => array(
+										'3D book with central spine',
+										'Page-turn animations',
+										'Left and right pages',
+										'Previous/Next navigation',
+										'Page indicator',
+										'Vintage paper texture',
+										'Product icons with gradients',
+										'Click to view product',
+									),
+									'useCases' => array(
+										'Showcase product catalogs',
+										'Display featured collections',
+										'Create interactive portfolios',
+										'Build product showcases',
+										'Digital magazine layouts',
+									),
+									'tips' => array(
+										'Use <code>category="electronics"</code> to filter by category',
+										'Use <code>limit="8"</code> to show more products',
+										'Adjust <code>show_price="0"</code> to hide prices',
+										'Use <code>button_text="Buy Now"</code> to change button text',
+									),
+								)
+							);
+
+							// Magazine Grid Shortcode (Free)
+							$this->render_shortcode_card(
+								'shortcodeglut_magazine',
+								'WooCommerce Magazine Grid',
+								'Display products in a magazine-style grid layout with varying item sizes creating a dynamic visual hierarchy. Features hero items, featured spots, and standard grids with overlay information.',
+								array(
+									'basic' => '[shortcodeglut_magazine]',
+									'advanced' => '[shortcodeglut_magazine limit="12" columns="4" layout="masonry" hover_effect="zoom" pagination="true"]',
+								),
+								array(
+									'limit' => 'Number of products to display (default: 12)',
+									'category' => 'Filter by category slug',
+									'columns' => 'Grid columns: 2, 3, 4, 5, or 6 (default: 4)',
+									'gap' => 'Gap between items in pixels (default: 20)',
+									'layout' => 'Layout style: masonry, grid, or balanced (default: masonry)',
+									'show_overlay' => 'Show product overlay: true or false (default: true)',
+									'show_price' => 'Show price in overlay: true or false (default: true)',
+									'show_category' => 'Show category badge: true or false (default: true)',
+									'hover_effect' => 'Hover effect: zoom, slide, fade, or none (default: zoom)',
+									'pagination' => 'Enable load more: true or false (default: false)',
+								),
+								'magazine-grid',
+								array(
+									'features' => array(
+										'Magazine-style masonry layout',
+										'Variable item sizes (hero, large, medium, small)',
+										'Product overlay with details',
+										'Category badges',
+										'Hover zoom effects',
+										'Load more pagination',
+										'Responsive grid columns',
+									),
+									'useCases' => array(
+										'Create Pinterest-style product grids',
+										'Display product collections visually',
+										'Build modern magazine layouts',
+										'Showcase featured products dynamically',
+										'Design landing page galleries',
+									),
+									'tips' => array(
+										'Use <code>layout="balanced"</code> for uniform sizing',
+										'Set <code>columns="5"</code> for denser grids',
+										'Enable <code>pagination="true"</code> for large catalogs',
+										'Use <code>hover_effect="slide"</code> for subtle animations',
+									),
+								)
+							);
+
+						?>
+
+					</div>
+				</div>
+
+				<!-- Pro Shortcodes Tab -->
+				<div class="shopg-tab-content" id="tab-pro">
+					<div class="image-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+
+						<?php
+						// PRO Shortcode - Advanced Filter
+						$this->render_pro_shortcode_card(
+							'shortcodeglut_advanced_filter',
+							'Advanced Filter',
+							'Display products with an advanced filtering sidebar featuring search, categories, price range, rating filters, and grid/list view toggle.',
+							array(
+								'basic' => '[shortcodeglut_advanced_filter]',
+								'advanced' => '[shortcodeglut_advanced_filter sidebar="left" items_per_page="12" columns="4" show_price_range="1" show_rating="1"]',
+							),
+							array(
+								'sidebar' => 'Sidebar position: left, right, or top (default: left)',
+								'items_per_page' => 'Number of products per page (default: 12)',
+								'columns' => 'Number of grid columns 1-6 (default: 4)',
+								'orderby' => 'Order by: date, title, price, popularity, rating (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'categories' => 'Filter by category slugs (comma-separated)',
+								'template' => 'WooTemplate ID for custom product display',
+								'show_search' => 'Show search in sidebar: 1 or 0 (default: 1)',
+								'show_categories' => 'Show categories filter: 1 or 0 (default: 1)',
+								'show_price_range' => 'Show price range filter: 1 or 0 (default: 1)',
+								'show_rating' => 'Show rating filter: 1 or 0 (default: 1)',
+								'show_sort_by' => 'Show sort by dropdown: 1 or 0 (default: 1)',
+								'match_mode' => 'Category match mode: any or all (default: any)',
+							),
+							'advanced-filter'
+						);
+						?>
+
+						<?php
+						// PRO Shortcode - Compare Products
+						$this->render_pro_shortcode_card(
+							'shopglut_compare',
+							'Compare Products',
+							'Display a side-by-side product comparison table with features, pricing, ratings, stock status, and add-to-cart buttons. Perfect for helping customers make informed purchasing decisions.',
+							array(
+								'basic' => '[shopglut_compare]',
+								'advanced' => '[shopglut_compare products="1,2,3" features="price,rating,sku,stock,dimensions,weight" show_image="1" show_add_to_cart="1"]',
+							),
+							array(
+								'products' => 'Product IDs to compare, comma-separated (default: latest products)',
+								'category' => 'Load products from a category slug (used if products is empty)',
+								'limit' => 'Max products to compare: 2-4 (default: 3)',
+								'features' => 'Feature rows to display, comma-separated (default: price,rating,sku,stock,dimensions,weight)',
+								'show_image' => 'Show product image: 1 or 0 (default: 1)',
+								'show_price' => 'Show price in header: 1 or 0 (default: 1)',
+								'show_rating' => 'Show rating in feature rows: 1 or 0 (default: 1)',
+								'show_add_to_cart' => 'Show add to cart button row: 1 or 0 (default: 1)',
+								'show_title' => 'Show product title: 1 or 0 (default: 1)',
+								'header_bg' => 'Custom header background color or gradient',
+							),
+							'compare-products'
+						);
+
+						// PRO Shortcode - Price Range Filter
+						$this->render_pro_shortcode_card(
+							'shortcodeglut_price_range',
+							'Price Range Filter',
+							'Display products filtered by a dual-handle price range slider with min/max inputs, real-time AJAX filtering, and a responsive product grid.',
+							array(
+								'basic' => '[shortcodeglut_price_range]',
+								'advanced' => '[shortcodeglut_price_range min="0" max="500" step="10" columns="4" items_per_page="12" categories="electronics,accessories"]',
+							),
+							array(
+								'min' => 'Minimum price value (default: 0)',
+								'max' => 'Maximum price value (default: 500)',
+								'step' => 'Price step increment (default: 10)',
+								'columns' => 'Number of grid columns 1-6 (default: 4)',
+								'items_per_page' => 'Number of products per page (default: 12)',
+								'orderby' => 'Order by: date, title, price, popularity, rating (default: date)',
+								'order' => 'Order direction: ASC or DESC (default: DESC)',
+								'categories' => 'Filter by category slugs (comma-separated)',
+								'template' => 'WooTemplate ID for custom product display',
+								'show_inputs' => 'Show min/max price input fields: 1 or 0 (default: 1)',
+								'show_results' => 'Show results count info: 1 or 0 (default: 1)',
+							),
+							'price-range-filter'
+						);
+						?>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Details Modal -->
+		<div id="shortcodeglut-details-modal" style="display: none;">
+			<div class="shortcodeglut-modal-overlay" onclick="closeDetailsModal()"></div>
+			<div class="shortcodeglut-modal-container">
+				<div class="shortcodeglut-modal-header">
+					<h3 id="shortcodeglut-details-title"></h3>
+					<button type="button" class="shortcodeglut-modal-close" onclick="closeDetailsModal()">
+						<span class="dashicons dashicons-no-alt"></span>
+					</button>
+				</div>
+				<div class="shortcodeglut-modal-body" id="shortcodeglut-details-body"></div>
+			</div>
+		</div>
+
+		<!-- Preview Modal -->
+		<div id="shortcodeglut-preview-modal" style="display: none;">
+			<div class="shortcodeglut-modal-overlay" onclick="closePreviewModal()"></div>
+			<div class="shortcodeglut-modal-container shortcodeglut-preview-modal-container">
+				<div class="shortcodeglut-modal-header">
+					<h3 id="shortcodeglut-preview-title"></h3>
+					<button type="button" class="shortcodeglut-modal-close" onclick="closePreviewModal()">
+						<span class="dashicons dashicons-no-alt"></span>
+					</button>
+				</div>
+				<div class="shortcodeglut-modal-body" id="shortcodeglut-preview-body"></div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render a shortcode card
+	 *
+	 * @param string $shortcode The shortcode tag
+	 * @param string $title Display title
+	 * @param string $description Shortcode description
+	 * @param array $examples Example shortcodes (basic, advanced)
+	 * @param array $params Parameters documentation
+	 * @param string $preview_type Preview type for demo
+	 * @param array $enhanced_details Enhanced details (features, useCases, tips)
+	 */
+	private function render_shortcode_card( $shortcode, $title, $description, $examples, $params, $preview_type, $enhanced_details = array() ) {
+		// Store shortcode data for JavaScript
+		$data = array(
+			'shortcode' => $shortcode,
+			'title' => $title,
+			'description' => $description,
+			'examples' => $examples,
+			'params' => $params,
+		);
+
+		// Add enhanced details if provided
+		if ( ! empty( $enhanced_details ) ) {
+			if ( isset( $enhanced_details['features'] ) ) {
+				$data['features'] = $enhanced_details['features'];
+			}
+			if ( isset( $enhanced_details['useCases'] ) ) {
+				$data['useCases'] = $enhanced_details['useCases'];
+			}
+			if ( isset( $enhanced_details['tips'] ) ) {
+				$data['tips'] = $enhanced_details['tips'];
+			}
+		}
+
+		$data_json = wp_json_encode( $data );
+		?>
+		<div class="shortcode-card" data-shortcode-data='<?php echo esc_attr( $data_json ); ?>'>
+			<div class="shortcode-card-header">
+				<h3><?php echo esc_html( $title ); ?></h3>
+				<p><?php echo esc_html( $description ); ?></p>
+			</div>
+
+			<div class="shortcode-display">
+				<div class="shortcode-code-wrapper">
+					<code><?php echo esc_html( $examples['basic'] ); ?></code>
+					<button type="button" class="copy-btn" onclick="copyShortcode('<?php echo esc_js( $examples['basic'] ); ?>', this)" title="<?php esc_attr_e( 'Copy shortcode', 'shortcodeglut' ); ?>">
+						<span class="dashicons dashicons-admin-page"></span>
+					</button>
+				</div>
+			</div>
+
+			<div class="shortcode-actions">
+				<button type="button" class="shortcode-action-btn details-btn">
+					<span class="dashicons dashicons-info-outline"></span>
+					<?php esc_html_e( 'Details', 'shortcodeglut' ); ?>
+				</button>
+				<button type="button" class="shortcode-action-btn preview-btn" onclick="showPreviewModal('<?php echo esc_js( $preview_type ); ?>')">
+					<span class="dashicons dashicons-welcome-view-site"></span>
+					<?php esc_html_e( 'Preview', 'shortcodeglut' ); ?>
+				</button>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render a PRO shortcode card with disabled details/preview and unlock button
+	 *
+	 * @param string $shortcode The shortcode tag
+	 * @param string $title Display title
+	 * @param string $description Shortcode description
+	 * @param array $examples Example shortcodes (basic, advanced)
+	 * @param array $params Parameters documentation
+	 * @param string $preview_type Preview type for demo
+	 */
+	private function render_pro_shortcode_card( $shortcode, $title, $description, $examples, $params, $preview_type = '' ) {
+		$pro_url = defined( 'SHORTCODEGLUT_PRO_URL' ) ? SHORTCODEGLUT_PRO_URL : 'https://www.appglut.com/shortcodeglut-pro/';
+		$is_pro_active = is_plugin_active( 'shortcodeglut-pro/shortcodeglut-pro.php' );
+
+		// Store shortcode data for JavaScript (for potential future use)
+		$data = array(
+			'shortcode' => $shortcode,
+			'title' => $title,
+			'description' => $description,
+			'examples' => $examples,
+			'params' => $params,
+		);
+		$data_json = wp_json_encode( $data );
+		?>
+
+		<?php if ( $is_pro_active ) : ?>
+			<!-- PRO is active - render as normal shortcode card -->
+			<div class="shortcode-card" data-shortcode-data='<?php echo esc_attr( $data_json ); ?>'>
+				<div class="shortcode-card-header">
+					<h3><?php echo esc_html( $title ); ?></h3>
+					<p><?php echo esc_html( $description ); ?></p>
+				</div>
+
+				<div class="shortcode-display">
+					<div class="shortcode-code-wrapper">
+						<code><?php echo esc_html( $examples['basic'] ); ?></code>
+						<button type="button" class="copy-btn" onclick="copyShortcode('<?php echo esc_js( $examples['basic'] ); ?>', this)" title="<?php esc_attr_e( 'Copy shortcode', 'shortcodeglut' ); ?>">
+							<span class="dashicons dashicons-admin-page"></span>
+						</button>
+					</div>
+				</div>
+
+				<div class="shortcode-actions">
+					<button type="button" class="shortcode-action-btn details-btn">
+						<span class="dashicons dashicons-info-outline"></span>
+						<?php esc_html_e( 'Details', 'shortcodeglut' ); ?>
+					</button>
+					<?php if ( ! empty( $preview_type ) ) : ?>
+					<button type="button" class="shortcode-action-btn preview-btn" onclick="showPreviewModal('<?php echo esc_js( $preview_type ); ?>')">
+						<span class="dashicons dashicons-welcome-view-site"></span>
+						<?php esc_html_e( 'Preview', 'shortcodeglut' ); ?>
+					</button>
+					<?php endif; ?>
+				</div>
+			</div>
+		<?php else : ?>
+			<!-- PRO not active - render with PRO badge and unlock button -->
+			<div class="shortcode-card shortcode-card-pro" data-shortcode-data='<?php echo esc_attr( $data_json ); ?>'>
+				<div class="shortcode-card-header">
+					<h3>
+						<?php echo esc_html( $title ); ?>
+						<span class="pro-badge"><?php esc_html_e( 'PRO', 'shortcodeglut' ); ?></span>
+					</h3>
+					<p><?php echo esc_html( $description ); ?></p>
+				</div>
+
+				<div class="shortcode-display">
+					<div class="shortcode-code-wrapper">
+						<code><?php echo esc_html( $examples['basic'] ); ?></code>
+						<button type="button" class="copy-btn" onclick="copyShortcode('<?php echo esc_js( $examples['basic'] ); ?>', this)" title="<?php esc_attr_e( 'Copy shortcode', 'shortcodeglut' ); ?>">
+							<span class="dashicons dashicons-admin-page"></span>
+						</button>
+					</div>
+				</div>
+
+				<div class="shortcode-actions">
+					<button type="button" class="shortcode-action-btn details-btn">
+						<span class="dashicons dashicons-info-outline"></span>
+						<?php esc_html_e( 'Details', 'shortcodeglut' ); ?>
+					</button>
+					<?php if ( ! empty( $preview_type ) ) : ?>
+					<button type="button" class="shortcode-action-btn preview-btn" onclick="showPreviewModal('<?php echo esc_js( $preview_type ); ?>')">
+						<span class="dashicons dashicons-welcome-view-site"></span>
+						<?php esc_html_e( 'Preview', 'shortcodeglut' ); ?>
+					</button>
+					<?php else : ?>
+					<button type="button" class="shortcode-action-btn preview-btn" disabled>
+						<span class="dashicons dashicons-welcome-view-site"></span>
+						<?php esc_html_e( 'Preview', 'shortcodeglut' ); ?>
+					</button>
+					<?php endif; ?>
+					<a href="<?php echo esc_url( $pro_url ); ?>" target="_blank" class="shortcode-action-btn unlock-pro-btn">
+						<span class="dashicons dashicons-lock"></span>
+						<?php esc_html_e( 'Unlock to PRO', 'shortcodeglut' ); ?>
+					</a>
+				</div>
+			</div>
+		<?php endif; ?>
+		<?php
+	}
+}

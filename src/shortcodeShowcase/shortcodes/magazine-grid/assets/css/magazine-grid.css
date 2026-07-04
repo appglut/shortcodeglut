@@ -1,0 +1,466 @@
+/**
+ * Magazine Grid Shortcode Styles
+ * Products displayed in a magazine-style grid layout
+ */
+
+.shortcodeglut-magazine-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 30px 0;
+    padding: 20px 0;
+}
+
+.shortcodeglut-magazine-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.shortcodeglut-magazine-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 200px;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Grid Item Sizes */
+.shortcodeglut-magazine-item-hero {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.shortcodeglut-magazine-item-large {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+.shortcodeglut-magazine-item-medium {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.shortcodeglut-magazine-item-small {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* Grid Item */
+.shortcodeglut-magazine-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+.shortcodeglut-magazine-item-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.shortcodeglut-magazine-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.shortcodeglut-magazine-img.placeholder-img {
+    opacity: 0.5;
+}
+
+/* Overlay */
+.shortcodeglut-magazine-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: #fff;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.shortcodeglut-magazine-overlay .shortcodeglut-magazine-category,
+.shortcodeglut-magazine-overlay .shortcodeglut-magazine-title,
+.shortcodeglut-magazine-overlay .shortcodeglut-magazine-price {
+    position: relative;
+    z-index: 3;
+}
+
+.shortcodeglut-magazine-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.shortcodeglut-magazine-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+
+.shortcodeglut-magazine-item-hero .shortcodeglut-magazine-title {
+    font-size: 24px;
+}
+
+.shortcodeglut-magazine-item-large .shortcodeglut-magazine-title {
+    font-size: 18px;
+}
+
+.shortcodeglut-magazine-item-small .shortcodeglut-magazine-title {
+    font-size: 14px;
+}
+
+.shortcodeglut-magazine-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.shortcodeglut-magazine-price del {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-right: 5px;
+}
+
+.shortcodeglut-magazine-price ins {
+    text-decoration: none;
+    color: #4CAF50;
+}
+
+.shortcodeglut-magazine-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+.shortcodeglut-magazine-link .screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Placeholder */
+.shortcodeglut-magazine-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+}
+
+.shortcodeglut-magazine-placeholder .placeholder-text {
+    color: #999;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Hover Effects */
+.shortcodeglut-magazine-hover-zoom .shortcodeglut-magazine-item:hover .shortcodeglut-magazine-img {
+    transform: scale(1.1);
+}
+
+.shortcodeglut-magazine-hover-slide .shortcodeglut-magazine-item:hover .shortcodeglut-magazine-overlay {
+    transform: translateY(-10px);
+}
+
+.shortcodeglut-magazine-hover-fade .shortcodeglut-magazine-overlay {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.shortcodeglut-magazine-hover-fade .shortcodeglut-magazine-item:hover .shortcodeglut-magazine-overlay {
+    opacity: 1;
+}
+
+/* Column Variations */
+.shortcodeglut-magazine-2-cols .shortcodeglut-magazine-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.shortcodeglut-magazine-3-cols .shortcodeglut-magazine-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.shortcodeglut-magazine-5-cols .shortcodeglut-magazine-grid {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.shortcodeglut-magazine-6-cols .shortcodeglut-magazine-grid {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+/* Layout Variations */
+.shortcodeglut-magazine-grid .shortcodeglut-magazine-balanced .shortcodeglut-magazine-item-hero {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* Pagination */
+.shortcodeglut-magazine-pagination {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.shortcodeglut-magazine-load-more {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.shortcodeglut-magazine-load-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.shortcodeglut-magazine-load-more.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Modal */
+.shortcodeglut-magazine-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.shortcodeglut-magazine-modal.active {
+    display: flex;
+}
+
+.shortcodeglut-magazine-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.shortcodeglut-magazine-modal-inner {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.shortcodeglut-magazine-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1;
+    transition: background 0.2s;
+}
+
+.shortcodeglut-magazine-modal-close:hover {
+    background: #e0e0e0;
+}
+
+.shortcodeglut-magazine-modal-content {
+    padding: 30px;
+}
+
+.shortcodeglut-magazine-modal-product {
+    text-align: center;
+}
+
+.shortcodeglut-magazine-modal-product img {
+    max-width: 200px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.shortcodeglut-magazine-modal-product h4 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.shortcodeglut-magazine-modal-product .shortcodeglut-magazine-category {
+    margin-bottom: 15px;
+}
+
+.shortcodeglut-magazine-modal-product .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.shortcodeglut-magazine-modal-product p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.shortcodeglut-magazine-modal-product .button {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+/* Loading & Error States */
+.shortcodeglut-loading {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.shortcodeglut-error {
+    text-align: center;
+    padding: 40px;
+    color: #e74c3c;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .shortcodeglut-magazine-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .shortcodeglut-magazine-2-cols .shortcodeglut-magazine-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .shortcodeglut-magazine-5-cols .shortcodeglut-magazine-grid,
+    .shortcodeglut-magazine-6-cols .shortcodeglut-magazine-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .shortcodeglut-magazine-item-hero {
+        grid-column: span 2;
+    }
+
+    .shortcodeglut-magazine-item-large {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .shortcodeglut-magazine-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 150px;
+        gap: 15px;
+    }
+
+    .shortcodeglut-magazine-item-hero {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .shortcodeglut-magazine-item-large {
+        grid-column: span 2;
+    }
+
+    .shortcodeglut-magazine-item-medium {
+        grid-column: span 1;
+    }
+
+    .shortcodeglut-magazine-title {
+        font-size: 14px;
+    }
+
+    .shortcodeglut-magazine-item-hero .shortcodeglut-magazine-title {
+        font-size: 18px;
+    }
+
+    .shortcodeglut-magazine-item-large .shortcodeglut-magazine-title {
+        font-size: 16px;
+    }
+
+    .shortcodeglut-magazine-title {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shortcodeglut-magazine-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 180px;
+        gap: 10px;
+    }
+
+    .shortcodeglut-magazine-item-hero,
+    .shortcodeglut-magazine-item-large,
+    .shortcodeglut-magazine-item-medium,
+    .shortcodeglut-magazine-item-small {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .shortcodeglut-magazine-item-hero {
+        grid-row: span 2;
+    }
+
+    .shortcodeglut-magazine-overlay {
+        padding: 15px;
+    }
+
+    .shortcodeglut-magazine-title {
+        font-size: 13px;
+    }
+
+    .shortcodeglut-magazine-item-hero .shortcodeglut-magazine-title {
+        font-size: 16px;
+    }
+
+    .shortcodeglut-magazine-modal-inner {
+        max-width: 95%;
+    }
+
+    .shortcodeglut-magazine-modal-content {
+        padding: 20px;
+    }
+}

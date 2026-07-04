@@ -1,0 +1,339 @@
+/**
+ * Category Tree Shortcode Styles
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+.shortcodeglut-category-tree-wrapper {
+    margin: 20px 0;
+    width: 1200px;
+}
+
+.shortcodeglut-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.shortcodeglut-breadcrumb a {
+    color: #2271b1;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.shortcodeglut-breadcrumb a:hover {
+    color: #135e96;
+}
+
+.shortcodeglut-tree-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.shortcodeglut-tree-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+.shortcodeglut-tree {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.shortcodeglut-tree-item {
+    margin: 0;
+}
+
+.shortcodeglut-tree-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none !important;
+    color: #333;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.shortcodeglut-tree-link:hover {
+    background: #f0f0f1;
+}
+
+.shortcodeglut-tree-link.active {
+    background: #e0e7ff;
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+.shortcodeglut-tree-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    fill: #666;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.shortcodeglut-tree-link.expanded .shortcodeglut-tree-icon {
+    transform: rotate(90deg);
+}
+
+.shortcodeglut-tree-name {
+    flex: 1;
+    font-size: 15px;
+}
+
+.shortcodeglut-tree-count {
+    font-size: 12px;
+    color: #888;
+    background: #f0f0f1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.shortcodeglut-subtree {
+    list-style: none;
+    padding-left: 32px;
+    display: none;
+}
+
+.shortcodeglut-subtree.open {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.shortcodeglut-subtree .shortcodeglut-tree-link {
+    padding: 10px 16px;
+    font-size: 15px;
+}
+
+.shortcodeglut-subtree .shortcodeglut-subtree {
+    padding-left: 24px;
+}
+
+.shortcodeglut-category-icon {
+    width: 32px !important;
+    height: 32px;
+    border-radius: 8px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Font Awesome icon styling */
+.shortcodeglut-category-icon.i,
+.shortcodeglut-category-icon i {
+    width: auto;
+    height: auto;
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 12px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.shortcodeglut-category-icon.shortcodeglut-gradient-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.shortcodeglut-category-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .shortcodeglut-tree-container {
+        padding: 16px;
+    }
+
+    .shortcodeglut-subtree {
+        padding-left: 20px;
+    }
+
+    .shortcodeglut-tree-link {
+        padding: 10px 12px;
+    }
+
+    .shortcodeglut-category-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .shortcodeglut-tree-name {
+        font-size: 14px;
+    }
+}
+
+/* Loading state */
+.shortcodeglut-category-tree-wrapper.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.shortcodeglut-category-tree-wrapper.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border: 3px solid #f0f0f1;
+    border-top-color: #2271b1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Product items styling */
+.shortcodeglut-product-item {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.shortcodeglut-product-link {
+    padding-left: 44px !important;
+    font-size: 14px !important;
+    color: #555 !important;
+    flex: 1;
+    min-width: 0;
+}
+
+.shortcodeglut-product-link:hover {
+    background: #f8f9fa !important;
+}
+
+.shortcodeglut-product-link .shortcodeglut-tree-count {
+    font-size: 13px;
+    color: #2271b1;
+    font-weight: 600;
+    background: transparent;
+    padding: 0;
+    margin-right: 8px;
+}
+
+/* Add to cart button styling */
+.shortcodeglut-add-to-cart-wrapper {
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.shortcodeglut-add-to-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #2271b1;
+    color: #fff;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.shortcodeglut-add-to-cart:hover {
+    background: #135e96;
+    transform: scale(1.05);
+}
+
+.shortcodeglut-add-to-cart svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+}
+
+/* Loading animation for add to cart */
+.shortcodeglut-add-to-cart .shortcodeglut-spinning,
+.shortcodeglut-add-to-cart .shortcodeglut-loading {
+    animation: shortcodeglut-spin 1s linear infinite;
+}
+
+.shortcodeglut-add-to-cart .shortcodeglut-spinning path,
+.shortcodeglut-add-to-cart .shortcodeglut-loading path {
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+@keyframes shortcodeglut-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* View cart button styling (anchor tag) - scoped to category-tree only */
+.shortcodeglut-category-tree-wrapper .shortcodeglut-view-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: #10b981;
+    color: #fff;
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.shortcodeglut-category-tree-wrapper .shortcodeglut-view-cart:hover {
+    background: #059669;
+    transform: scale(1.05);
+}
+
+.shortcodeglut-category-tree-wrapper .shortcodeglut-view-cart svg {
+    width: 14px;
+    height: 14px;
+    display: block;
+}

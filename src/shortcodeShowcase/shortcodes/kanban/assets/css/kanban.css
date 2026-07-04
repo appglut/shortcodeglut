@@ -1,0 +1,215 @@
+.shortcodeglut-kanban-wrapper {
+    max-width: 1800px;
+    margin: 40px auto;
+    padding: 40px 20px;
+}
+
+.shortcodeglut-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.shortcodeglut-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 16px 0;
+}
+
+.shortcodeglut-code-info {
+    background: rgba(0,0,0,0.05);
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-family: monospace;
+    font-size: 13px;
+    display: inline-block;
+    color: #1a1a1a;
+}
+
+.shortcodeglut-kanban {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+.shortcodeglut-column {
+    min-width: 320px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.shortcodeglut-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.shortcodeglut-column-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.shortcodeglut-column-count {
+    background: rgba(0,0,0,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.shortcodeglut-column-priority {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.shortcodeglut-column-priority.high {
+    background: #ef4444;
+}
+
+.shortcodeglut-column-priority.medium {
+    background: #f59e0b;
+}
+
+.shortcodeglut-column-priority.low {
+    background: #22c55e;
+}
+
+.shortcodeglut-column-priority.critical {
+    background: #a855f7;
+}
+
+.shortcodeglut-card {
+    background: rgba(0,0,0,0.03);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.shortcodeglut-card:hover {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.shortcodeglut-card-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shortcodeglut-card-icon svg {
+    width: 25px;
+    height: 25px;
+    fill: #1a1a1a;
+}
+
+.shortcodeglut-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+}
+
+.shortcodeglut-card-title a {
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.shortcodeglut-card-title a:hover {
+    color: #555;
+}
+
+.shortcodeglut-card-desc {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+}
+
+.shortcodeglut-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shortcodeglut-card-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.shortcodeglut-card-btn {
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.08);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shortcodeglut-card-btn:hover {
+    background: rgba(0,0,0,0.15);
+}
+
+.shortcodeglut-card-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 6px;
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.shortcodeglut-load-more {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0,0,0,0.06);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.shortcodeglut-load-more:hover {
+    background: rgba(0,0,0,0.12);
+}
+
+.shortcodeglut-load-more.loading {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+@media (max-width: 1024px) {
+    .shortcodeglut-kanban {
+        flex-direction: column;
+    }
+
+    .shortcodeglut-column {
+        min-width: 100%;
+    }
+}

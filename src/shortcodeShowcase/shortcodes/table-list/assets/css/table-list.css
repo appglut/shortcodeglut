@@ -1,0 +1,456 @@
+/**
+ * Table List Shortcode Styles
+ * Table-based product display for Shortcodeglut
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+.shortcodeglut-archive-wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Breadcrumb */
+.shortcodeglut-breadcrumb {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 20px;
+	font-size: 14px;
+	color: #666;
+}
+
+.shortcodeglut-breadcrumb a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.shortcodeglut-breadcrumb a:hover {
+	text-decoration: underline;
+}
+
+/* Header */
+.shortcodeglut-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.shortcodeglut-title {
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0;
+}
+
+/* Table */
+.shortcodeglut-table {
+	background: #fff;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Ensure no underlines on all links within the shortcode */
+.shortcodeglut-archive-wrapper a {
+	text-decoration: none;
+}
+
+.shortcodeglut-archive-wrapper a:hover {
+	text-decoration: none;
+}
+
+.shortcodeglut-table-header {
+	display: grid;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 20px;
+	background: #f8f9fa;
+	font-weight: 600;
+	font-size: 13px;
+	color: #555;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.shortcodeglut-table-item {
+	display: grid;
+	align-items: center;
+	gap: 16px;
+	padding: 16px 20px;
+	border-bottom: 1px solid #f0f0f1;
+	transition: background 0.2s;
+}
+
+.shortcodeglut-table-item:last-child {
+	border-bottom: none;
+}
+
+.shortcodeglut-table-item:hover {
+	background: #f8f9fa;
+}
+
+/* Product Icon */
+.shortcodeglut-product-icon {
+	width: 44px;
+	height: 44px;
+	background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.shortcodeglut-product-icon img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.shortcodeglut-product-icon svg {
+	width: 22px;
+	height: 22px;
+	fill: #667eea;
+}
+
+.shortcodeglut-product-info {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.shortcodeglut-product-title {
+	font-weight: 600;
+	font-size: 15px;
+	margin-bottom: 2px;
+}
+
+.shortcodeglut-product-title a {
+	color: #333;
+	text-decoration: none !important;
+}
+
+.shortcodeglut-product-title a:hover {
+	color: #2271b1;
+	text-decoration: none !important;
+}
+
+.shortcodeglut-product-category a {
+	text-decoration: none !important;
+	color: #2271b1;
+}
+
+.shortcodeglut-product-category a:hover {
+	color: #1a4d7a;
+	text-decoration: none !important;
+}
+
+.shortcodeglut-product-sku {
+	font-size: 12px;
+	color: #888;
+}
+
+.shortcodeglut-product-price {
+	font-weight: 700;
+	font-size: 16px;
+	color: #2271b1;
+}
+
+.shortcodeglut-product-date {
+	font-size: 13px;
+	color: #666;
+}
+
+.shortcodeglut-product-stock {
+	font-size: 13px;
+}
+
+.shortcodeglut-product-stock .in-stock {
+	color: #22c55e;
+}
+
+.shortcodeglut-product-stock .out-of-stock {
+	color: #ef4444;
+}
+
+/* Product Actions */
+.shortcodeglut-product-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.shortcodeglut-btn {
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none !important;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    white-space: nowrap;
+    line-height: 1.4;
+    color: #fff;
+}
+
+.shortcodeglut-btn:hover {
+    text-decoration: none;
+}
+
+.shortcodeglut-btn i {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.shortcodeglut-btn span {
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.shortcodeglut-btn-primary {
+    background: #2271b1;
+    color: #fff;
+}
+
+.shortcodeglut-btn-primary:hover {
+    background: #1a4d7a;
+    color: #fff;
+  }
+
+  .shortcodeglut-btn-secondary {
+      background: #f0f0f1;
+      color: #333;
+  }
+
+  .shortcodeglut-btn-secondary:hover {
+      background: #e0e0e1;
+  }
+
+
+/* Pagination */
+.shortcodeglut-pagination {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 32px;
+}
+
+.shortcodeglut-pagination .page-numbers {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 8px;
+}
+
+.shortcodeglut-pagination .page-numbers li {
+	margin: 0;
+}
+
+.shortcodeglut-pagination .page-numbers a {
+	padding: 10px 16px;
+	border: 1px solid #ddd;
+	background: #fff;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+	text-decoration: none;
+	color: #333;
+	display: block;
+}
+
+.shortcodeglut-pagination .page-numbers a:hover {
+	background: #f8f9fa;
+}
+
+.shortcodeglut-pagination .page-numbers a.current {
+	background: #2271b1;
+	color: #fff;
+	border-color: #2271b1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.shortcodeglut-table-item,
+	.shortcodeglut-table-header {
+		gap: 8px;
+	}
+
+	.shortcodeglut-product-date,
+	.shortcodeglut-product-actions {
+		display: none;
+	}
+
+	.shortcodeglut-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.shortcodeglut-archive-wrapper {
+		padding: 10px;
+	}
+
+	.shortcodeglut-title {
+		font-size: 20px;
+	}
+}
+
+/* Loading state */
+.shortcodeglut-loading {
+	text-align: center;
+	padding: 40px;
+	color: #666;
+}
+
+.shortcodeglut-loading::after {
+	content: '';
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #ddd;
+	border-top-color: #2271b1;
+	border-radius: 50%;
+	animation: shortcodeglut-spin 0.8s linear infinite;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+@keyframes shortcodeglut-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+ /* Add to Cart Handler Styles */
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart {
+      background: #22c55e;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:hover {
+      background: #16a34a;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn:focus {
+      outline: 2px solid #2271b1;
+      outline-offset: 2px;
+  }
+
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:focus {
+      outline: 2px solid #16a34a;
+      outline-offset: 2px;
+  }
+
+  /* Hide WooCommerce's default elements */
+  .shortcodeglut-product-actions .added_to_cart,
+  .shortcodeglut-add-to-cart-btn + .added_to_cart,
+  .shortcodeglut-add-to-cart-btn ~ .added_to_cart {
+      display: none !important;
+  }
+
+  /* Loading state */
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+      opacity: 0.8;
+      cursor: not-allowed;
+  }
+
+  /* Hide WooCommerce loader on our buttons */
+  .shortcodeglut-add-to-cart-btn .ajax-loading,
+  .shortcodeglut-add-to-cart-btn::after {
+      display: none !important;
+  }
+
+  /* Add to Cart Handler Styles */
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart {
+      background: #22c55e;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:hover {
+      background: #16a34a;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn:focus {
+      outline: 2px solid #2271b1;
+      outline-offset: 2px;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:focus {
+      outline: 2px solid #16a34a;
+      outline-offset: 2px;
+      color: #fff;
+  }
+
+  /* Loading state - white text and loader */
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+      opacity: 0.8;
+      cursor: not-allowed;
+      color: #fff;
+  }
+
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading svg,
+  .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading span {
+      color: #fff;
+      fill: #fff;
+  }
+
+  /* Hide WooCommerce's default elements */
+  .shortcodeglut-product-actions .added_to_cart,
+  .shortcodeglut-add-to-cart-btn + .added_to_cart,
+  .shortcodeglut-add-to-cart-btn ~ .added_to_cart {
+      display: none !important;
+  }
+
+  /* Hide WooCommerce loader on our buttons */
+  .shortcodeglut-add-to-cart-btn .ajax-loading,
+  .shortcodeglut-add-to-cart-btn::after {
+      display: none !important;
+  }
+
+  /* SVG spinner animation */
+  @keyframes shortcodeglut-svg-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+
+  .shortcodeglut-add-to-cart-btn .shortcodeglut-spinner {
+      animation: shortcodeglut-svg-spin 1s linear infinite;
+  }
+
+/* Sortable table headers */
+  .shortcodeglut-table-sortable {
+      cursor: pointer;
+      user-select: none;
+  }
+
+  .shortcodeglut-archive-wrapper.loading {
+      opacity: 0.6;
+      pointer-events: none;
+  }
+
+  .shortcodeglut-archive-wrapper.loading .shortcodeglut-table {
+      position: relative;
+  }
+
+  /* Remove any pseudo-element content from sortable headers */                                                                                         
+  .shortcodeglut-table-sortable::after,                     
+  .shortcodeglut-table-sortable::before {
+      content: none !important;
+      display: none !important;
+  }

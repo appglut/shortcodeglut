@@ -1,0 +1,364 @@
+/* Shortcodeglut Template: product_card_horizontal_purple */
+/* All styles are scoped to .product-design to prevent conflicts */
+
+.product-design.product-card-horizontal-purple {
+    width: 100%;
+    max-width: 525px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-design.product-card-horizontal-purple:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.product-design.product-card-horizontal-purple .cta-container {
+    padding: 20px;
+}
+
+.product-design.product-card-horizontal-purple .product-item {
+      display: flex;
+      gap: 20px;
+      flex-direction: row; /* Default: horizontal layout */
+  }
+.product-design.product-card-horizontal-purple .product-thumb {
+    position: relative;
+    width: 200px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.product-design.product-card-horizontal-purple .product-thumb a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.product-design.product-card-horizontal-purple .pri-img {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+.product-design.product-card-horizontal-purple .product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+}
+
+.product-design.product-card-horizontal-purple .product-label {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #fff;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+.product-design.product-card-horizontal-purple .new-badge {
+    background: #673AB7;
+}
+
+.product-design.product-card-horizontal-purple .featured-badge {
+    background: #FF9800;
+}
+
+.product-design.product-card-horizontal-purple .discount-badge {
+    background: #f44336;
+}
+
+.product-design.product-card-horizontal-purple .outofstock-badge {
+    background: #9E9E9E;
+}
+
+.product-design.product-card-horizontal-purple .product-caption {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.product-design.product-card-horizontal-purple .product-caption h3 {
+    margin: 0 0 6px 0;
+    padding: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.product-design.product-card-horizontal-purple .product-caption h3 a {
+    text-decoration: none !important;
+    color: #1d2327 !important;
+    transition: color 0.3s ease;
+    display: block;
+}
+
+.product-design.product-card-horizontal-purple .product-caption h3 a:hover {
+    color: #673AB7 !important;
+}
+
+.product-design.product-card-horizontal-purple .product-identity {
+    margin-bottom: 15px;
+}
+
+.product-design.product-card-horizontal-purple .product-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.product-design.product-card-horizontal-purple .product-title a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.product-design.product-card-horizontal-purple .product-title a:hover {
+    color: #673AB7;
+}
+
+.product-design.product-card-horizontal-purple .product-category {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-design.product-card-horizontal-purple .product-category a {
+    color: #666;
+    text-decoration: none;
+}
+
+.product-design.product-card-horizontal-purple .product-category a:hover {
+    color: #673AB7;
+}
+
+.product-design.product-card-horizontal-purple .ratings {
+    margin-bottom: 10px;
+}
+
+.product-design.product-card-horizontal-purple .ratings i {
+    color: #FFC107;
+    font-size: 14px;
+}
+
+.product-design.product-card-horizontal-purple .spr-badge {
+    display: inline-block;
+}
+
+.product-design.product-card-horizontal-purple .spr-starrating {
+    display: flex;
+    gap: 2px;
+}
+
+.product-design.product-card-horizontal-purple .price-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.product-design.product-card-horizontal-purple .product-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #673AB7;
+}
+
+.product-design.product-card-horizontal-purple .price-old del {
+    color: #999;
+    font-size: 16px;
+}
+
+.product-design.product-card-horizontal-purple .cta-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+    width: 100%;
+    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.product-design.product-card-horizontal-purple .cta-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.product-design.product-card-horizontal-purple .product-cart-action {
+    display: inline-block;
+}
+
+.product-design.product-card-horizontal-purple .btn-cart {
+    padding: 10px 20px;
+    background: #673AB7;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.product-design.product-card-horizontal-purple .btn-cart:hover {
+    background: #5E35B1;
+    color: #fff;
+}
+
+.product-design.product-card-horizontal-purple .btn-cart i {
+    font-size: 14px;
+}
+
+.product-design.product-card-horizontal-purple .out-of-stock {
+    color: #999;
+    font-size: 14px;
+}
+
+ @media (max-width: 768px) {
+      .product-design.product-card-horizontal-purple .product-item {
+          flex-direction: column;
+      }
+
+      .product-design.product-card-horizontal-purple .product-thumb {
+          width: 100%;
+      }
+
+      .product-design.product-card-horizontal-purple .pri-img {
+          height: 250px;
+      }
+  }
+
+  /* 3+ columns: Force vertical layout */
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .product-item,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .product-item,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .product-item,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .product-item {
+      flex-direction: column !important;
+  }
+
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .product-thumb,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .product-thumb,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .product-thumb,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .product-thumb {
+      width: 100% !important;
+  }
+
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .pri-img,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .pri-img,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .pri-img,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .pri-img {
+      height: 180px !important;
+  }
+
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .product-caption h3,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .product-caption h3,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .product-caption h3 {
+      font-size: 14px !important;
+  }
+
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .cta-description,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .cta-description {
+      display: none !important;
+  }
+
+  /* Center content in vertical layout (3+ columns) */
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .product-caption,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .product-caption,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .product-caption,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .product-caption {
+      text-align: center;
+      align-items: center;
+  }
+
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .price-box,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .price-box,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .price-box,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .price-box {
+      justify-content: center;
+  }
+
+  .shortcodeglut-grid[style*="repeat(3,"] .product-design.product-card-horizontal-purple .cta-actions,
+  .shortcodeglut-grid[style*="repeat(4,"] .product-design.product-card-horizontal-purple .cta-actions,
+  .shortcodeglut-grid[style*="repeat(5,"] .product-design.product-card-horizontal-purple .cta-actions,
+  .shortcodeglut-grid[style*="repeat(6,"] .product-design.product-card-horizontal-purple .cta-actions {
+      justify-content: center;
+  }
+
+  /* Bootstrap column classes support for shortcodeglut_woo_category */
+  .col-lg-4 .product-design.product-card-horizontal-purple .product-item,
+  .col-lg-3 .product-design.product-card-horizontal-purple .product-item,
+  .col-lg-2 .product-design.product-card-horizontal-purple .product-item,
+  .col-lg-1 .product-design.product-card-horizontal-purple .product-item {
+      flex-direction: column !important;
+  }
+
+  .col-lg-4 .product-design.product-card-horizontal-purple .product-thumb,
+  .col-lg-3 .product-design.product-card-horizontal-purple .product-thumb,
+  .col-lg-2 .product-design.product-card-horizontal-purple .product-thumb,
+  .col-lg-1 .product-design.product-card-horizontal-purple .product-thumb {
+      width: 100% !important;
+  }
+
+  .col-lg-4 .product-design.product-card-horizontal-purple .pri-img,
+  .col-lg-3 .product-design.product-card-horizontal-purple .pri-img,
+  .col-lg-2 .product-design.product-card-horizontal-purple .pri-img,
+  .col-lg-1 .product-design.product-card-horizontal-purple .pri-img {
+      height: 180px !important;
+  }
+
+  .col-lg-4 .product-design.product-card-horizontal-purple .product-caption h3,
+  .col-lg-3 .product-design.product-card-horizontal-purple .product-caption h3,
+  .col-lg-2 .product-design.product-card-horizontal-purple .product-caption h3,
+  .col-lg-1 .product-design.product-card-horizontal-purple .product-caption h3 {
+      font-size: 14px !important;
+  }
+
+  .col-lg-2 .product-design.product-card-horizontal-purple .cta-description,
+  .col-lg-1 .product-design.product-card-horizontal-purple .cta-description {
+      display: none !important;
+  }
+
+  /* Center content in Bootstrap columns */
+  .col-lg-4 .product-design.product-card-horizontal-purple .product-caption,
+  .col-lg-3 .product-design.product-card-horizontal-purple .product-caption,
+  .col-lg-2 .product-design.product-card-horizontal-purple .product-caption,
+  .col-lg-1 .product-design.product-card-horizontal-purple .product-caption {
+      text-align: center;
+      align-items: center;
+  }
+
+  .col-lg-4 .product-design.product-card-horizontal-purple .price-box,
+  .col-lg-3 .product-design.product-card-horizontal-purple .price-box,
+  .col-lg-2 .product-design.product-card-horizontal-purple .price-box,
+  .col-lg-1 .product-design.product-card-horizontal-purple .price-box {
+      justify-content: center;
+  }
+
+  .col-lg-4 .product-design.product-card-horizontal-purple .cta-actions,
+  .col-lg-3 .product-design.product-card-horizontal-purple .cta-actions,
+  .col-lg-2 .product-design.product-card-horizontal-purple .cta-actions,
+  .col-lg-1 .product-design.product-card-horizontal-purple .cta-actions {
+      justify-content: center;
+  }

@@ -1,0 +1,654 @@
+/**
+ * Masonry Grid Shortcode Styles
+ * Responsive masonry/pinterest-style product display for Shortcodeglut
+ *
+ * @package Shortcodeglut
+ * @subpackage ShortcodeShowcase
+ */
+
+.shortcodeglut-masonry-wrapper {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 40px 20px;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Ensure no underlines on links */
+.shortcodeglut-masonry-wrapper a {
+	text-decoration: none;
+}
+
+.shortcodeglut-masonry-wrapper a:hover {
+	text-decoration: none;
+}
+
+/* Breadcrumb */
+.shortcodeglut-breadcrumb {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 24px;
+	font-size: 14px;
+	color: #666;
+}
+
+.shortcodeglut-breadcrumb a {
+	color: #2271b1;
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+.shortcodeglut-breadcrumb a:hover {
+	color: #135e96;
+}
+
+/* Header */
+.shortcodeglut-header {
+	text-align: center;
+	margin-bottom: 32px;
+}
+
+.shortcodeglut-title {
+	font-size: 36px;
+	font-weight: 800;
+	color: #1a1a1a;
+	margin: 0 0 8px 0;
+	letter-spacing: -0.02em;
+}
+
+/* Toolbar */
+.shortcodeglut-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+	padding: 16px 20px;
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.shortcodeglut-sort-select {
+	padding: 10px 32px 10px 16px;
+	border: 1px solid #e0e0e1;
+	border-radius: 8px;
+	font-size: 14px;
+	color: #333;
+	background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23333" d="M2 4l4 4 4-4z"/></svg>') no-repeat right 12px center;
+	cursor: pointer;
+	transition: border-color 0.2s;
+	max-width: 200px;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+
+.shortcodeglut-sort-select:hover {
+	border-color: #2271b1;
+}
+
+.shortcodeglut-sort-select:focus {
+	outline: none;
+	border-color: #2271b1;
+	box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
+}
+
+.shortcodeglut-results-count {
+	font-size: 14px;
+	color: #666;
+	font-weight: 500;
+}
+
+/* Masonry Container */
+.shortcodeglut-masonry {
+	column-gap: 20px;
+}
+
+.shortcodeglut-masonry-item {
+	break-inside: avoid;
+	margin-bottom: 20px;
+}
+
+/* Card Styles */
+.shortcodeglut-card {
+	background: #fff;
+	overflow: hidden;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shortcodeglut-card-style-modern.shortcodeglut-card.no-shadow {
+	box-shadow: none;
+	border: 1px solid #e5e7eb;
+}
+
+.shortcodeglut-card-style-modern.shortcodeglut-card.has-shadow {
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.shortcodeglut-card-style-classic.shortcodeglut-card {
+	border: 1px solid #e5e7eb;
+	box-shadow: none;
+}
+
+.shortcodeglut-card-style-minimal.shortcodeglut-card {
+	box-shadow: none;
+	border: none;
+	background: transparent;
+}
+
+/* Hover Effects */
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card:hover {
+	transform: translateY(-4px);
+}
+
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card.has-shadow:hover {
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card.no-shadow:hover {
+	border-color: #2271b1;
+}
+
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card-style-classic:hover {
+	border-color: #2271b1;
+}
+
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card-style-minimal:hover {
+	background: #f8fafc;
+}
+
+/* Card Image */
+.shortcodeglut-card-image {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.shortcodeglut-card-image.tall {
+	min-height: 280px;
+}
+
+.shortcodeglut-card-image.medium {
+	min-height: 200px;
+}
+
+.shortcodeglut-card-image.short {
+	min-height: 140px;
+}
+
+.shortcodeglut-card-image a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.shortcodeglut-card-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+}
+
+.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card-image img:hover {
+	transform: scale(1.05);
+}
+
+.shortcodeglut-card-image svg {
+	width: 60px;
+	height: 60px;
+	fill: rgba(255, 255, 255, 0.9);
+}
+
+/* Card Body */
+.shortcodeglut-card-body {
+	padding: 16px;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-card-body {
+	padding: 12px 0;
+	background: transparent;
+}
+
+/* Product Tag */
+.shortcodeglut-tag {
+	display: inline-block;
+	background: #fef3c7;
+	color: #92400e;
+	padding: 4px 10px;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	margin-bottom: 8px;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-tag {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+/* Product Title */
+.shortcodeglut-card-title {
+	font-weight: 600;
+	font-size: 15px;
+	margin-bottom: 6px;
+	line-height: 1.4;
+}
+
+.shortcodeglut-card-title a {
+	color: #1a1a1a;
+	transition: color 0.2s;
+}
+
+.shortcodeglut-card-title a:hover {
+	color: #2271b1;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-card-title a {
+	color: #111827;
+}
+
+/* Product Excerpt */
+.shortcodeglut-card-excerpt {
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 12px;
+	line-height: 1.6;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-card-excerpt {
+	color: #6b7280;
+}
+
+/* Card Footer */
+.shortcodeglut-card-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-card-footer {
+	justify-content: flex-start;
+	gap: 16px;
+}
+
+/* Price */
+.shortcodeglut-price {
+	font-weight: 700;
+	font-size: 18px;
+	color: #2563eb;
+	white-space: nowrap;
+}
+
+.shortcodeglut-card-style-classic .shortcodeglut-price {
+	color: #1a1a1a;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-price {
+	color: #111827;
+	font-size: 16px;
+}
+
+.shortcodeglut-price del {
+	font-size: 14px;
+	color: #999;
+	margin-right: 4px;
+	font-weight: 400;
+}
+
+.shortcodeglut-price ins {
+	text-decoration: none;
+}
+
+/* Add to Cart Button */
+.shortcodeglut-btn {
+	padding: 8px 16px;
+	background: #2563eb;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s;
+	white-space: nowrap;
+}
+
+.shortcodeglut-btn:hover {
+	background: #1d4ed8;
+	transform: translateY(-1px);
+}
+
+.shortcodeglut-btn:active {
+	transform: translateY(0);
+}
+
+.shortcodeglut-card-style-classic .shortcodeglut-btn {
+	background: #1a1a1a;
+}
+
+.shortcodeglut-card-style-classic .shortcodeglut-btn:hover {
+	background: #333;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-btn {
+	background: transparent;
+	border: 1px solid #d1d5db;
+	color: #374151;
+}
+
+.shortcodeglut-card-style-minimal .shortcodeglut-btn:hover {
+	background: #f3f4f6;
+	border-color: #9ca3af;
+	transform: none;
+}
+
+/* Pagination */
+.shortcodeglut-pagination {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 32px;
+	background: transparent;
+}
+
+.shortcodeglut-pagination .page-numbers {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 8px;
+}
+
+.shortcodeglut-pagination .page-numbers li {
+	margin: 0;
+}
+
+.shortcodeglut-pagination .page-numbers a {
+	padding: 10px 16px;
+	border: 1px solid #ddd;
+	background: #ffffff;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	text-decoration: none;
+	color: #333;
+	display: block;
+	transition: all 0.2s;
+}
+
+.shortcodeglut-pagination .page-numbers a:hover {
+	background: #f8f9fa;
+	border-color: #2271b1;
+	color: #2271b1;
+}
+
+.shortcodeglut-pagination .page-numbers a.current {
+	background: #2271b1;
+	color: #fff;
+	border-color: #2271b1;
+}
+
+.shortcodeglut-pagination .page-numbers a.prev,
+.shortcodeglut-pagination .page-numbers a.next {
+	font-weight: bold;
+}
+
+/* Loading state */
+.shortcodeglut-masonry-wrapper.loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.shortcodeglut-loading {
+	text-align: center;
+	padding: 40px;
+	color: #666;
+}
+
+.shortcodeglut-loading::after {
+	content: '';
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #ddd;
+	border-top-color: #2271b1;
+	border-radius: 50%;
+	animation: shortcodeglut-spin 0.8s linear infinite;
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+@keyframes shortcodeglut-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Add to Cart Button States */
+.shortcodeglut-btn.shortcodeglut-added {
+	background: #22c55e;
+}
+
+.shortcodeglut-btn.shortcodeglut-added:hover {
+	background: #16a34a;
+}
+
+.shortcodeglut-btn:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.shortcodeglut-btn.shortcodeglut-added:focus {
+	outline-color: #16a34a;
+}
+
+.shortcodeglut-btn.shortcodeglut-loading {
+	opacity: 0.8;
+	cursor: not-allowed;
+}
+
+.shortcodeglut-btn.shortcodeglut-loading::before {
+	content: '';
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border: 2px solid #fff;
+	border-top-color: transparent;
+	border-radius: 50%;
+	animation: shortcodeglut-btn-spin 0.8s linear infinite;
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+@keyframes shortcodeglut-btn-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Hide WooCommerce default elements */
+.shortcodeglut-card-footer .added_to_cart,
+.shortcodeglut-btn + .added_to_cart,
+.shortcodeglut-btn ~ .added_to_cart {
+	display: none !important;
+}
+
+.shortcodeglut-btn .ajax-loading,
+.shortcodeglut-btn::after {
+	display: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+	.shortcodeglut-masonry {
+		column-count: 3 !important;
+	}
+
+	.shortcodeglut-masonry-wrapper {
+		padding: 30px 16px;
+	}
+
+	.shortcodeglut-toolbar {
+		flex-direction: column;
+		gap: 12px;
+		align-items: stretch;
+	}
+
+	.shortcodeglut-sort-select {
+		width: 100%;
+	}
+
+	.shortcodeglut-results-count {
+		text-align: center;
+	}
+}
+
+@media (max-width: 768px) {
+	.shortcodeglut-masonry {
+		column-count: 2 !important;
+	}
+
+	.shortcodeglut-title {
+		font-size: 28px;
+	}
+
+	.shortcodeglut-card-body {
+		padding: 12px;
+	}
+
+	.shortcodeglut-card-title {
+		font-size: 14px;
+	}
+
+	.shortcodeglut-price {
+		font-size: 16px;
+	}
+
+	.shortcodeglut-btn {
+		padding: 6px 12px;
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 480px) {
+	.shortcodeglut-masonry {
+		column-count: 1 !important;
+	}
+
+	.shortcodeglut-masonry-wrapper {
+		padding: 20px 12px;
+	}
+
+	.shortcodeglut-title {
+		font-size: 24px;
+	}
+
+	.shortcodeglut-toolbar {
+		padding: 12px;
+	}
+
+	.shortcodeglut-sort-select,
+	.shortcodeglut-results-count {
+		font-size: 13px;
+	}
+
+	.shortcodeglut-card-footer {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+	}
+
+	.shortcodeglut-btn {
+		width: 100%;
+		text-align: center;
+	}
+
+	.shortcodeglut-pagination .page-numbers {
+		gap: 4px;
+	}
+
+	.shortcodeglut-pagination .page-numbers a {
+		padding: 8px 12px;
+		font-size: 13px;
+	}
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+	.shortcodeglut-masonry-wrapper {
+		color-scheme: dark;
+	}
+
+	.shortcodeglut-card {
+		background: #1e1e1e;
+	}
+
+	.shortcodeglut-card-style-classic.shortcodeglut-card {
+		border-color: #3e3e3e;
+	}
+
+	.shortcodeglut-card-title a {
+		color: #e5e7eb;
+	}
+
+	.shortcodeglut-card-title a:hover {
+		color: #60a5fa;
+	}
+
+	.shortcodeglut-card-excerpt,
+	.shortcodeglut-results-count,
+	.shortcodeglut-breadcrumb {
+		color: #9ca3af;
+	}
+
+	.shortcodeglut-pagination .page-numbers a.current {
+		background: #3b82f6;
+		border-color: #3b82f6;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.shortcodeglut-card,
+	.shortcodeglut-btn,
+	.shortcodeglut-card-image img,
+	.shortcodeglut-pagination .page-numbers a {
+		transition: none;
+	}
+
+	.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card:hover {
+		transform: none;
+	}
+
+	.shortcodeglut-masonry-wrapper.has-hover-lift .shortcodeglut-card-image img:hover {
+		transform: none;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.shortcodeglut-card {
+		border: 2px solid currentColor;
+	}
+
+	.shortcodeglut-btn {
+		border: 2px solid currentColor;
+	}
+
+	.shortcodeglut-pagination .page-numbers a {
+		border: 2px solid currentColor;
+	}
+}

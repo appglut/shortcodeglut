@@ -1,0 +1,225 @@
+/* Shortcodeglut Template: product_card_lavender */
+/* All styles are scoped to .shortcodeglut-product-cards to prevent conflicts */
+
+.shortcodeglut-product-cards *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+.shortcodeglut-product-cards body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+.shortcodeglut-product-cards .product-template18{
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .shortcodeglut-product-cards .product-template18:hover {
+            transform: translateY(-5px);
+        }
+.shortcodeglut-product-cards .product-item{
+            position: relative;
+        }
+.shortcodeglut-product-cards .product-thumb{
+            position: relative;
+            overflow: hidden;
+        }
+.shortcodeglut-product-cards .product-thumb img{
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .shortcodeglut-product-cards .product-template18:hover .product-thumb img {
+            transform: scale(1.05);
+        }
+.shortcodeglut-product-cards .product-badge{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+.shortcodeglut-product-cards .product-label{
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+.shortcodeglut-product-cards .new-badge{
+            background: #7E57C2;
+        }
+.shortcodeglut-product-cards .featured-badge{
+            background: #FF9800;
+        }
+.shortcodeglut-product-cards .discount-badge{
+            background: #EC407A;
+        }
+.shortcodeglut-product-cards .outofstock-badge{
+            background: #9E9E9E;
+        }
+.shortcodeglut-product-cards .hover-content{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(126,87,194,0.95), rgba(126,87,194,0.7), transparent);
+            padding: 80px 20px 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .shortcodeglut-product-cards .product-template18:hover .hover-content {
+            transform: translateY(0);
+        }
+.shortcodeglut-product-cards .product-caption{
+            margin-bottom: 15px;
+        }
+.shortcodeglut-product-cards .product-title{
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+.shortcodeglut-product-cards .product-title a{
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .shortcodeglut-product-cards .product-title a:hover {
+            color: #EDE7F6;
+        }
+.shortcodeglut-product-cards .product-identity{
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .product-category{
+            font-size: 12px;
+            color: #EDE7F6;
+            margin-bottom: 5px;
+        }
+.shortcodeglut-product-cards .product-category a{
+            color: #EDE7F6;
+            text-decoration: none;
+        }
+        .shortcodeglut-product-cards .product-category a:hover {
+            color: #fff;
+        }
+.shortcodeglut-product-cards .ratings{
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .ratings i{
+            color: #FFC107;
+            font-size: 12px;
+        }
+.shortcodeglut-product-cards .price-box{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+.shortcodeglut-product-cards .product-price{
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+.shortcodeglut-product-cards .price-old del{
+            color: #EDE7F6;
+            font-size: 14px;
+        }
+.shortcodeglut-product-cards .button-group{
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .button-group a{
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .shortcodeglut-product-cards .button-group a:hover {
+            background: #fff;
+            color: #7E57C2;
+        }
+.shortcodeglut-product-cards .box-cart{
+            margin-top: 10px;
+        }
+.shortcodeglut-product-cards .btn-cart{
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+            color: #7E57C2;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        .shortcodeglut-product-cards .btn-cart:hover {
+            background: #EDE7F6;
+        }
+.shortcodeglut-product-cards .header{
+            text-align: center;
+            margin-bottom: 30px;
+        }
+.shortcodeglut-product-cards .header h1{
+            color: #333;
+            margin-bottom: 10px;
+        }
+.shortcodeglut-product-cards .header p{
+            color: #666;
+        }
+
+
+/* Add to cart handler styles */
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart {
+    background: #4CAF50;
+    color: #fff;
+}
+
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:hover {
+    background: #45a049;
+}
+
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+/* Hide WooCommerce's View cart link after our button */
+.shortcodeglut-product-cards .box-cart .added_to_cart,
+.shortcodeglut-product-cards .shortcodeglut-add-to-cart-btn + .added_to_cart {
+    display: none !important;
+}
+
+/* Ensure all links have no underline */
+.shortcodeglut-product-cards a {
+    text-decoration: none !important;
+}
+
+.shortcodeglut-product-cards a:hover {
+    text-decoration: none !important;
+}
+
+/* Fix star rating color */
+.shortcodeglut-product-cards .ratings i,
+.shortcodeglut-product-cards .ratings .star-rating,
+.shortcodeglut-product-cards .ratings .fa-star,
+.shortcodeglut-product-cards .ratings .fas,
+.shortcodeglut-product-cards .ratings .far {
+    color: #FFC107 !important;
+}
+.shortcodeglut-product-cards .ratings .fa-regular.fa-star,
+.shortcodeglut-product-cards .ratings .far.fa-star {
+    color: #e0e0e0 !important;
+}

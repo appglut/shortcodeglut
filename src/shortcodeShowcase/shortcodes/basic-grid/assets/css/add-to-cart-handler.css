@@ -1,0 +1,78 @@
+/**
+ * Shortcodeglut Add to Cart Handler Styles
+ * Loading states and transitions for add-to-cart buttons
+ */
+
+/* Hide WooCommerce's default blue loader on our buttons */
+.shortcodeglut-add-to-cart-btn .ajax-loading,
+.shortcodeglut-add-to-cart-btn .loading,
+.shortcodeglut-add-to-cart-btn::after,
+.shortcodeglut-add-to-cart-btn .spinner,
+.shortcodeglut-add-to-cart-btn .icon_loader {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* Hide WooCommerce's "View cart" link that appears after our buttons */
+.product-cart-action .added_to_cart,
+.shortcodeglut-add-to-cart-btn + .added_to_cart,
+.shortcodeglut-add-to-cart-btn ~ .added_to_cart {
+    display: none !important;
+}
+
+/* Hide WooCommerce block overlay/loader */
+.blockUI.blockOverlay,
+.blockUI.blockElement,
+.woocommerce-loader,
+.woocommerce .blockUI,
+.woocommerce-page .blockUI {
+    display: none !important;
+}
+
+/* Loading state for add-to-cart button */
+.shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+    cursor: not-allowed;
+    pointer-events: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Spinner animation for loading state */
+.shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading .fa-spinner {
+    animation: shortcodeglut-spin 1s linear infinite;
+}
+
+@keyframes shortcodeglut-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Smooth fade transition */
+.shortcodeglut-add-to-cart-btn {
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+/* Loading pulse effect */
+.shortcodeglut-add-to-cart-btn.shortcodeglut-add-to-cart-loading {
+    animation: shortcodeglut-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes shortcodeglut-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.98);
+    }
+}
+
+/* View cart button smooth appearance */
+.shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart {
+    transition: all 0.3s ease;
+}
+
+.shortcodeglut-add-to-cart-btn.shortcodeglut-view-cart:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
